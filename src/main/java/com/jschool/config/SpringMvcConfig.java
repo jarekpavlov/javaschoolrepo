@@ -1,5 +1,6 @@
 package com.jschool.config;
 
+import com.jschool.DAO.ClientDaoImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,10 @@ public class SpringMvcConfig implements WebMvcConfigurer {
         resolver.setSuffix(".jsp");
         return resolver;
 
+    }
+    @Bean
+    public ClientDaoImpl getClientDao(){
+        return new ClientDaoImpl();
     }
 
 
