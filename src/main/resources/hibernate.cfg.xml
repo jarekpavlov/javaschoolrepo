@@ -14,5 +14,7 @@
         <property name="hibernate.hbm2ddl.auto">create</property>
         <mapping class="com.jschool.domain.Client"></mapping>
         <mapping class="com.jschool.domain.Order"></mapping>
+        <mapping class="com.jschool.domain.Address"></mapping>
+        <mapping class="com.jschool.domain.Product"></mapping>
     </session-factory>
 </hibernate-configuration>

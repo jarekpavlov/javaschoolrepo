@@ -15,7 +15,18 @@ public class Client {
     private String phone;
     private String clientAddress;
     private String dateofbirth;
+    private Address address;
+    private String password;
     private Set<Order> orders = new HashSet<>();
+
+    @ManyToOne
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     //@Column should be used if the name of column in DB does not match to class field
     @Id
@@ -27,7 +38,7 @@ public class Client {
     public void setId(Long id) {
         this.id = id;
     }
-
+    @Column(length = 45)
     public String getName() {
         return name;
     }
@@ -35,7 +46,7 @@ public class Client {
     public void setName(String name) {
         this.name = name;
     }
-
+    @Column(length = 45)
     public String getSurname() {
         return surname;
     }
@@ -44,6 +55,7 @@ public class Client {
         this.surname = surename;
     }
 
+    @Column(length = 45)
     public String getPhone() {
         return phone;
     }
@@ -55,6 +67,8 @@ public class Client {
     public String getClientAddress() {
         return clientAddress;
     }
+
+    @Column(length = 45)
     public String getEmail() {
         return email;
     }
@@ -66,6 +80,7 @@ public class Client {
         this.clientAddress = address;
     }
 
+    @Column(length = 45)
     public String getDateofbirth() {
         return dateofbirth;
     }
@@ -81,5 +96,13 @@ public class Client {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+    @Column(length = 45)
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

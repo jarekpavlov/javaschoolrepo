@@ -2,6 +2,8 @@ package com.jschool.domain;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -9,19 +11,19 @@ public class Order {
 
     private Long id;
     private Client client;
-//    private String clientAddress;
-    private String payment;//enum
-//    private String deliveryMethod;//enum
-//    // Products
-//    private String paymentStatus;//enum
-//
-//
+    private String clientAddress;
+    private String payment;
+    private String deliveryMethod;
+    private Set<Product> productSet = new HashSet<>();
+    private String paymentStatus;
+    private String orderStatus;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
-//
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -34,15 +36,15 @@ public class Order {
     public void setClient(Client client) {
         this.client = client;
     }
-//
-//    public String getClientAddress() {
-//        return clientAddress;
-//    }
-//
-//    public void setClientAddress(String clientAddress) {
-//        this.clientAddress = clientAddress;
-//    }
-//
+
+    public String getClientAddress() {
+        return clientAddress;
+    }
+
+    public void setClientAddress(String clientAddress) {
+        this.clientAddress = clientAddress;
+    }
+    @Column(length = 45)
     public String getPayment() {
         return payment;
     }
@@ -50,32 +52,39 @@ public class Order {
     public void setPayment(String payment) {
         this.payment = payment;
     }
-//
-//    public String getDeliveryMethod() {
-//        return deliveryMethod;
-//    }
-//
-//    public void setDeliveryMethod(String deliveryMethod) {
-//        this.deliveryMethod = deliveryMethod;
-//    }
-//
-//    public String getPaymentStatus() {
-//        return paymentStatus;
-//    }
-//
-//    public void setPaymentStatus(String paymentStatus) {
-//        this.paymentStatus = paymentStatus;
-//    }
-//
-//    public String getOrderStatus() {
-//        return orderStatus;
-//    }
-//
-//    public void setOrderStatus(String orderStatus) {
-//        this.orderStatus = orderStatus;
-//    }
-//
-//    private  String orderStatus;//enum
+    @Column(length = 45)
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
 
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+    @Column(length = 45)
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
 
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+    @Column(length = 45)
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "order_id"),
+                                        inverseJoinColumns = @JoinColumn(name = "product_id"))
+    public Set<Product> getProductSet() {
+        return productSet;
+    }
+
+    public void setProductSet(Set<Product> productSet) {
+        this.productSet = productSet;
+    }
 }
