@@ -65,8 +65,7 @@ public class ClientDaoImpl implements ClientDao{
         transaction = session.beginTransaction();
     }
     public static void end(){
-        transaction.commit();
+        session.getTransaction().commit();
         session.close();
-        factory.close();
     }
 }

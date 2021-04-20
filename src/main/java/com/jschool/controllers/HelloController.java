@@ -12,7 +12,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,16 +28,21 @@ public class HelloController {
     @GetMapping(value = "/clients")
     public String hello(ModelMap map){
 
-        Client client = new Client();
-        client.setName("Ann");
-        clientDao.save(client);
-        clientDao.delete(4L);
-        List<Client> clients = clientDao.clientList();
-        map.addAttribute("clients",clients);
-        System.out.println(clientDao.get(2L).getName());
+//        Client client = new Client();
+//        client.setName("John");
+//        clientDao.save(client);
+//        List<Client> clients = clientDao.clientList();
+//        map.addAttribute("clients",clients);
+        //System.out.println(clientDao.get(2L).getName());
 
 
         return "hello";
+    }
+
+    @GetMapping(value = "/delete/{id}")
+    public String deleteClient(@PathVariable Long id){
+        clientDao.delete(id);
+        return "redirect:/clients";
     }
 
 

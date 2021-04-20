@@ -1,6 +1,8 @@
 package com.jschool.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "clients")//If the name of the table in db is different
@@ -11,8 +13,9 @@ public class Client {
     private String surname;
     private String email;
     private String phone;
-    private String address;
+    private String clientAddress;
     private String dateofbirth;
+    private Set<Order> orders = new HashSet<>();
 
     //@Column should be used if the name of column in DB does not match to class field
     @Id
@@ -49,8 +52,8 @@ public class Client {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public String getClientAddress() {
+        return clientAddress;
     }
     public String getEmail() {
         return email;
@@ -59,8 +62,8 @@ public class Client {
         this.email = email;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setClientAddress(String address) {
+        this.clientAddress = address;
     }
 
     public String getDateofbirth() {
@@ -69,5 +72,14 @@ public class Client {
 
     public void setDateofbirth(String dateofbirth) {
         this.dateofbirth = dateofbirth;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "client") //mapped by is used to bind this SET with client field in other POJO
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }
