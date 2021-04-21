@@ -1,6 +1,6 @@
 package com.jschool.config;
 
-import com.jschool.DAO.ClientDaoImpl;
+import com.jschool.DAO.EntityDaoImpl;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -28,8 +28,8 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
     }
     @Bean
-    public ClientDaoImpl getClientDao(){
-        return new ClientDaoImpl(getSessionFactory());
+    public EntityDaoImpl getClientDao(){
+        return new EntityDaoImpl(getSessionFactory());
     }
 
     @Bean

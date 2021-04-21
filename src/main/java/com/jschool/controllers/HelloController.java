@@ -1,14 +1,9 @@
 package com.jschool.controllers;
 
-import com.jschool.DAO.ClientDaoImpl;
+import com.jschool.DAO.EntityDaoImpl;
 import com.jschool.domain.Client;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.query.Query;
+import com.jschool.domain.Order;
+import com.jschool.domain.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,21 +14,44 @@ import java.util.List;
 @Controller
 public class HelloController {
 
-    private ClientDaoImpl clientDao;
+    private EntityDaoImpl entityDaoImpl;
     @Autowired
-    public HelloController(ClientDaoImpl clientDao){
-        this.clientDao = clientDao;
+    public HelloController(EntityDaoImpl entityDaoImpl){
+        this.entityDaoImpl = entityDaoImpl;
     }
 
     @GetMapping(value = "/clients")
     public String hello(ModelMap map){
-
-//        Client client = new Client();
-//        client.setName("John");
-//        clientDao.save(client);
-//        List<Client> clients = clientDao.clientList();
+        entityDaoImpl.setProcessedClass(Client.class);
+        Client client = new Client();
+        client.setName("Pop");
+        entityDaoImpl.save(client);
+//        List<Client> clients = entityDaoImpl.clientList();
 //        map.addAttribute("clients",clients);
-        //System.out.println(clientDao.get(2L).getName());
+//        System.out.println(entityDaoImpl.get(2L).getName());
+        Product product1 = new Product();
+        product1.setBrand("product1");
+        Product product2 = new Product();
+        product2.setBrand("product2");
+        Product product3 = new Product();
+        product3.setBrand("product3");
+
+        Order order1 = new Order();
+        order1.setClient(entityDaoImpl.get(1L));
+        Order order2 = new Order();
+        order2.setClient(entityDaoImpl.get(1L));
+
+        order1.getProductSet().add(product1);
+        order1.getProductSet().add(product3);
+        order2.getProductSet().add(product2);
+
+        product1.getOrderSet().add(order1);
+        product2.getOrderSet().add(order2);
+        product3.getOrderSet().add(order1);
+
+        entityDaoImpl.save(order1);
+        entityDaoImpl.save(order2);
+
 
 
         return "hello";
@@ -41,7 +59,7 @@ public class HelloController {
 
     @GetMapping(value = "/delete/{id}")
     public String deleteClient(@PathVariable Long id){
-        clientDao.delete(id);
+        entityDaoImpl.delete(id);
         return "redirect:/clients";
     }
 

@@ -102,4 +102,8 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public void addOrdersInSet(Order order){
+        orderSet.add(order);
+    }
 }

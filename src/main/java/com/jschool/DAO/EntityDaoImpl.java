@@ -9,21 +9,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.Query;
 import java.util.List;
 
-public class ClientDaoImpl implements ClientDao{
+public class EntityDaoImpl<T> implements EntityDao<T> {
 
     private static SessionFactory factory;
     private static Session session;
     private static Transaction transaction;
+    private Class<T> processedClass;
+    public void setProcessedClass(Class<T> processedClass){
+        this.processedClass=processedClass;
+    }
 
     @Autowired
-    public ClientDaoImpl(SessionFactory factory) {
+    public EntityDaoImpl(SessionFactory factory) {
         this.factory = factory;
     }
 
     @Override
-    public void save(Client client) {
+    public void save(T entity) {
     begin();
-    session.persist(client);// "persist" is used to create a new instance
+    session.persist(entity);// "persist" is used to create a new instance
     end();
     }
 
@@ -37,9 +41,9 @@ public class ClientDaoImpl implements ClientDao{
     }
 
     @Override
-    public void update(Client client) {
+    public void update(T entity) {
         begin();
-        session.merge(client); //"merge" is used to update a new instance
+        session.merge(entity); //"merge" is used to update a new instance
         end();
 
     }
@@ -53,10 +57,10 @@ public class ClientDaoImpl implements ClientDao{
     }
 
     @Override
-    public List<Client> clientList() {
+    public List<T> clientList() {
         begin();
-        Query query = session.createQuery("select c from Client c"); //"createQuery is using to retrieve information using custom query "
-        List<Client> resultList = query.getResultList();
+        Query query = session.createQuery("select c from "+processedClass.getName()+ " c"); //"createQuery is using to retrieve information using custom query "
+        List<T> resultList = query.getResultList();
         end();
         return  resultList;
     }

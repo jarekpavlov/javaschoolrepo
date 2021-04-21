@@ -87,4 +87,8 @@ public class Order {
     public void setProductSet(Set<Product> productSet) {
         this.productSet = productSet;
     }
+
+    public void addProductInSet(Product product){
+        productSet.add(product);
+    }
 }
