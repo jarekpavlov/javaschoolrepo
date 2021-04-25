@@ -2,14 +2,9 @@ package com.jschool.controllers;
 
 import com.jschool.DAO.EntityDaoImpl;
 import com.jschool.domain.Client;
-import com.jschool.domain.Order;
-import com.jschool.domain.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 public class HelloController {
@@ -20,10 +15,9 @@ public class HelloController {
         this.entityDaoImpl = entityDaoImpl;
     }
 
-    @GetMapping(value = "/clients")
+    @GetMapping(value = "/test")
     public String hello(){
-          Client client = new Client();
-          client.setName("Guru");
+
         //  entityDaoImpl.saveEntity(client);
          // entityDaoImpl.delete(Client.class, 2L);
 //          List<Client> clients = entityDaoImpl.entityList();
@@ -52,8 +46,13 @@ public class HelloController {
 //        entityDaoImpl.save(order1);
 //        entityDaoImpl.save(order2);
         //  map.addAttribute("user", productId.toString());
-        return "hello";
+        return "users";
     }
+    @GetMapping(value = "")
+    public String startPage(){
+        return "startPage";
+    }
+
 
 
 

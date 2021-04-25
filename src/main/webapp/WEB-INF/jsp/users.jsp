@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
 <head>
@@ -19,7 +20,7 @@
 <body>
 <div align="center">
     <h1>Clients</h1>
-    <h3><a hreh="new">New client</a></h3>
+    <h3><a hreh="new">Users</a></h3>
     <table border="1" cellpadding="5">
         <tr>
             <th>Number</th>
@@ -30,15 +31,21 @@
             <th>Phone</th>
             <th>Date of birth</th>
         </tr>
-        <c:forEach items="${clients}" var="client" varStatus="status">
+        <c:forEach items="${userList}" var="user" varStatus="status">
             <tr>
                 <th>${status.index+1}</th>
-                <th>${client.name}</th>
-                <th>${client.surname}</th>
-                <th>${client.email}</th>
-                <th>${client.address}</th>
-                <th>${client.phone}</th>
-                <th>${client.dateofbirth}</th>
+                <th>${user.name}</th>
+                <th>${user.surname}</th>
+                <th>${user.email}</th>
+
+                <th>${user.address.city}</th>
+                <th>${user.phone}</th>
+                <th>${user.dateofbirth}</th>
+                <th>
+                    <a href="users/delete?id=${user.id}">delete</a>
+                    &nbsp;&nbsp;
+                    <a href="users/edit?id=${user.id}">edit</a>
+                </th>
             </tr>
         </c:forEach>
 

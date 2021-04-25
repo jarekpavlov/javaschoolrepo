@@ -13,13 +13,13 @@ public class Client {
     private String surname;
     private String email;
     private String phone;
-    private String clientAddress;
     private String dateofbirth;
     private Address address;
     private String password;
     private Set<Order> orders = new HashSet<>();
 
-    @ManyToOne
+
+    @OneToOne
     public Address getAddress() {
         return address;
     }
@@ -64,9 +64,6 @@ public class Client {
         this.phone = phone;
     }
 
-    public String getClientAddress() {
-        return clientAddress;
-    }
 
     @Column(length = 45)
     public String getEmail() {
@@ -76,9 +73,6 @@ public class Client {
         this.email = email;
     }
 
-    public void setClientAddress(String address) {
-        this.clientAddress = address;
-    }
 
     @Column(length = 45)
     public String getDateofbirth() {

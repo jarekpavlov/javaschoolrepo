@@ -14,15 +14,15 @@ public class Address {
     private String street;
     private short house;
     private short flat;
-    private Set<Client> clientSet =new HashSet<>();
+    private Client client;
 
-    @OneToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER, mappedBy = "address")
-    public Set<Client> getClientSet() {
-        return clientSet;
+    @OneToOne(mappedBy = "address")
+    public Client getClient() {
+        return client;
     }
 
-    public void setClientSet(Set<Client> clientSet) {
-        this.clientSet = clientSet;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     @Id

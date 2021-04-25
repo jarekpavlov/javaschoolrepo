@@ -1,6 +1,5 @@
 package com.jschool.config;
 
-import com.jschool.DAO.EntityDaoImpl;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
