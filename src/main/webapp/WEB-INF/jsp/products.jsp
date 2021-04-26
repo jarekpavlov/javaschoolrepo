@@ -38,7 +38,7 @@
                     <th>
                         <a href="product/edit?id=${product.id}">Edit</a>
                         <a href="product/delete?id=${product.id}">Delete</a>
-                        <form:form action="order/create" method="post">
+                        <form:form action="/MmsPr/order/create?id=${product.id}" method="post">
                             <input type="text" name="numberForOrder"/>
                             <input type="submit" value="Create Order">
                         </form:form>

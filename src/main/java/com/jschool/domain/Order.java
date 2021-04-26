@@ -2,6 +2,7 @@ package com.jschool.domain;
 
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -77,7 +78,7 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "order_id"),
                                         inverseJoinColumns = @JoinColumn(name = "product_id"))
     public Set<Product> getProductSet() {

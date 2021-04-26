@@ -3,6 +3,7 @@ package com.jschool.domain;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ public class Product {
     private Float volume;
     private int quantity;
     private Set<Order> orderSet =new HashSet<>();
+
 
     @ManyToMany(mappedBy = "productSet")
     public Set<Order> getOrderSet() {

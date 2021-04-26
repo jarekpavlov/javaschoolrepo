@@ -1,6 +1,7 @@
 package com.jschool.domain;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -83,7 +84,7 @@ public class Client {
         this.dateofbirth = dateofbirth;
     }
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "client") //mapped by is used to bind this SET with client field in other POJO
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "client") //mapped by is used to bind this SET with client field in other POJO
     public Set<Order> getOrders() {
         return orders;
     }

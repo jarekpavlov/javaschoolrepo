@@ -5,11 +5,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.List;
 
-@Component
+@Repository
+@Transactional
 public class EntityDaoImpl  {
 
     private static SessionFactory factory;
@@ -27,7 +30,6 @@ public class EntityDaoImpl  {
         end();
         return  entity;
     }
-
     public <T> T getEntity( Class<T> type,Long id) {
         begin();
         T entity = session.find( type, id);//"find" is used to find and give an object from data base
