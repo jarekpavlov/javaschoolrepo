@@ -23,11 +23,9 @@ public class HelloController {
 
 //        Client client = entityService.deleteEntity(Client.class,3L);
 //        System.out.println(client.getId());
-        Client client = new Client();
-        client.setName("Boba");
-        client.setEmail("@t-systems");
-        client.setId(4L);
-        entityService.updateEntity(client);
+        Client client = entityService.getEntity(Client.class,2L);
+        System.out.println(client.getName());
+
         return "users";
     }
     @GetMapping(value = "")

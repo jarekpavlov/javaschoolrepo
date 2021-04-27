@@ -19,33 +19,28 @@ public class EntityService {
         this.entityDaoImpl=entityDaoImpl;
     }
     public <T> T saveEntity(T entity){
-        entityDaoImpl.openCurrentSessionWithTransaction();
+        entityDaoImpl.openCurrentSession();
         entityDaoImpl.saveEntity(entity);
-        entityDaoImpl.closeCurrentSessionWithTransaction();
         return entity;
     }
     public<T> T updateEntity(T entity) {
-        entityDaoImpl.openCurrentSessionWithTransaction();
+        entityDaoImpl.openCurrentSession();
         entityDaoImpl.updateEntity(entity);
-        entityDaoImpl.closeCurrentSessionWithTransaction();
         return entity;
     }
     public <T> T getEntity( Class<T> type,Long id) {
         entityDaoImpl.openCurrentSession();
         T entity = entityDaoImpl.getEntity(type, id);
-        entityDaoImpl.closeCurrentSession();
         return entity;
     }
     public <T> T deleteEntity(Class<T> type, Long id) {
-        entityDaoImpl.openCurrentSessionWithTransaction();
+        entityDaoImpl.openCurrentSession();
         T reference = entityDaoImpl.deleteEntity(type,id);
-        entityDaoImpl.closeCurrentSessionWithTransaction();
         return reference;
     }
     public <T> List<T> entityList(Class<T> type) {
         entityDaoImpl.openCurrentSession();
         List<T> entityList = entityDaoImpl.entityList(type);
-        entityDaoImpl.closeCurrentSession();
         return  entityList;
     }
 

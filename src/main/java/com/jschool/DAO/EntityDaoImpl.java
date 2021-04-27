@@ -13,7 +13,6 @@ public class EntityDaoImpl  {
 
     private SessionFactory factory;
     private  Session currentSession;
-    private Transaction currentTransaction;
 
 
     public EntityDaoImpl(SessionFactory factory) {
@@ -22,7 +21,7 @@ public class EntityDaoImpl  {
 
 
     public <T> T saveEntity(T entity) {
-        currentSession.persist(entity);// "persist" is used to create a new instance
+        currentSession.saveOrUpdate(entity);// "saveOrUpdate" is used to create a new instance
         return  entity;
     }
     public <T> T getEntity( Class<T> type,Long id) {
@@ -31,7 +30,7 @@ public class EntityDaoImpl  {
     }
 
     public<T> T updateEntity(T entity) {
-        currentSession.update(entity); //"update" is used to update a new instance
+        currentSession.saveOrUpdate(entity); //"saveOrUpdate" is used to update a new instance
         return entity;
     }
 
@@ -47,18 +46,8 @@ public class EntityDaoImpl  {
         return  resultList;
     }
     public Session openCurrentSession() {
-        currentSession = factory.openSession();
+        currentSession = factory.getCurrentSession();
         return currentSession;
     }
-    public void openCurrentSessionWithTransaction(){
-        currentSession = factory.openSession();
-        currentTransaction = currentSession.beginTransaction();
-    }
-    public void closeCurrentSessionWithTransaction(){
-        currentTransaction.commit();
-        currentSession.close();
-    }
-    public void closeCurrentSession() {
-        currentSession.close();
-    }
+
 }
