@@ -35,7 +35,7 @@ public class OrderController {
 
     @PostMapping(value = "/order/create")
     public String createOrder(@RequestParam int numberForOrder, HttpServletRequest request){
-        Client client = entityService.getEntity(Client.class,1L);
+        Client client = entityService.getEntity(Client.class,6L);
         Long productId = Long.parseLong(request.getParameter("id"));
         Product product = entityService.getEntity(Product.class,productId);
         Order order = new Order();

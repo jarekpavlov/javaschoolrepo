@@ -1,6 +1,9 @@
 package com.jschool.domain;
 
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.HashSet;
@@ -78,7 +81,7 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "order_id"),
                                         inverseJoinColumns = @JoinColumn(name = "product_id"))
     public Set<Product> getProductSet() {

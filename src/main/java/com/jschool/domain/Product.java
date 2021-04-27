@@ -1,6 +1,8 @@
 package com.jschool.domain;
 
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -23,6 +25,7 @@ public class Product {
 
 
     @ManyToMany(mappedBy = "productSet")
+    @LazyCollection(LazyCollectionOption.FALSE)
     public Set<Order> getOrderSet() {
         return orderSet;
     }
