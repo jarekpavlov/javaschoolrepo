@@ -4,16 +4,16 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-@Configuration
+@org.springframework.context.annotation.Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.jschool")
 public class SpringMvcConfig implements WebMvcConfigurer {
@@ -29,15 +29,15 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
     }
 
-    @Bean
-    public StandardServiceRegistry getStandardServiceRegistry(){
-        return new StandardServiceRegistryBuilder().configure().build();
-    }
 
     @Bean
     public SessionFactory getSessionFactory(){
-        return new MetadataSources(getStandardServiceRegistry())
-                .buildMetadata().buildSessionFactory();
+        Configuration configuration = new Configuration().configure();
+        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties()).configure();
+        SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
+
+        return sessionFactory;
     }
 
 }

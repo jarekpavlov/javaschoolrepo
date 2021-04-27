@@ -3,6 +3,7 @@ package com.jschool.controllers;
 import com.jschool.DAO.EntityDaoImpl;
 import com.jschool.domain.Address;
 import com.jschool.domain.Client;
+import com.jschool.service.EntityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,15 +16,15 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    private EntityDaoImpl entityDaoImpl;
+    private EntityService entityService;
 
-    public UserController(EntityDaoImpl entityDaoImpl){
-        this.entityDaoImpl=entityDaoImpl;
+    public UserController(EntityService entityService){
+        this.entityService=entityService;
     }
 
     @GetMapping(value = "/users")
     public String getUsers(ModelMap map){
-        List<Client> userList = entityDaoImpl.entityList(Client.class);
+        List<Client> userList = entityService.entityList(Client.class);
         map.addAttribute("userList", userList);
         return "users";
     }
@@ -37,7 +38,7 @@ public class UserController {
     public String userEdit(HttpServletRequest request,ModelMap map){
         Long id = Long.parseLong(request.getParameter("id"));
 
-        Client client = entityDaoImpl.getEntity(Client.class, id);
+        Client client = entityService.getEntity(Client.class, id);
         map.addAttribute(client);
         return "registrationPage";
     }
@@ -45,19 +46,19 @@ public class UserController {
     public String saveUser(Client client){
         Address address = client.getAddress();
         if(client.getId()!=null) {
-            entityDaoImpl.update(address);
-            entityDaoImpl.update(client);
+            entityService.updateEntity(address);
+            entityService.updateEntity(client);
         }
         else {
-            entityDaoImpl.saveEntity(address);
-            entityDaoImpl.saveEntity(client);
+            entityService.saveEntity(address);
+            entityService.saveEntity(client);
         }
         return "redirect:/";
     }
     @GetMapping(value = "/users/delete")
     public String deleteUser(HttpServletRequest request){
         Long id = Long.parseLong(request.getParameter("id"));
-        entityDaoImpl.delete(Client.class, id);
+        entityService.deleteEntity(Client.class, id);
         return "redirect:/users";
     }
 }
