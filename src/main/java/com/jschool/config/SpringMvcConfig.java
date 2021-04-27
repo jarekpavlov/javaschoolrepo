@@ -29,15 +29,4 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
     }
 
-
-    @Bean
-    public SessionFactory getSessionFactory(){
-        Configuration configuration = new Configuration().configure();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-                .applySettings(configuration.getProperties()).configure();
-        SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-
-        return sessionFactory;
-    }
-
 }

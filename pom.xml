@@ -19,6 +19,7 @@
     <maven.compiler.target>1.7</maven.compiler.target>
     <spring.version>5.2.4.RELEASE</spring.version>
     <hibernate.verion>5.4.1.Final</hibernate.verion>
+    <tomcat.varsion>9.0.41</tomcat.varsion>
   </properties>
 
   <dependencies>
@@ -73,7 +74,12 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-core</artifactId>
-      <version>9.0.41</version>
+      <version>${tomcat.varsion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-dbcp</artifactId>
+      <version>${tomcat.varsion}</version>
     </dependency>
   </dependencies>
 
