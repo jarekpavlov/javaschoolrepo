@@ -1,6 +1,5 @@
 package com.jschool.controllers;
 
-import com.jschool.DAO.EntityDaoImpl;
 import com.jschool.domain.Client;
 import com.jschool.domain.Order;
 import com.jschool.domain.Product;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Controller
@@ -40,8 +38,8 @@ public class OrderController {
         Product product = entityService.getEntity(Product.class,productId);
         Order order = new Order();
         order.setClient(client);
-        product.getOrderSet().add(order);
-        order.getProductSet().add(product);
+//        product.getProductsInOrderSet().add(order);
+//        order.getProductsInOrderSet().add(product);
         entityService.saveEntity(order);
 
         return "redirect:/products";

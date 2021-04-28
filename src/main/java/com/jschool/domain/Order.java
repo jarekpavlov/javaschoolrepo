@@ -1,11 +1,7 @@
 package com.jschool.domain;
 
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,9 +14,18 @@ public class Order {
     private String clientAddress;
     private String payment;
     private String deliveryMethod;
-    private Set<Product> productSet = new HashSet<>();
+    private Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
     private String paymentStatus;
     private String orderStatus;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "order")
+    public Set<ProductsInOrder> getProductsInOrderSet() {
+        return productsInOrderSet;
+    }
+
+    public void setProductsInOrderSet(Set<ProductsInOrder> productSet) {
+        this.productsInOrderSet = productSet;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,18 +86,5 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "order_id"),
-                                        inverseJoinColumns = @JoinColumn(name = "product_id"))
-    public Set<Product> getProductSet() {
-        return productSet;
-    }
 
-    public void setProductSet(Set<Product> productSet) {
-        this.productSet = productSet;
-    }
-
-    public void addProductInSet(Product product){
-        productSet.add(product);
-    }
 }

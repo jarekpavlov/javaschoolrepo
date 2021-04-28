@@ -1,11 +1,6 @@
 package com.jschool.domain;
 
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,17 +16,15 @@ public class Product {
     private Float mass;
     private Float volume;
     private int quantity;
-    private Set<Order> orderSet =new HashSet<>();
+    private Set<ProductsInOrder> productsInOrderSet =new HashSet<>();
 
-
-    @ManyToMany(mappedBy = "productSet")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    public Set<Order> getOrderSet() {
-        return orderSet;
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "product")
+    public Set<ProductsInOrder> getProductsInOrderSet() {
+        return productsInOrderSet;
     }
 
-    public void setOrderSet(Set<Order> orderSet) {
-        this.orderSet = orderSet;
+    public void setProductsInOrderSet(Set<ProductsInOrder> orderSet) {
+        this.productsInOrderSet = orderSet;
     }
 
     @Id
@@ -108,7 +101,4 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public void addOrdersInSet(Order order){
-        orderSet.add(order);
-    }
 }
