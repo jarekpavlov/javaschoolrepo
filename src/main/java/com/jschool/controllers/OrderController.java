@@ -38,7 +38,6 @@ public class OrderController {
     @PostMapping(value = "/order/addtocart")
     public String addToCart(@RequestParam int numberForOrder, HttpServletRequest request){
 
-        Client client = entityService.getEntity(Client.class,6L);
         Long id =Long.parseLong(request.getParameter("id"));
 
         Product product = entityService.getEntity(Product.class,id);
@@ -47,15 +46,29 @@ public class OrderController {
         productsInOrder.setQuantity(numberForOrder);
 
         HttpSession httpSession = request.getSession();
-        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSetTemp");
+        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
         if (productsInOrderSet!=null){
             productsInOrderSet.add(productsInOrder);
-            httpSession.setAttribute("productsInOrderSetTemp",productsInOrderSet);
+            httpSession.setAttribute("productsInOrderSet",productsInOrderSet);
         }else{
             Set<ProductsInOrder> temp = new HashSet<>();
             temp.add(productsInOrder);
-            httpSession.setAttribute("productsInOrderSetTemp",temp);
+            httpSession.setAttribute("productsInOrderSet",temp);
         }
+
+        return "redirect:/products";
+    }
+    @PostMapping(value = "/order/create")
+    public String createOrder(HttpSession httpSession){
+        Client client = entityService.getEntity(Client.class,1L);
+        Set<ProductsInOrder> productsInOrderSetTemp = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
+        if (productsInOrderSetTemp==null){
+            return null;
+        }
+        Order order = new Order();
+        order.setClient(client);
+        order.setProductsInOrderSet(productsInOrderSetTemp);
+        entityService.saveEntity(order);
 
         return "redirect:/products";
     }

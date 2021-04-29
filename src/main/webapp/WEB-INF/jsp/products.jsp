@@ -20,6 +20,9 @@
     <div align="center">
         <h1>Products</h1>
         <h3><a href="product/new">New Product</a></h3>
+        <form:form action="/MmsPr/order/create" method="post">
+            <input type="submit" value="Create Order">
+        </form:form>
         <table border="1" cellpadding="5">
             <tr >
                 <th>Number</th>
@@ -40,7 +43,7 @@
                         <a href="product/delete?id=${product.id}">Delete</a>
                         <form:form action="/MmsPr/order/addtocart?id=${product.id}" method="post">
                             <input type="text" name="numberForOrder"/>
-                            <input type="submit" value="Create Order">
+                            <input type="submit" value="Add to Cart">
                         </form:form>
                     </th>
 
