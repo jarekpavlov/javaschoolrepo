@@ -3,6 +3,7 @@ package com.jschool.controllers;
 import com.jschool.DAO.EntityDaoImpl;
 import com.jschool.domain.Address;
 import com.jschool.domain.Client;
+import com.jschool.domain.ProductsInOrder;
 import com.jschool.service.EntityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
 
 
 @Controller

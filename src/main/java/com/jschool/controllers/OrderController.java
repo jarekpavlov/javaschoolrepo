@@ -3,6 +3,7 @@ package com.jschool.controllers;
 import com.jschool.domain.Client;
 import com.jschool.domain.Order;
 import com.jschool.domain.Product;
+import com.jschool.domain.ProductsInOrder;
 import com.jschool.service.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class OrderController {
@@ -31,16 +35,27 @@ public class OrderController {
         return "orders";
     }
 
-    @PostMapping(value = "/order/create")
-    public String createOrder(@RequestParam int numberForOrder, HttpServletRequest request){
+    @PostMapping(value = "/order/addtocart")
+    public String addToCart(@RequestParam int numberForOrder, HttpServletRequest request){
+
         Client client = entityService.getEntity(Client.class,6L);
-        Long productId = Long.parseLong(request.getParameter("id"));
-        Product product = entityService.getEntity(Product.class,productId);
-        Order order = new Order();
-        order.setClient(client);
-//        product.getProductsInOrderSet().add(order);
-//        order.getProductsInOrderSet().add(product);
-        entityService.saveEntity(order);
+        Long id =Long.parseLong(request.getParameter("id"));
+
+        Product product = entityService.getEntity(Product.class,id);
+        ProductsInOrder productsInOrder = new ProductsInOrder();
+        productsInOrder.setProduct(product);
+        productsInOrder.setQuantity(numberForOrder);
+
+        HttpSession httpSession = request.getSession();
+        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSetTemp");
+        if (productsInOrderSet!=null){
+            productsInOrderSet.add(productsInOrder);
+            httpSession.setAttribute("productsInOrderSetTemp",productsInOrderSet);
+        }else{
+            Set<ProductsInOrder> temp = new HashSet<>();
+            temp.add(productsInOrder);
+            httpSession.setAttribute("productsInOrderSetTemp",temp);
+        }
 
         return "redirect:/products";
     }
