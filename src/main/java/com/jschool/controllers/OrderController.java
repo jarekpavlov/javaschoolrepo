@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -68,6 +69,10 @@ public class OrderController {
         Order order = new Order();
         order.setClient(client);
         order.setProductsInOrderSet(productsInOrderSetTemp);
+        Iterator<ProductsInOrder> itr = productsInOrderSetTemp.iterator();
+        while (itr.hasNext()){
+            itr.next().setOrder(order);
+        }
         entityService.saveEntity(order);
 
         return "redirect:/products";
