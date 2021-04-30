@@ -14,6 +14,10 @@
 <a href="/MmsPr/products">Products</a>
 <a href="/MmsPr/users">Users</a>
 <a href="/MmsPr/users/registration">Registration</a>
+<form name="logout" action="/MmsPr/login" method="post">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    <button type="submit">Logout</button>
+</form>
 
 
 </body>

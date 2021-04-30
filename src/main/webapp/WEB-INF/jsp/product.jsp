@@ -21,6 +21,7 @@
         <h1>Product</h1>
         <table>
             <form:form action="/MmsPr/product/save/" method="post" modelAttribute="product"  >
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <form:hidden path = "id"/>
                 <tr>
                     <td>Brand:</td>

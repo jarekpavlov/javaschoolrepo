@@ -21,6 +21,7 @@
         <h1>Products</h1>
         <h3><a href="product/new">New Product</a></h3>
         <form:form action="/MmsPr/order/create" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <input type="submit" value="Create Order">
         </form:form>
         <table border="1" cellpadding="5">
@@ -42,6 +43,7 @@
                         <a href="product/edit?id=${product.id}">Edit</a>
                         <a href="product/delete?id=${product.id}">Delete</a>
                         <form:form action="/MmsPr/order/addtocart?id=${product.id}" method="post">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <input type="text" name="numberForOrder"/>
                             <input type="submit" value="Add to Cart">
                         </form:form>
