@@ -45,6 +45,10 @@ public class EntityDaoImpl  {
         List<T> resultList = query.getResultList();
         return  resultList;
     }
+    public <T> List<T> getEntityByEmail (Class<T> type, String email) {
+        Query query = currentSession.createQuery("select c from "+type.getName()+ " c where c.email='"+email+"'"); //"createQuery is using to retrieve information using custom query "
+        return (List<T>) query.getResultList();
+    }
     public Session openCurrentSession() {
         currentSession = factory.getCurrentSession();
         return currentSession;

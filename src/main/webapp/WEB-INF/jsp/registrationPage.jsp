@@ -33,6 +33,10 @@
                 <td><form:input path = "surname"/></td>
             </tr>
             <tr>
+                <td>Email:</td>
+                <td><form:input path = "email"/></td>
+            </tr>
+            <tr>
                 <td>clientAddress:</td>
                 <td><form:input path = "address.city"/></td>
             </tr>

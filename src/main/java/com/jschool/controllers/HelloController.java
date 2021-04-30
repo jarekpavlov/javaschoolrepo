@@ -21,26 +21,8 @@ public class HelloController {
 
     @GetMapping(value = "/test")
     public String hello(){
-
-        Order order = new Order();
-        ProductsInOrder productsInOrder1= new ProductsInOrder();
-        ProductsInOrder productsInOrder2= new ProductsInOrder();
-        Client client = entityService.getEntity(Client.class,1L);
-        Product product1=entityService.getEntity(Product.class,1L);
-        Product product2=entityService.getEntity(Product.class,2L);
-        order.setClient(client);
-        productsInOrder1.setProduct(product1);
-        productsInOrder2.setProduct(product2);
-        productsInOrder1.setOrder(order);
-        productsInOrder2.setOrder(order);
-        product1.getProductsInOrderSet().add(productsInOrder1);
-        product2.getProductsInOrderSet().add(productsInOrder2);
-        order.getProductsInOrderSet().add(productsInOrder1);
-        order.getProductsInOrderSet().add(productsInOrder2);
-        entityService.saveEntity(order);
-
-
-
+        Client client = entityService.getEntityByEmail(Client.class, "yaroslavvl@yandex.ru");
+        System.out.println(client);
         return "users";
     }
     @GetMapping(value = "")

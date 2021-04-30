@@ -1,6 +1,7 @@
 package com.jschool.service;
 
 import com.jschool.DAO.EntityDaoImpl;
+import com.jschool.domain.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,16 @@ public class EntityService {
         entityDaoImpl.openCurrentSession();
         List<T> entityList = entityDaoImpl.entityList(type);
         return  entityList;
+    }
+    public <T> T getEntityByEmail( Class<T> type,String email) {
+        T someEntity;
+        entityDaoImpl.openCurrentSession();
+        List<T> entities= entityDaoImpl.getEntityByEmail(type, email);
+        for (T entity:entities){
+            someEntity = entity;
+            return someEntity;
+        }
+        return null;
     }
 
 }
