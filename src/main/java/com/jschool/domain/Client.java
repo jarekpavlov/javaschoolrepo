@@ -1,12 +1,13 @@
 package com.jschool.domain;
 
+import com.jschool.security.Authority;
+
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "clients")//If the name of the table in db is different
+@Table(name = "clients")
 public class Client {
 
     private Long id;
@@ -14,11 +15,20 @@ public class Client {
     private String surname;
     private String email;
     private String phone;
-    private String dateofbirth;
+    private String dateOfBirth;
     private Address address;
     private String password;
     private Set<Order> orders = new HashSet<>();
+    private Set<Authority> authorities;
 
+    @OneToMany(cascade =CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "client")
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
 
     @OneToOne
     public Address getAddress() {
@@ -29,7 +39,6 @@ public class Client {
         this.address = address;
     }
 
-    //@Column should be used if the name of column in DB does not match to class field
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
@@ -76,12 +85,12 @@ public class Client {
 
 
     @Column(length = 45)
-    public String getDateofbirth() {
-        return dateofbirth;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDateofbirth(String dateofbirth) {
-        this.dateofbirth = dateofbirth;
+    public void setDateOfBirth(String dateofbirth) {
+        this.dateOfBirth = dateofbirth;
     }
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "client") //mapped by is used to bind this SET with client field in other POJO
@@ -92,7 +101,7 @@ public class Client {
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
-    @Column(length = 45)
+    @Column(length = 100)
     public String getPassword() {
         return password;
     }

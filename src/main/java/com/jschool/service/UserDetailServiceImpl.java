@@ -1,6 +1,7 @@
 package com.jschool.service;
 
 import com.jschool.domain.Client;
+import com.jschool.security.CustomSecurityClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +18,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
     }
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        entityService.getEntityByEmail(Client.class,s);
-        return null;
+        Client client = entityService.getEntityByEmail(Client.class,s);
+
+        return new CustomSecurityClient(client);
     }
 }

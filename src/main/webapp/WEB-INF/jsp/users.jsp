@@ -40,7 +40,7 @@
 
                 <th>${user.address.city}</th>
                 <th>${user.phone}</th>
-                <th>${user.dateofbirth}</th>
+                <th>${user.dateOfBirth}</th>
                 <th>
                     <a href="users/delete?id=${user.id}">delete</a>
                     &nbsp;&nbsp;

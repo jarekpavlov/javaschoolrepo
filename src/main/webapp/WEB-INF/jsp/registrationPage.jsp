@@ -42,7 +42,7 @@
             </tr>
             <tr>
                 <td>Date of birth:</td>
-                <td><form:input path = "dateofbirth"/></td>
+                <td><form:input path = "dateOfBirth"/></td>
             </tr>
             <tr>
                 <td>Password:</td>
