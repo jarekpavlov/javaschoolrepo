@@ -11,14 +11,9 @@ public class CustomSecurityClient extends Client implements UserDetails {
 
     public CustomSecurityClient(Client client) {
         this.setAuthorities(client.getAuthorities());
-        this.setAddress(client.getAddress());
-        this.setDateOfBirth(client.getDateOfBirth());
         this.setEmail(client.getEmail());
-        this.setId(client.getId());
         this.setName(client.getName());
-        this.setOrders(client.getOrders());
         this.setPassword(client.getPassword());
-        this.setPhone(client.getPhone());
         this.setSurname(client.getSurname());
     }
 

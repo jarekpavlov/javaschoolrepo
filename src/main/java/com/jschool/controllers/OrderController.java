@@ -5,6 +5,7 @@ import com.jschool.domain.Order;
 import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.service.EntityService;
+import com.jschool.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,57 +24,33 @@ import java.util.Set;
 public class OrderController {
 
     private EntityService entityService;
+    private OrderService orderService;
 
     @Autowired
-    public OrderController(EntityService entityService){
+    public OrderController(EntityService entityService, OrderService orderService) {
         this.entityService = entityService;
+        this.orderService = orderService;
     }
 
     @GetMapping(value = "/orders")
-    public String createOrder(ModelMap map){
+    public String createOrder(ModelMap map) {
         List<Order> orders = entityService.entityList(Order.class);
         map.addAttribute("orders", orders);
         return "orders";
     }
 
     @PostMapping(value = "/order/addtocart")
-    public String addToCart(@RequestParam int numberForOrder, HttpServletRequest request){
+    public String addToCart(@RequestParam int numberForOrder, HttpServletRequest request) {
 
-        Long id =Long.parseLong(request.getParameter("id"));
-
-        Product product = entityService.getEntity(Product.class,id);
-        ProductsInOrder productsInOrder = new ProductsInOrder();
-        productsInOrder.setProduct(product);
-        productsInOrder.setQuantity(numberForOrder);
-
-        HttpSession httpSession = request.getSession();
-        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
-        if (productsInOrderSet!=null){
-            productsInOrderSet.add(productsInOrder);
-            httpSession.setAttribute("productsInOrderSet",productsInOrderSet);
-        }else{
-            Set<ProductsInOrder> temp = new HashSet<>();
-            temp.add(productsInOrder);
-            httpSession.setAttribute("productsInOrderSet",temp);
-        }
+        orderService.addToCart(numberForOrder, request);
 
         return "redirect:/products";
     }
+
     @PostMapping(value = "/order/create")
-    public String createOrder(HttpSession httpSession){
-        Client client = entityService.getEntity(Client.class,1L);
-        Set<ProductsInOrder> productsInOrderSetTemp = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
-        if (productsInOrderSetTemp==null){
-            return null;
-        }
-        Order order = new Order();
-        order.setClient(client);
-        order.setProductsInOrderSet(productsInOrderSetTemp);
-        Iterator<ProductsInOrder> itr = productsInOrderSetTemp.iterator();
-        while (itr.hasNext()){
-            itr.next().setOrder(order);
-        }
-        entityService.saveEntity(order);
+    public String createOrder(HttpSession httpSession) {
+
+        orderService.createOrder(httpSession);
 
         return "redirect:/products";
     }
