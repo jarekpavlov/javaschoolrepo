@@ -2,7 +2,16 @@ package com.jschool.domain;
 
 import com.jschool.security.Authority;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +30,7 @@ public class Client {
     private Set<Order> orders = new HashSet<>();
     private Set<Authority> authorities;
 
-    @OneToMany(cascade =CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "client")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "client")
     public Set<Authority> getAuthorities() {
         return authorities;
     }
@@ -48,6 +57,7 @@ public class Client {
     public void setId(Long id) {
         this.id = id;
     }
+
     @Column(length = 45)
     public String getName() {
         return name;
@@ -56,13 +66,14 @@ public class Client {
     public void setName(String name) {
         this.name = name;
     }
+
     @Column(length = 45)
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surename) {
-        this.surname = surename;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     @Column(length = 45)
@@ -79,6 +90,7 @@ public class Client {
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -89,11 +101,11 @@ public class Client {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateofbirth) {
-        this.dateOfBirth = dateofbirth;
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "client") //mapped by is used to bind this SET with client field in other POJO
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "client")
     public Set<Order> getOrders() {
         return orders;
     }
@@ -101,6 +113,7 @@ public class Client {
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
+
     @Column(length = 100)
     public String getPassword() {
         return password;

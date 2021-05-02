@@ -7,8 +7,6 @@ import java.util.Set;
 
 public class CustomSecurityClient extends Client implements UserDetails {
 
-    public CustomSecurityClient() {}
-
     public CustomSecurityClient(Client client) {
         this.setAuthorities(client.getAuthorities());
         this.setAddress(client.getAddress());

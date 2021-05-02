@@ -1,8 +1,12 @@
 package com.jschool.domain;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "addresses")
@@ -34,6 +38,7 @@ public class Address {
     public void setId(Long id) {
         this.id = id;
     }
+
     @Column(length = 45)
     public String getCountry() {
         return country;
@@ -42,6 +47,7 @@ public class Address {
     public void setCountry(String country) {
         this.country = country;
     }
+
     @Column(length = 45)
     public String getCity() {
         return city;
@@ -58,6 +64,7 @@ public class Address {
     public void setPostCode(int postCode) {
         this.postCode = postCode;
     }
+
     @Column(length = 45)
     public String getStreet() {
         return street;

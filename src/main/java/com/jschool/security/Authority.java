@@ -3,8 +3,11 @@ package com.jschool.security;
 import com.jschool.domain.Client;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
-import javax.swing.event.CaretListener;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Authority implements GrantedAuthority {
@@ -13,9 +16,8 @@ public class Authority implements GrantedAuthority {
     private String authority;
     private Client client;
 
-
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
