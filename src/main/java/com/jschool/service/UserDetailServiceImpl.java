@@ -12,13 +12,15 @@ import org.springframework.stereotype.Service;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     EntityService entityService;
+
     @Autowired
-    public UserDetailServiceImpl (EntityService entityService){
+    public UserDetailServiceImpl(EntityService entityService) {
         this.entityService = entityService;
     }
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Client client = entityService.getEntityByEmail(Client.class,s);
+        Client client = entityService.getEntityByEmail(Client.class, s);
 
         return new CustomSecurityClient(client);
     }

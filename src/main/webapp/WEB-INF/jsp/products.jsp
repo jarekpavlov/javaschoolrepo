@@ -42,7 +42,7 @@
                     <th>
                         <a href="product/edit?id=${product.id}">Edit</a>
                         <a href="product/delete?id=${product.id}">Delete</a>
-                        <form:form action="/MmsPr/order/addtocart?id=${product.id}" method="post">
+                        <form:form action="/MmsPr/order/add-to-cart?id=${product.id}" method="post">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <input type="text" name="numberForOrder"/>
                             <input type="submit" value="Add to Cart">

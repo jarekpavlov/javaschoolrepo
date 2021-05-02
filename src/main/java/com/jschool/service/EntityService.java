@@ -1,11 +1,9 @@
 package com.jschool.service;
 
-import com.jschool.DAO.EntityDaoImpl;
-import com.jschool.domain.Client;
+import com.jschool.DAO.EntityDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -13,42 +11,45 @@ import java.util.List;
 @Transactional
 public class EntityService {
 
-    private EntityDaoImpl entityDaoImpl;
+    private EntityDao entityDaoImpl;
 
-    @Autowired//This annotation is not necessary
-    public  EntityService(EntityDaoImpl entityDaoImpl){
-        this.entityDaoImpl=entityDaoImpl;
+    @Autowired
+    public EntityService(EntityDao entityDaoImpl) {
+        this.entityDaoImpl = entityDaoImpl;
     }
-    public <T> T saveEntity(T entity){
+
+    public <T> T saveEntity(T entity) {
         entityDaoImpl.openCurrentSession();
         entityDaoImpl.saveEntity(entity);
         return entity;
     }
-    public<T> T updateEntity(T entity) {
+
+    public <T> T updateEntity(T entity) {
         entityDaoImpl.openCurrentSession();
         entityDaoImpl.updateEntity(entity);
         return entity;
     }
-    public <T> T getEntity( Class<T> type,Long id) {
+
+    public <T> T getEntity(Class<T> type, Long id) {
         entityDaoImpl.openCurrentSession();
-        T entity = entityDaoImpl.getEntity(type, id);
-        return entity;
+        return entityDaoImpl.getEntity(type, id);
     }
+
     public <T> T deleteEntity(Class<T> type, Long id) {
         entityDaoImpl.openCurrentSession();
-        T reference = entityDaoImpl.deleteEntity(type,id);
-        return reference;
+        return entityDaoImpl.deleteEntity(type, id);
     }
+
     public <T> List<T> entityList(Class<T> type) {
         entityDaoImpl.openCurrentSession();
-        List<T> entityList = entityDaoImpl.entityList(type);
-        return  entityList;
+        return entityDaoImpl.entityList(type);
     }
-    public <T> T getEntityByEmail( Class<T> type,String email) {
+
+    public <T> T getEntityByEmail(Class<T> type, String email) {
         T someEntity;
         entityDaoImpl.openCurrentSession();
-        List<T> entities= entityDaoImpl.getEntityByEmail(type, email);
-        for (T entity:entities){
+        List<T> entities = entityDaoImpl.getEntityByEmail(type, email);
+        for (T entity : entities) {
             someEntity = entity;
             return someEntity;
         }

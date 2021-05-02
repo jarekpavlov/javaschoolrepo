@@ -6,12 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Login</title>
 </head>
-<body >
+<body>
 
 <h1>Login Form</h1>
 
@@ -24,7 +24,7 @@
                 Failed to login
                 <c:if test="${SPRING_SECURITY_LAST_EXCEPTION !=null}">
                     Reason: <c:out
-                    value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>
+                        value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>
                 </c:if>
             </div>
         </c:if>
@@ -32,15 +32,14 @@
             <div>You have been logged out</div>
         </c:if>
         <p>
-            <label for="username">Username</label><input type="text" id = "username" name="username">
+            <label for="username">Username</label><input type="text" id="username" name="username">
         </p>
         <p>
-            <label for="password">Password</label><input type="password" id = "password" name="password">
+            <label for="password">Password</label><input type="password" id="password" name="password">
         </p>
         <div>
             <button type="submit" class="btn">Login</button>
         </div>
-
     </fieldset>
 </form>
 </body>

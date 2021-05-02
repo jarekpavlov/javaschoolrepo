@@ -1,6 +1,14 @@
 package com.jschool.domain;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,9 +24,9 @@ public class Product {
     private Float mass;
     private Float volume;
     private int quantity;
-    private Set<ProductsInOrder> productsInOrderSet =new HashSet<>();
+    private Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "product")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
     public Set<ProductsInOrder> getProductsInOrderSet() {
         return productsInOrderSet;
     }
@@ -36,6 +44,7 @@ public class Product {
     public void setId(Long id) {
         this.id = id;
     }
+
     @Column(length = 45)
     public String getTitle() {
         return title;
@@ -52,6 +61,7 @@ public class Product {
     public void setPrice(Float price) {
         this.price = price;
     }
+
     @Column(length = 45)
     public String getCategory() {
         return category;
@@ -60,6 +70,7 @@ public class Product {
     public void setCategory(String category) {
         this.category = category;
     }
+
     @Column(length = 45)
     public String getBrand() {
         return brand;
@@ -68,6 +79,7 @@ public class Product {
     public void setBrand(String brand) {
         this.brand = brand;
     }
+
     @Column(length = 45)
     public String getColor() {
         return color;

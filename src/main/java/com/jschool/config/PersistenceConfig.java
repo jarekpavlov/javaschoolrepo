@@ -18,10 +18,9 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource({ "classpath:persistence-mysql.properties" })
-@ComponentScan({ "com.jschool" })
-public class PersistenceConfig
-{
+@PropertySource("classpath:persistence-mysql.properties")
+@ComponentScan("com.jschool")
+public class PersistenceConfig {
     @Autowired
     private Environment env;
 
@@ -29,7 +28,7 @@ public class PersistenceConfig
     public LocalSessionFactoryBean getSessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(restDataSource());
-        sessionFactory.setPackagesToScan(new String[] { "com.jschool" });
+        sessionFactory.setPackagesToScan("com.jschool");
         sessionFactory.setHibernateProperties(hibernateProperties());
 
         return sessionFactory;
@@ -65,7 +64,7 @@ public class PersistenceConfig
             {
                 setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
                 setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
-                setProperty("hibernate.show_sql",env.getProperty("hibernate.show_sql"));
+                setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
                 setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
                 setProperty("hibernate.globally_quoted_identifiers", "true");
             }

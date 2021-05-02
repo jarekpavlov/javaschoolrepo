@@ -1,9 +1,11 @@
 package com.jschool.domain;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "products_in_order")
 public class ProductsInOrder {
@@ -32,6 +34,7 @@ public class ProductsInOrder {
     public void setOrder(Order order) {
         this.order = order;
     }
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     public Product getProduct() {

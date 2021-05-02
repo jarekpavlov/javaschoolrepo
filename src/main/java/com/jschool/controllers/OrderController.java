@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +26,7 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
+
     public OrderController(EntityService entityService, OrderService orderService) {
         this.entityService = entityService;
         this.orderService = orderService;
@@ -39,7 +39,8 @@ public class OrderController {
         return "orders";
     }
 
-    @PostMapping(value = "/order/addtocart")
+
+    @PostMapping(value = "/order/add-to-cart")
     public String addToCart(@RequestParam int numberForOrder, HttpServletRequest request) {
 
         orderService.addToCart(numberForOrder, request);
