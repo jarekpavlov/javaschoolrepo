@@ -1,13 +1,21 @@
 package com.jschool.controllers;
 
+import com.jschool.DTO.OrderDTO;
 import com.jschool.domain.Client;
+import com.jschool.domain.Order;
 import com.jschool.service.EntityService;
+import com.jschool.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 @Controller
 public class HelloController {
+
+    @Autowired
+    private OrderService orderService;
 
     private EntityService entityService;
 
@@ -18,8 +26,8 @@ public class HelloController {
 
     @GetMapping(value = "/test")
     public String hello() {
-        Client client = entityService.getEntityByEmail(Client.class, "yaroslavvl@yandex.ru");
-        System.out.println(client);
+        List<OrderDTO> list = orderService.getOrderDtoList();
+        System.out.println(list);
         return "users";
     }
 
