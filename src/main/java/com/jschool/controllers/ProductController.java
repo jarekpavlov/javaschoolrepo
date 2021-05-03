@@ -5,14 +5,20 @@ import com.jschool.domain.Product;
 import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ProductController {
@@ -62,5 +68,18 @@ public class ProductController {
         entityService.deleteEntity(Product.class, id);
         return "redirect:/products";
     }
+
+    @PostMapping(value = "/product/filter")
+    public String filterProduct(@RequestParam String color,
+                                @RequestParam String brand,
+                                @RequestParam String title, ModelMap map) {
+
+        List<ProductDTO> filteredList = productService.getFilteredProductList(color, brand, title);
+
+        map.addAttribute("products", filteredList);
+
+        return "products";
+    }
+
 
 }

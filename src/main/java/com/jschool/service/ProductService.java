@@ -20,11 +20,46 @@ public class ProductService {
         this.modelMapper = modelMapper;
     }
 
-    public void saveProduct(Product product){
+    public void saveProduct(Product product) {
         if (product.getId() != null)
             entityService.updateEntity(product);
         else
             entityService.saveEntity(product);
+    }
+
+    /**
+     * Method returns a collection of ProductDTO entities filtered by:
+     * @param color
+     * @param brand
+     * @param title
+     * @return
+     */
+    public List<ProductDTO> getFilteredProductList(String color, String brand, String title) {
+        List<ProductDTO> productDtoList = getProductDtoList();
+        List<ProductDTO> filteredList = null;
+        if (!color.equals("")) {
+            filteredList = productDtoList.stream()
+                    .filter(l -> l.getColor().equals(color)).collect(Collectors.toList());
+        }
+        if (!brand.equals("")) {
+            if (filteredList == null) {
+                filteredList = productDtoList.stream()
+                        .filter(l -> l.getBrand().equals(brand)).collect(Collectors.toList());
+            } else {
+                filteredList = filteredList.stream()
+                        .filter(l -> l.getBrand().equals(brand)).collect(Collectors.toList());
+            }
+        }
+        if (!title.equals("")) {
+            if (filteredList == null) {
+                filteredList = productDtoList.stream()
+                        .filter(l -> l.getTitle().equals(title)).collect(Collectors.toList());
+            } else {
+                filteredList = filteredList.stream()
+                        .filter(l -> l.getTitle().equals(title)).collect(Collectors.toList());
+            }
+        }
+        return filteredList;
     }
 
     public ProductDTO getProductDTO(Product product) {
