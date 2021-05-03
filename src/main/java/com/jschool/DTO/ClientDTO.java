@@ -9,6 +9,15 @@ public class ClientDTO {
     private String email;
     private String phone;
     private Address address;
+    private String dateOfBirth;
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
     public Long getId() {
         return id;

@@ -1,7 +1,9 @@
 package com.jschool.controllers;
 
+import com.jschool.DTO.ProductDTO;
 import com.jschool.domain.Product;
 import com.jschool.service.EntityService;
+import com.jschool.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,15 +18,17 @@ import java.util.List;
 public class ProductController {
 
     private EntityService entityService;
+    private ProductService productService;
 
     @Autowired
-    public ProductController(EntityService entityService) {
+    public ProductController(EntityService entityService, ProductService productService) {
         this.entityService = entityService;
+        this.productService = productService;
     }
 
     @GetMapping(value = "/products")
     public String getProducts(ModelMap map) {
-        List<Product> productList = entityService.entityList(Product.class);
+        List<ProductDTO> productList = productService.getProductDtoList();
         map.addAttribute("products", productList);
         return "products";
     }
@@ -39,10 +43,8 @@ public class ProductController {
 
     @RequestMapping(value = "/product/save", method = RequestMethod.POST)
     public String saveProduct(Product product) {
-        if (product.getId() != null)
-            entityService.updateEntity(product);
-        else
-            entityService.saveEntity(product);
+
+        productService.saveProduct(product);
 
         return "redirect:/products";
     }

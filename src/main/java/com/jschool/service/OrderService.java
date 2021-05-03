@@ -27,11 +27,13 @@ public class OrderService {
     @Autowired
     public OrderService(EntityService entityService, ModelMapper modelMapper) {
         this.entityService = entityService;
-        this.modelMapper =modelMapper;
+        this.modelMapper = modelMapper;
     }
+
     /**
      * This method is taking @param numberForOrder to create a session using
-     * @param request  with ProductsInOrder instance to store the Products into the cart
+     *
+     * @param request with ProductsInOrder instance to store the Products into the cart
      */
     public void addToCart(int numberForOrder, HttpServletRequest request) {
         Long id = Long.parseLong(request.getParameter("id"));
@@ -52,8 +54,10 @@ public class OrderService {
             httpSession.setAttribute("productsInOrderSet", temp);
         }
     }
+
     /**
      * The method is taking the session instance using
+     *
      * @param httpSession to a new Order object to store it
      * into the database
      */
@@ -70,13 +74,14 @@ public class OrderService {
         }
         entityService.saveEntity(order);
     }
-    public OrderDTO getOrderDTO(Order order){
+
+    public OrderDTO getOrderDTO(Order order) {
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.LOOSE);
-        OrderDTO orderDTO=modelMapper.map(order,OrderDTO.class);
-        return orderDTO;
+        return modelMapper.map(order, OrderDTO.class);
     }
-    public List<OrderDTO> getOrderDtoList(){
+
+    public List<OrderDTO> getOrderDtoList() {
         return (entityService.entityList(Order.class))
                 .stream()
                 .map(this::getOrderDTO)

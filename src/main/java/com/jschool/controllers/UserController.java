@@ -1,7 +1,8 @@
 package com.jschool.controllers;
 
-import com.jschool.domain.Address;
+import com.jschool.DTO.ClientDTO;
 import com.jschool.domain.Client;
+import com.jschool.service.ClientService;
 import com.jschool.service.EntityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,14 +17,16 @@ import java.util.List;
 public class UserController {
 
     private EntityService entityService;
+    private ClientService clientService;
 
-    public UserController(EntityService entityService) {
+    public UserController(EntityService entityService, ClientService clientService) {
         this.entityService = entityService;
+        this.clientService = clientService;
     }
 
     @GetMapping(value = "/users")
     public String getUsers(ModelMap map) {
-        List<Client> userList = entityService.entityList(Client.class);
+        List<ClientDTO> userList = clientService.getClientDtoList();
         map.addAttribute("userList", userList);
         return "users";
     }
@@ -38,7 +41,6 @@ public class UserController {
     @GetMapping(value = "/users/edit")
     public String userEdit(HttpServletRequest request, ModelMap map) {
         Long id = Long.parseLong(request.getParameter("id"));
-
         Client client = entityService.getEntity(Client.class, id);
         map.addAttribute(client);
         return "registrationPage";
@@ -46,14 +48,7 @@ public class UserController {
 
     @PostMapping(value = "/users/save")
     public String saveUser(Client client) {
-        Address address = client.getAddress();
-        if (client.getId() != null) {
-            entityService.updateEntity(address);
-            entityService.updateEntity(client);
-        } else {
-            entityService.saveEntity(address);
-            entityService.saveEntity(client);
-        }
+        clientService.saveClient(client);
         return "redirect:/";
     }
 
