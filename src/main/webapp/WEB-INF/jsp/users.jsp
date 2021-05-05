@@ -11,7 +11,7 @@
 
 <html>
 <head>
-    <title>Hello</title>
+    <title>Clients</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
@@ -20,7 +20,6 @@
 <body>
 <div align="center">
     <h1>Clients</h1>
-    <h3><a hreh="new">Users</a></h3>
     <table border="1" cellpadding="5">
         <tr>
             <th>Number</th>
@@ -48,9 +47,7 @@
                 </th>
             </tr>
         </c:forEach>
-
     </table>
-    <button type="submit" class="btn btn-primary">Submit</button>
 </div>
 
 </body>

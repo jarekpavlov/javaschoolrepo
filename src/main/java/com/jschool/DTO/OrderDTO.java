@@ -1,5 +1,6 @@
 package com.jschool.DTO;
 
+import com.jschool.domain.Client;
 import com.jschool.domain.Product;
 
 import java.util.Set;
@@ -9,6 +10,15 @@ public class OrderDTO {
     private Set<Product> productSet;
     private String paymentStatus;
     private String orderStatus;
+    private Client client;
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
     public Long getId() {
         return id;

@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -121,5 +122,30 @@ public class Client {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        Client client = (Client) obj;
+        if (this.id == null && this.name == null) {
+            if (client.getId() != null && client.getName() != null)
+                return false;
+        } else if (!(this.id.equals(client.getId()) && this.name.equals(client.getName()))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int prime = 31;
+        int result = 1;
+        result = result * prime + ((id == null) ? 0 : id.hashCode());
+        result = result * prime + ((name == null) ? 0 : name.hashCode());
+        return result;
     }
 }

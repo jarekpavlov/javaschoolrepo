@@ -1,12 +1,13 @@
 package com.jschool.controllers;
 
+import com.jschool.DTO.OrderDTO;
 import com.jschool.domain.Client;
 import com.jschool.domain.Order;
-import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.service.EntityService;
 import com.jschool.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class OrderController {
@@ -34,9 +34,11 @@ public class OrderController {
     }
 
     @GetMapping(value = "/orders")
-    public String createOrder(ModelMap map) {
-        List<Order> orders = entityService.entityList(Order.class);
-        map.addAttribute("orders", orders);
+    public String getOrdersByClient(ModelMap map, @AuthenticationPrincipal Client client) {
+        List<OrderDTO> orders = orderService.getOrderDtoList();
+        List<OrderDTO> ordersByClient = orders.stream()
+                .filter(order -> order.getClient().equals(client)).collect(Collectors.toList());
+        map.addAttribute("orders", ordersByClient);
         return "orders";
     }
 
@@ -47,25 +49,34 @@ public class OrderController {
     }
 
     @PostMapping(value = "/order/create")
-    public String createOrder(HttpSession httpSession) {
-        orderService.createOrder(httpSession);
-        return "redirect:/products";
-    }
-    @GetMapping(value = "/order/product-in-cart")
-    public String getProductsInCart(ModelMap map, HttpSession session){
-        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
-        map.addAttribute("productsInCart",productsInOrderSet);
-        return "cart";
-    }
-    @GetMapping(value = "/order/delete-from-cart")
-    public String deleteProductFromCart(HttpServletRequest request){
-        orderService.deleteFromCart(request);
-        return "redirect:/order/product-in-cart";
-    }
-    @PostMapping(value = "/order/save-from-cart")
-    public String saveOrderFromCart(@RequestParam Map<String,String> quantityMap, HttpSession session ){
-        orderService.saveFromCart(quantityMap,session);
-        return "redirect:/products";
+    public String createOrder(HttpSession httpSession, @AuthenticationPrincipal Client client) {
+        orderService.createOrder(httpSession, client);
+        return "redirect:/orders";
     }
 
+    @GetMapping(value = "/order/products-in-cart")
+    public String getProductsInCart(ModelMap map, HttpSession session) {
+        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
+        map.addAttribute("productsInCart", productsInOrderSet);
+        return "cart";
+    }
+
+    @GetMapping(value = "/order/delete-from-cart")
+    public String deleteProductFromCart(HttpServletRequest request) {
+        orderService.deleteFromCart(request);
+        return "redirect:/order/products-in-cart";
+    }
+
+    @PostMapping(value = "/order/save-from-cart")
+    public String saveOrderFromCart(@RequestParam Map<String, String> quantityMap, HttpSession session, @AuthenticationPrincipal Client client) {
+        orderService.saveFromCart(quantityMap, session, client);
+        return "redirect:/orders";
+    }
+
+    @GetMapping(value = "/order/products-in-order")
+    public String getProductsInOrder(HttpServletRequest request, ModelMap map) {
+        Set<ProductsInOrder> productsInOrderSet = orderService.getProductsInOrder(request);
+        map.addAttribute("products", productsInOrderSet);
+        return "productsPerOrder";
+    }
 }

@@ -7,8 +7,8 @@ import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,10 +61,9 @@ public class OrderService {
      * The method is taking the session instance using
      *
      * @param httpSession to a new Order object to store it
-     * into the database
+     *                    into the database
      */
-    public void createOrder(HttpSession httpSession) {
-        Client client = entityService.getEntity(Client.class, 1L);
+    public void createOrder(HttpSession httpSession, Client client) {
         Set<ProductsInOrder> productsInOrderSetTemp = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
 
         Order order = new Order();
@@ -74,31 +73,42 @@ public class OrderService {
         for (ProductsInOrder temp : productsInOrderSetTemp) {
             temp.setOrder(order);
         }
+        order.setOrderStatus("In process");
+        order.setPaymentStatus("Waiting for payment");
         entityService.saveEntity(order);
         httpSession.removeAttribute("productsInOrderSet");
     }
-    public void deleteFromCart(HttpServletRequest request){
+
+    public void deleteFromCart(HttpServletRequest request) {
         Long id = Long.parseLong(request.getParameter("id"));
         HttpSession session = request.getSession();
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
         Iterator<ProductsInOrder> itr = productsInOrderSet.iterator();
-        while (itr.hasNext()){
-            if(itr.next().getProduct().getId().equals(id)){
+        while (itr.hasNext()) {
+            if (itr.next().getProduct().getId().equals(id)) {
                 itr.remove();
                 break;
             }
         }
-        session.setAttribute("productsInOrderSet",productsInOrderSet);
+        session.setAttribute("productsInOrderSet", productsInOrderSet);
     }
-    public void saveFromCart(Map<String,String> quantityMap, HttpSession session){
-        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>)session.getAttribute("productsInOrderSet");
-        for(ProductsInOrder temp : productsInOrderSet){
+
+    public void saveFromCart(Map<String, String> quantityMap, HttpSession session, @AuthenticationPrincipal Client client) {
+        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
+        for (ProductsInOrder temp : productsInOrderSet) {
             Long ProductId = temp.getProduct().getId();
-            String quantity =quantityMap.get(String.valueOf(ProductId)) ;
+            String quantity = quantityMap.get(String.valueOf(ProductId));
             temp.setQuantity(Integer.parseInt(quantity));
         }
-        session.setAttribute("productsInOrderSet",productsInOrderSet);
-        createOrder(session);
+        session.setAttribute("productsInOrderSet", productsInOrderSet);
+        createOrder(session, client);
+    }
+
+    public Set<ProductsInOrder> getProductsInOrder(HttpServletRequest request) {
+        Long id = Long.parseLong(request.getParameter("id"));
+        Order order = entityService.getEntity(Order.class, id);
+        Set<ProductsInOrder> productsInOrderSet = order.getProductsInOrderSet();
+        return productsInOrderSet;
     }
 
     public OrderDTO getOrderDTO(Order order) {
