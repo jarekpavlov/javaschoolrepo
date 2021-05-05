@@ -2,10 +2,10 @@ package com.jschool.controllers;
 
 import com.jschool.DTO.ProductDTO;
 import com.jschool.domain.Product;
+import com.jschool.domain.ProductsInOrder;
 import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 @Controller
 public class ProductController {
@@ -33,9 +36,15 @@ public class ProductController {
     }
 
     @GetMapping(value = "/products")
-    public String getProducts(ModelMap map) {
+    public String getProducts(ModelMap map, HttpSession httpSession) {
         List<ProductDTO> productList = productService.getProductDtoList();
         map.addAttribute("products", productList);
+        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
+        if (productsInOrderSet != null) {
+            map.addAttribute("productsInCart", productsInOrderSet.size());
+        } else {
+            map.addAttribute("productsInCart", "0");
+        }
         return "products";
     }
 
@@ -49,9 +58,7 @@ public class ProductController {
 
     @RequestMapping(value = "/product/save", method = RequestMethod.POST)
     public String saveProduct(Product product) {
-
         productService.saveProduct(product);
-
         return "redirect:/products";
     }
 
@@ -75,11 +82,8 @@ public class ProductController {
                                 @RequestParam String title, ModelMap map) {
 
         List<ProductDTO> filteredList = productService.getFilteredProductList(color, brand, title);
-
         map.addAttribute("products", filteredList);
-
         return "products";
     }
-
 
 }

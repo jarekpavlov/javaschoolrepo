@@ -7,7 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -15,9 +17,13 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableWebMvc
 @EnableWebSecurity
 @ComponentScan(basePackages = "com.jschool")
-@Import({WebSecurityConfig.class})//It is not necessary?
+@Import({WebSecurityConfig.class})
 public class SpringMvcConfig implements WebMvcConfigurer {
 
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/MmsPr/resources/**").addResourceLocations("classpath:/images/");
+//    }
 
     @Bean
     public ViewResolver getViewResolver() {

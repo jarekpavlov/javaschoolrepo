@@ -20,6 +20,9 @@
     <div align="center">
         <h1>Products</h1>
         <h3><a href="product/new">New Product</a></h3>
+        <label>Products in cart:</label>
+        <label>${productsInCart}</label>
+        <a href="/MmsPr/order/product-in-cart" class="btn btn-primary btn-sm" role="button">Cart</a>
         <form:form action="/MmsPr/product/filter" method="post">
             <label>Color:</label>
             <input type="text" name="color"/>

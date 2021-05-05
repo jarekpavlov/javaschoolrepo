@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -73,6 +75,30 @@ public class OrderService {
             temp.setOrder(order);
         }
         entityService.saveEntity(order);
+        httpSession.removeAttribute("productsInOrderSet");
+    }
+    public void deleteFromCart(HttpServletRequest request){
+        Long id = Long.parseLong(request.getParameter("id"));
+        HttpSession session = request.getSession();
+        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
+        Iterator<ProductsInOrder> itr = productsInOrderSet.iterator();
+        while (itr.hasNext()){
+            if(itr.next().getProduct().getId().equals(id)){
+                itr.remove();
+                break;
+            }
+        }
+        session.setAttribute("productsInOrderSet",productsInOrderSet);
+    }
+    public void saveFromCart(Map<String,String> quantityMap, HttpSession session){
+        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>)session.getAttribute("productsInOrderSet");
+        for(ProductsInOrder temp : productsInOrderSet){
+            Long ProductId = temp.getProduct().getId();
+            String quantity =quantityMap.get(String.valueOf(ProductId)) ;
+            temp.setQuantity(Integer.parseInt(quantity));
+        }
+        session.setAttribute("productsInOrderSet",productsInOrderSet);
+        createOrder(session);
     }
 
     public OrderDTO getOrderDTO(Order order) {
