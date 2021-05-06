@@ -41,9 +41,9 @@
                 <th>${user.phone}</th>
                 <th>${user.dateOfBirth}</th>
                 <th>
-                    <a href="users/delete?id=${user.id}">delete</a>
+                    <a href="/MmsPr/admin/users/delete?id=${user.id}">delete</a>
                     &nbsp;&nbsp;
-                    <a href="users/edit?id=${user.id}">edit</a>
+                    <a href="/MmsPr/users/edit?id=${user.id}">edit</a>
                 </th>
             </tr>
         </c:forEach>

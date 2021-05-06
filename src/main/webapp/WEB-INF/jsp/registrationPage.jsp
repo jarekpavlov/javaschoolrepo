@@ -20,7 +20,7 @@
 <div align="center">
     <h1>Client</h1>
     <table>
-        <form:form action="/MmsPr/users/save/" method="post" modelAttribute="client"  >
+        <form:form action="/MmsPr/users/registration/save/" method="post" modelAttribute="client"  >
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <form:hidden path = "address.id"/>
             <form:hidden path = "id"/>

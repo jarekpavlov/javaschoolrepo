@@ -24,14 +24,14 @@ public class UserController {
         this.clientService = clientService;
     }
 
-    @GetMapping(value = "/users")
+    @GetMapping(value = "/admin/users")
     public String getUsers(ModelMap map) {
         List<ClientDTO> userList = clientService.getClientDtoList();
         map.addAttribute("userList", userList);
         return "users";
     }
 
-    @GetMapping(value = "/users/registration")
+    @GetMapping(value = "/users/registration/register")
     public String registrationMeth(ModelMap map) {
         Client client = new Client();
         map.addAttribute("client", client);
@@ -46,16 +46,16 @@ public class UserController {
         return "registrationPage";
     }
 
-    @PostMapping(value = "/users/save")
+    @PostMapping(value = "/users/registration/save")
     public String saveUser(Client client) {
         clientService.saveClient(client);
         return "redirect:/";
     }
 
-    @GetMapping(value = "/users/delete")
+    @GetMapping(value = "/admin/users/delete")
     public String deleteUser(HttpServletRequest request) {
         Long id = Long.parseLong(request.getParameter("id"));
         entityService.deleteEntity(Client.class, id);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 }
