@@ -29,7 +29,7 @@ public class Client {
     private Address address;
     private String password;
     private Set<Order> orders = new HashSet<>();
-    private Set<Authority> authorities;
+    private Set<Authority> authorities = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "client")
     public Set<Authority> getAuthorities() {

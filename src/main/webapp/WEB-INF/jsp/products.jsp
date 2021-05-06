@@ -21,11 +21,17 @@
 <body>
 <div align="center">
     <h1>Products</h1>
-    <h3><a href="product/new">New Product</a></h3>
-    <a href="/MmsPr/orders">Order History</a>
-    <label>Products in cart:</label>
-    <label>${productsInCart}</label>
-    <a href="/MmsPr/order/products-in-cart" class="btn btn-primary btn-sm" role="button">Cart</a>
+    <sec:authorize access="hasRole('ADMIN')">
+        <h3><a href="product/new">New Product</a></h3>
+    </sec:authorize>
+    <sec:authorize access="hasRole('USER')">
+        <a href="/MmsPr/orders">Order History</a>
+    </sec:authorize>
+    <sec:authorize access="hasRole('USER') or isAnonymous()">
+        <label>Products in cart:</label>
+        <label>${productsInCart}</label>
+        <a href="/MmsPr/order/products-in-cart" class="btn btn-primary btn-sm" role="button">Cart</a>
+    </sec:authorize>
     <form:form action="/MmsPr/product/filter" method="post">
         <label>Color:</label>
         <input type="text" name="color"/>
@@ -60,11 +66,13 @@
                         <a href="product/delete?id=${product.id}">Delete</a>
                     </sec:authorize>
 
-                    <form:form action="/MmsPr/order/add-to-cart?id=${product.id}" method="post">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                        <input type="text" name="numberForOrder"/>
-                        <input type="submit" value="Add to Cart">
-                    </form:form>
+                    <sec:authorize access="!hasRole('ADMIN')">
+                        <form:form action="/MmsPr/order/add-to-cart?id=${product.id}" method="post">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            <input type="text" name="numberForOrder"/>
+                            <input type="submit" value="Add to Cart">
+                        </form:form>
+                    </sec:authorize>
                 </th>
 
             </tr>

@@ -4,11 +4,15 @@ import com.jschool.DTO.ClientDTO;
 import com.jschool.domain.Client;
 import com.jschool.service.ClientService;
 import com.jschool.service.EntityService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -47,8 +51,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/users/registration/save")
-    public String saveUser(Client client) {
-        clientService.saveClient(client);
+    public String saveUser(Client client, @AuthenticationPrincipal Client clientWithPassword) {
+        clientService.saveClient(client,clientWithPassword);
         return "redirect:/";
     }
 
