@@ -3,14 +3,15 @@ package com.jschool.DTO;
 import com.jschool.domain.Client;
 import com.jschool.domain.Product;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class OrderDTO {
     private Long id;
-    private Set<Product> productSet;
     private String paymentStatus;
     private String orderStatus;
     private Client client;
+    private Set<Product> productSet = new HashSet<>();
 
     public Client getClient() {
         return client;

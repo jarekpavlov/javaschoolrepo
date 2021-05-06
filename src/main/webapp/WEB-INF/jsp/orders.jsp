@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
@@ -24,6 +25,9 @@
     <table border="1" cellpadding="5">
         <tr>
             <th>Number</th>
+            <sec:authorize access="hasRole('ADMIN')">
+                <th>Client</th>
+            </sec:authorize>
             <th>Order Status</th>
             <th>Payment Status</th>
             <th>Products</th>
@@ -31,6 +35,9 @@
         <c:forEach items="${orders}" var="order" varStatus="status">
             <tr>
                 <th>${status.index+1}</th>
+                <sec:authorize access="hasRole('ADMIN')">
+                    <th>${order.client.email}</th>
+                </sec:authorize>
                 <th>${order.orderStatus}</th>
                 <th>${order.paymentStatus}</th>
                 <th><a href="/MmsPr/order/products-in-order?id=${order.id}">products in order</a></th>

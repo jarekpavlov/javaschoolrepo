@@ -76,7 +76,24 @@ public class OrderController {
     @GetMapping(value = "/order/products-in-order")
     public String getProductsInOrder(HttpServletRequest request, ModelMap map) {
         Set<ProductsInOrder> productsInOrderSet = orderService.getProductsInOrder(request);
+        OrderDTO orderDTO = orderService.getOrderFromJoinTable(productsInOrderSet);
+        map.addAttribute("order", orderDTO);
         map.addAttribute("products", productsInOrderSet);
         return "productsPerOrder";
+    }
+
+    @PostMapping(value = "admin/orders/save")
+    public String saveOrderStatus(@RequestParam String orderStatus
+                                  ,@RequestParam String paymentStatus
+                                  ,@RequestParam Long id) {
+        orderService.saveOrderStatus(orderStatus, paymentStatus,id);
+        return "redirect:/admin/orders";
+    }
+
+    @GetMapping(value = "/admin/orders")
+    public String getAllOrders(ModelMap map) {
+        List<OrderDTO> orderDtoList = orderService.getOrderDtoList();
+        map.addAttribute("orders", orderDtoList);
+        return "orders";
     }
 }
