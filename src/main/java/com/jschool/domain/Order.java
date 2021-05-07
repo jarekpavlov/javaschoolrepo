@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +27,15 @@ public class Order {
     private Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
     private String paymentStatus;
     private String orderStatus;
+    private Date dateOfOrder;
+
+    public Date getDateOfOrder() {
+        return dateOfOrder;
+    }
+
+    public void setDateOfOrder(Date dateOfOrder) {
+        this.dateOfOrder = dateOfOrder;
+    }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
     public Set<ProductsInOrder> getProductsInOrderSet() {

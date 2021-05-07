@@ -10,10 +10,10 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -68,6 +68,8 @@ public class OrderService {
         Set<ProductsInOrder> productsInOrderSetTemp = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
 
         Order order = new Order();
+        Date date = new Date();
+        order.setDateOfOrder(date);
         order.setClient(client);
         order.setProductsInOrderSet(productsInOrderSetTemp);
 
@@ -112,7 +114,7 @@ public class OrderService {
         return productsInOrderSet;
     }
 
-    public OrderDTO getOrderFromJoinTable(Set<ProductsInOrder> productsInOrderSet){
+    public OrderDTO getOrderFromJoinTable(Set<ProductsInOrder> productsInOrderSet) {
         ProductsInOrder productsInOrder = new ProductsInOrder();
         for (ProductsInOrder entity : productsInOrderSet) {
             productsInOrder = entity;
@@ -122,7 +124,8 @@ public class OrderService {
         Order order = productsInOrder.getOrder();
         return getOrderDTO(order);
     }
-    public void saveOrderStatus(String orderStatus,String paymentStatus,Long id){
+
+    public void saveOrderStatus(String orderStatus, String paymentStatus, Long id) {
         Order order = entityService.getEntity(Order.class, id);
         order.setOrderStatus(orderStatus);
         order.setPaymentStatus(paymentStatus);

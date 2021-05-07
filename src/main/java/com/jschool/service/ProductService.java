@@ -6,6 +6,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,7 @@ public class ProductService {
 
     /**
      * Method returns a collection of ProductDTO entities filtered by:
+     *
      * @param color
      * @param brand
      * @param title
@@ -60,6 +63,12 @@ public class ProductService {
             }
         }
         return filteredList;
+    }
+
+    public List<Product> getTopTenProducts() {
+
+        List<Product> productList = new ArrayList<>();
+        return productList;
     }
 
     public ProductDTO getProductDTO(Product product) {

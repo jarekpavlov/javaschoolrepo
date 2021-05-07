@@ -3,6 +3,7 @@ package com.jschool.DTO;
 import com.jschool.domain.Client;
 import com.jschool.domain.Product;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,16 @@ public class OrderDTO {
     private String paymentStatus;
     private String orderStatus;
     private Client client;
+    private Date dateOfOrder;
     private Set<Product> productSet = new HashSet<>();
+
+    public Date getDateOfOrder() {
+        return dateOfOrder;
+    }
+
+    public void setDateOfOrder(Date dateOfOrder) {
+        this.dateOfOrder = dateOfOrder;
+    }
 
     public Client getClient() {
         return client;

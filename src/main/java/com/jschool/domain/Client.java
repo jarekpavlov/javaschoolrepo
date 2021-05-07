@@ -148,4 +148,12 @@ public class Client {
         result = result * prime + ((name == null) ? 0 : name.hashCode());
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
+    }
 }

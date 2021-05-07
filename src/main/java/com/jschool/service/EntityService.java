@@ -1,6 +1,7 @@
 package com.jschool.service;
 
 import com.jschool.DAO.EntityDao;
+import com.jschool.domain.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,10 @@ public class EntityService {
             return someEntity;
         }
         return null;
+    }
+    public List<Order> getPeriodOrders(int daysAgo){
+        entityDaoImpl.openCurrentSession();
+        return entityDaoImpl.getPeriodOrders(daysAgo);
     }
 
 }
