@@ -1,12 +1,16 @@
 package com.jschool.service;
 
 import com.jschool.DAO.EntityDao;
-import com.jschool.domain.Order;
+import com.jschool.count.JoinCountByClient;
+import com.jschool.count.JoinCountByProduct;
+import com.jschool.count.JoinCountSum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Service
 @Transactional
@@ -56,9 +60,43 @@ public class EntityService {
         }
         return null;
     }
-    public List<Order> getPeriodOrders(int daysAgo){
+
+    public Set<JoinCountByClient> getBestClient(int daysAgo) {
         entityDaoImpl.openCurrentSession();
-        return entityDaoImpl.getPeriodOrders(daysAgo);
+        List<?> bestClient = entityDaoImpl.getBestClient(daysAgo);
+        Set<JoinCountByClient> joinCountByClients = new TreeSet<>();
+        for (int i = 0; i < bestClient.size(); i++) {
+            JoinCountByClient joinCountByClient = new JoinCountByClient();
+            Object[] result = (Object[]) bestClient.get(i);
+            joinCountByClient.setResultAmount((Double) result[0]);
+            joinCountByClient.setClient_id((Long) result[1]);
+            joinCountByClients.add(joinCountByClient);
+        }
+        return joinCountByClients;
+    }
+
+    public Set<JoinCountByProduct> getBestProduct(int daysAgo) {
+        entityDaoImpl.openCurrentSession();
+        List<?> bestProduct = entityDaoImpl.getBestProduct(daysAgo);
+        Set<JoinCountByProduct> joinCountByProductSet = new TreeSet<>();
+        for (int i = 0; i < bestProduct.size(); i++) {
+            JoinCountByProduct joinCountByProduct = new JoinCountByProduct();
+            Object[] result = (Object[]) bestProduct.get(i);
+            joinCountByProduct.setResultAmount((Double) result[0]);
+            joinCountByProduct.setProduct_id((Long) result[1]);
+            joinCountByProductSet.add(joinCountByProduct);
+        }
+        return joinCountByProductSet;
+
+    }
+
+    public JoinCountSum getSum(int daysAgo) {
+        entityDaoImpl.openCurrentSession();
+        Object object = entityDaoImpl.getSum(daysAgo);
+        JoinCountSum joinCountSum = new JoinCountSum();
+        joinCountSum.setResultSum((Double) object);
+
+        return joinCountSum;
     }
 
 }

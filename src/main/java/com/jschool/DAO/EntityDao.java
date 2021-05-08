@@ -1,6 +1,5 @@
 package com.jschool.DAO;
 
-import com.jschool.domain.Order;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -53,14 +52,37 @@ public class EntityDao {
         Query query = currentSession.createQuery("select c from " + type.getName() + " c where c.email='" + email + "'");
         return (List<T>) query.getResultList();
     }
-    public List<Order> getPeriodOrders(int daysAgo){
+
+    public List<?> getBestClient(int daysAgo) {
+        String dateBefore_daysS = getDateBefore(daysAgo);
+        Query query = currentSession.createQuery("select sum(m.product.price*m.quantity) as resultAmount, m.order.client.id as" +
+                "  client_id from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
+                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" + "group by m.order.client.id order by sum(m.product.price*m.quantity)");
+        return query.getResultList();
+    }
+
+    public List<?> getBestProduct(int daysAgo) {
+        String dateBefore_daysS = getDateBefore(daysAgo);
+        Query query = currentSession.createQuery("select sum(m.product.price*m.quantity), m.product.id, m.quantity" +
+                " from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
+                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" + "group by m.product.id order by sum(m.product.price*m.quantity)");
+        return query.getResultList();
+    }
+
+    public Object getSum(int daysAgo) {
+        String dateBefore_daysS = getDateBefore(daysAgo);
+        Query query = currentSession.createQuery("select sum(m.product.price*m.quantity)" +
+                " from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
+                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'");
+        return query.getSingleResult();
+    }
+
+    private String getDateBefore(int daysAgo) {
         Instant now = Instant.now();
         Instant before = now.minus(Duration.ofDays(daysAgo));
         Date dateBefore_days = Date.from(before);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String dateBefore_daysS = dateFormat.format(dateBefore_days);
-        Query query =currentSession.createQuery("select o from Order o where o.dateOfOrder > '"+dateBefore_daysS+"'");
-        return  (List<Order>) query.getResultList();
+        return dateFormat.format(dateBefore_days);
     }
 
     public Session openCurrentSession() {
