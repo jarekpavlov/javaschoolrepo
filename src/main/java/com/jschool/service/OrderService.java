@@ -27,9 +27,20 @@ public class OrderService {
     private EntityService entityService;
     private ModelMapper modelMapper;
 
+    public OrderService() {
+    }
+
     @Autowired
     public OrderService(EntityService entityService, ModelMapper modelMapper) {
         this.entityService = entityService;
+        this.modelMapper = modelMapper;
+    }
+
+    public ModelMapper getModelMapper() {
+        return modelMapper;
+    }
+
+    public void setModelMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
@@ -118,7 +129,6 @@ public class OrderService {
         ProductsInOrder productsInOrder = new ProductsInOrder();
         for (ProductsInOrder entity : productsInOrderSet) {
             productsInOrder = entity;
-            System.out.println(entity);
             break;
         }
         Order order = productsInOrder.getOrder();
@@ -133,9 +143,10 @@ public class OrderService {
     }
 
     public OrderDTO getOrderDTO(Order order) {
-        modelMapper.getConfiguration()
+        getModelMapper()
+                .getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.LOOSE);
-        return modelMapper.map(order, OrderDTO.class);
+        return getModelMapper().map(order, OrderDTO.class);
     }
 
     public List<OrderDTO> getOrderDtoList() {

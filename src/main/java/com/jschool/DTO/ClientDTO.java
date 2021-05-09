@@ -66,4 +66,20 @@ public class ClientDTO {
     public void setAddress(Address address) {
         this.address = address;
     }
+
+    public boolean equals(Object object){
+        if (this==object)
+            return true;
+        if(getClass()!=object.getClass())
+            return false;
+        if(object==null)
+            return false;
+        ClientDTO clientDTO = (ClientDTO) object;
+        if (((ClientDTO) object).getId() == null)
+            if (this.id!=null)
+                return false;
+        if(!this.id.equals(clientDTO.getId()))
+            return false;
+        return true;
+    }
 }

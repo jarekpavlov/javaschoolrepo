@@ -113,4 +113,30 @@ public class Product {
         this.quantity = quantity;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if(getClass()!=obj.getClass())
+            return false;
+        if (obj == null)
+            return false;
+        Product product = (Product) obj;
+        if (this.id == null ) {
+            if (product.getId() != null)
+                return false;
+        } else if (!this.id.equals(product.getId())) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int prime = 31;
+        int result = 1;
+        result = result * prime + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
 }

@@ -17,6 +17,7 @@ class ProductServiceTest {
 
         List<ProductDTO> list = new ArrayList<>();
         List<ProductDTO> filteredList = new ArrayList<>();
+
         ProductDTO product1 = new ProductDTO();
         ProductDTO product2 = new ProductDTO();
         ProductDTO product3 = new ProductDTO();
@@ -58,7 +59,9 @@ class ProductServiceTest {
         filteredList.add(product2);
         List<ProductDTO> filteredListAfterMethod = productService.getFilteredProductList(list,"color1","brand1","");
         System.out.println(filteredListAfterMethod);
+
         Assertions.assertEquals(filteredList,filteredListAfterMethod);
+        Assertions.assertNotEquals(list, productService.getFilteredProductList(list,"color2","brand3",""));
     }
 
     @Test

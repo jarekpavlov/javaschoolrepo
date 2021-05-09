@@ -110,5 +110,29 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if(getClass()!=obj.getClass())
+            return false;
+        if (obj == null)
+            return false;
+        Order order = (Order) obj;
+        if (this.id == null ) {
+            if (order.getId() != null)
+                return false;
+        } else if (!this.id.equals(order.getId())) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public int hashCode() {
+        int prime = 31;
+        int result = 1;
+        result = result * prime + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
 }

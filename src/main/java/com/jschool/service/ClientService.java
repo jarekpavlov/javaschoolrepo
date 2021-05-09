@@ -6,6 +6,7 @@ import com.jschool.domain.Client;
 import com.jschool.security.Authority;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,19 @@ public class ClientService {
     private ModelMapper modelMapper;
     private EntityService entityService;
 
+    public ClientService() {}
+
+    @Autowired
     public ClientService(ModelMapper modelMapper, EntityService entityService) {
         this.entityService = entityService;
+        this.modelMapper = modelMapper;
+    }
+
+    public ModelMapper getModelMapper() {
+        return modelMapper;
+    }
+
+    public void setModelMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
@@ -47,9 +59,10 @@ public class ClientService {
 
     public ClientDTO getClientDTO(Client client) {
 
-        modelMapper.getConfiguration()
+        getModelMapper()
+                .getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.LOOSE);
-        return modelMapper.map(client, ClientDTO.class);
+        return getModelMapper().map(client, ClientDTO.class);
     }
 
     public List<ClientDTO> getClientDtoList() {

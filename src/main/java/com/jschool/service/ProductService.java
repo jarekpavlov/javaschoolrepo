@@ -16,7 +16,7 @@ public class ProductService {
     private ModelMapper modelMapper;
     private EntityService entityService;
 
-    public ProductService() {};
+    public ProductService() {}
 
     @Autowired
     public ProductService(ModelMapper modelMapper, EntityService entityService) {

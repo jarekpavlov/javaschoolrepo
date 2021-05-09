@@ -62,4 +62,20 @@ public class OrderDTO {
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
+
+    public boolean equals(Object object){
+        if (this==object)
+            return true;
+        if(getClass()!=object.getClass())
+            return false;
+        if(object==null)
+            return false;
+        OrderDTO orderDTO = (OrderDTO) object;
+        if (((OrderDTO) object).getId() == null)
+            if (this.id!=null)
+                return false;
+        if(!this.id.equals(orderDTO.getId()))
+            return false;
+        return true;
+    }
 }

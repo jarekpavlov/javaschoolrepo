@@ -52,4 +52,30 @@ public class ProductsInOrder {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if(getClass()!=obj.getClass())
+            return false;
+        if (obj == null)
+            return false;
+        ProductsInOrder productsInOrder = (ProductsInOrder) obj;
+        if (this.id == null ) {
+            if (productsInOrder.getId() != null)
+                return false;
+        } else if (!this.id.equals(productsInOrder.getId())) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int prime = 31;
+        int result = 1;
+        result = result * prime + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
 }

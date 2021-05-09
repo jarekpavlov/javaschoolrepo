@@ -75,7 +75,7 @@ public class EntityDao {
         String dateBefore_daysS = getDateBefore(daysAgo);
         Query query = currentSession.createQuery("select sum(m.product.price*m.quantity)" +
                 " from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
-                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'"+"and m.order.orderStatus = 'finished'");
+                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" + "and m.order.orderStatus = 'finished'");
         return query.getSingleResult();
     }
 
