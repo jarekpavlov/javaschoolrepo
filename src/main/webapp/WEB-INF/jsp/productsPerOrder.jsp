@@ -22,7 +22,7 @@
 <body>
 <div align="center">
     <h1>Products in order</h1>
-    <sec:authorize access="hasRole('ADMIN')">
+    <sec:authorize access="hasRole('EMPLOYEE')">
         <form:form action="/MmsPr/admin/orders/save" method="post">
             <input type="hidden" value="${order.id}" name="id">
             <div>
@@ -36,7 +36,7 @@
             <input type="submit" value="Save"/>
         </form:form>
     </sec:authorize>
-    <table border="1" cellpadding="5">
+    <table border="3" cellpadding="5">
         <tr>
             <th>Number</th>
             <th>Title</th>

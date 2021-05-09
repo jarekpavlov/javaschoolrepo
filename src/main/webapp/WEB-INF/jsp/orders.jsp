@@ -12,7 +12,6 @@
 <html>
 <head>
     <title>Orders</title>
-    <title>Product page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
@@ -22,10 +21,10 @@
 <body>
 <div align="center">
     <h1>Orders</h1>
-    <table border="1" cellpadding="5">
+    <table border="3" cellpadding="5">
         <tr>
             <th>Number</th>
-            <sec:authorize access="hasRole('ADMIN')">
+            <sec:authorize access="hasRole('EMPLOYEE')">
                 <th>Client</th>
             </sec:authorize>
             <th>Order Status</th>
@@ -35,7 +34,7 @@
         <c:forEach items="${orders}" var="order" varStatus="status">
             <tr>
                 <th>${status.index+1}</th>
-                <sec:authorize access="hasRole('ADMIN')">
+                <sec:authorize access="hasRole('EMPLOYEE')">
                     <th>${order.client.email}</th>
                 </sec:authorize>
                 <th>${order.orderStatus}</th>
@@ -43,8 +42,14 @@
                 <th><a href="/MmsPr/order/products-in-order?id=${order.id}">products in order</a></th>
             </tr>
         </c:forEach>
-
     </table>
+    <sec:authorize access="hasRole('EMPLOYEE')">
+        <form action="/MmsPr/admin/statistic" method="get">
+            <label>Days before:</label>
+            <input type="text" name="days" id="days">
+            <input type="submit" value="Get Statistic" class="btn btn-primary"/>
+        </form>
+    </sec:authorize>
 </div>
 
 </body>

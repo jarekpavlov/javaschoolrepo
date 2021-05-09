@@ -20,7 +20,7 @@
 <body>
 <div align="center">
     <h1>Clients</h1>
-    <table border="1" cellpadding="5">
+    <table border="3" cellpadding="5">
         <tr>
             <th>Number</th>
             <th>Name</th>

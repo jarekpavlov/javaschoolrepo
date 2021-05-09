@@ -20,7 +20,7 @@
 <body>
 <div align="center">
     <h1>Products in Cart</h1>
-    <table border="1" cellpadding="5">
+    <table cellpadding="3" >
         <tr>
             <th>Number</th>
             <th>Brand</th>

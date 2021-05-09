@@ -57,7 +57,8 @@ public class EntityDao {
         String dateBefore_daysS = getDateBefore(daysAgo);
         Query query = currentSession.createQuery("select sum(m.product.price*m.quantity) as resultAmount, m.order.client.id as" +
                 "  client_id from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
-                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" + "group by m.order.client.id order by sum(m.product.price*m.quantity)");
+                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" + "and m.order.orderStatus = 'finished' group by m.order.client.id order by sum(m.product.price*m.quantity)");
+        query.setMaxResults(10);
         return query.getResultList();
     }
 
@@ -65,7 +66,8 @@ public class EntityDao {
         String dateBefore_daysS = getDateBefore(daysAgo);
         Query query = currentSession.createQuery("select sum(m.product.price*m.quantity), m.product.id, m.quantity" +
                 " from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
-                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" + "group by m.product.id order by sum(m.product.price*m.quantity)");
+                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" + "and m.order.orderStatus = 'finished' group by m.product.id order by sum(m.product.price*m.quantity)");
+        query.setMaxResults(10);
         return query.getResultList();
     }
 
@@ -73,7 +75,7 @@ public class EntityDao {
         String dateBefore_daysS = getDateBefore(daysAgo);
         Query query = currentSession.createQuery("select sum(m.product.price*m.quantity)" +
                 " from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
-                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'");
+                " where m.order.dateOfOrder > '" + dateBefore_daysS + "'"+"and m.order.orderStatus = 'finished'");
         return query.getSingleResult();
     }
 

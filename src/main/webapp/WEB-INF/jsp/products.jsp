@@ -21,7 +21,7 @@
 <body>
 <div align="center">
     <h1>Products</h1>
-    <sec:authorize access="hasRole('ADMIN')">
+    <sec:authorize access="hasRole('EMPLOYEE')">
         <h3><a href="product/new">New Product</a></h3>
     </sec:authorize>
     <sec:authorize access="hasRole('USER')">
@@ -45,7 +45,7 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="submit" value="Create Order">
     </form:form>
-    <table border="1" cellpadding="5">
+    <table border="3" cellpadding="5">
         <tr>
             <th>Number</th>
             <th>Title</th>
@@ -61,12 +61,12 @@
                 <th>${product.brand}</th>
                 <th>${product.quantity}</th>
                 <th>
-                    <sec:authorize access="hasRole('ADMIN')">
+                    <sec:authorize access="hasRole('EMPLOYEE')">
                         <a href="product/edit?id=${product.id}">Edit</a>
                         <a href="product/delete?id=${product.id}">Delete</a>
                     </sec:authorize>
 
-                    <sec:authorize access="!hasRole('ADMIN')">
+                    <sec:authorize access="!hasRole('EMPLOYEE')">
                         <form:form action="/MmsPr/order/add-to-cart?id=${product.id}" method="post">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <input type="text" name="numberForOrder"/>
