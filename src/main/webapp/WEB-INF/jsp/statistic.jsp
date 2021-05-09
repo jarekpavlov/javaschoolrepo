@@ -20,7 +20,7 @@
 </head>
 <body>
     <div align="center">
-        <h1>Statistic for ${daysAgo} days</h1>
+        <h1>Statistic for the last ${daysAgo} days</h1>
         <h3>Best client</h3>
         <table cellpadding="3" border="5" >
             <tr>

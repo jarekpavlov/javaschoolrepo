@@ -64,4 +64,20 @@ public class ProductDTO {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public boolean equals(Object object){
+        if (this==object)
+            return true;
+        if(getClass()!=object.getClass())
+            return false;
+        if(object==null)
+            return false;
+        ProductDTO productDTO = (ProductDTO) object;
+        if (((ProductDTO) object).getId() == null)
+            if (this.id!=null)
+                return false;
+        if(!this.id.equals(productDTO.getId()))
+            return false;
+        return true;
+    }
 }

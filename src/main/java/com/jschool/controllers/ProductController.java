@@ -16,11 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 
 @Controller
@@ -81,7 +77,8 @@ public class ProductController {
                                 @RequestParam String brand,
                                 @RequestParam String title, ModelMap map) {
 
-        List<ProductDTO> filteredList = productService.getFilteredProductList(color, brand, title);
+
+        List<ProductDTO> filteredList = productService.getFilteredProductList(productService.getProductDtoList(), color, brand, title);
         map.addAttribute("products", filteredList);
         return "products";
     }
