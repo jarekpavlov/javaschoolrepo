@@ -54,10 +54,11 @@
             <tr>
                 <input  type="submit" value="Save"/>
             </tr>
-
         </form:form>
     </table>
-
+    <sec:authorize access="hasRole('USER')">
+        <a href="/MmsPr/user/registration/change-password">Change Password</a>
+    </sec:authorize>
 </div>
 </body>
 </html>

@@ -85,7 +85,6 @@ public class ProductService {
         return filteredList;
     }
 
-
     public ProductDTO getProductDTO(Product product) {
         getModelMapper()
                 .getConfiguration()

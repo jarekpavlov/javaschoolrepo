@@ -2,6 +2,7 @@ package com.jschool.controllers;
 
 import com.jschool.DTO.ClientDTO;
 import com.jschool.domain.Client;
+import com.jschool.security.CustomSecurityClient;
 import com.jschool.service.ClientService;
 import com.jschool.service.EntityService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,11 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
 
 @Controller
 public class UserController {
@@ -36,8 +36,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/users/registration/register")
-    public String registrationMeth(ModelMap map) {
-        Client client = new Client();
+    public String registrationMeth(ModelMap map, @AuthenticationPrincipal Client client) {
+        if (client == null) {
+            client = new Client();
+        }
         map.addAttribute("client", client);
         return "registrationPage";
     }
@@ -52,7 +54,18 @@ public class UserController {
 
     @PostMapping(value = "/users/registration/save")
     public String saveUser(Client client, @AuthenticationPrincipal Client clientWithPassword) {
-        clientService.saveClient(client,clientWithPassword);
+        clientService.saveClient(client, clientWithPassword);
+        return "redirect:/";
+    }
+
+    @GetMapping(value = "/user/registration/change-password")
+    public String getChangePassword(){
+        return "changePassword";
+    }
+    @PostMapping(value = "/user/registration/change-password")
+    public String changePassword(@RequestParam String newPassword1
+                                    ,@RequestParam String newPassword2, @AuthenticationPrincipal CustomSecurityClient client){
+        clientService.saveClientWithChangedPassword(newPassword1,newPassword2,client);
         return "redirect:/";
     }
 
