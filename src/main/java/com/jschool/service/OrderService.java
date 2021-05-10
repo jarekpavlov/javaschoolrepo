@@ -3,6 +3,8 @@ package com.jschool.service;
 import com.jschool.DTO.OrderDTO;
 import com.jschool.domain.Client;
 import com.jschool.domain.Order;
+import com.jschool.domain.OrderStatus;
+import com.jschool.domain.PaymentStatus;
 import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import org.modelmapper.ModelMapper;
@@ -87,8 +89,8 @@ public class OrderService {
         for (ProductsInOrder temp : productsInOrderSetTemp) {
             temp.setOrder(order);
         }
-        order.setOrderStatus("In process");
-        order.setPaymentStatus("Waiting for payment");
+        order.setOrderStatus(OrderStatus.PENDING_PAYMENT);
+        order.setPaymentStatus(PaymentStatus.PENDING_PAYMENT);
         entityService.saveEntity(order);
         httpSession.removeAttribute("productsInOrderSet");
     }
@@ -135,7 +137,7 @@ public class OrderService {
         return getOrderDTO(order);
     }
 
-    public void saveOrderStatus(String orderStatus, String paymentStatus, Long id) {
+    public void saveOrderStatus(OrderStatus orderStatus, PaymentStatus paymentStatus, Long id) {
         Order order = entityService.getEntity(Order.class, id);
         order.setOrderStatus(orderStatus);
         order.setPaymentStatus(paymentStatus);

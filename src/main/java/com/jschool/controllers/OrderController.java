@@ -2,6 +2,8 @@ package com.jschool.controllers;
 
 import com.jschool.DTO.OrderDTO;
 import com.jschool.domain.Client;
+import com.jschool.domain.OrderStatus;
+import com.jschool.domain.PaymentStatus;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.service.EntityService;
 import com.jschool.service.OrderService;
@@ -82,8 +84,8 @@ public class OrderController {
     }
 
     @PostMapping(value = "admin/orders/save")
-    public String saveOrderStatus(@RequestParam String orderStatus
-                                  ,@RequestParam String paymentStatus
+    public String saveOrderStatus(@RequestParam OrderStatus orderStatus
+                                  ,@RequestParam PaymentStatus paymentStatus
                                   ,@RequestParam Long id) {
         orderService.saveOrderStatus(orderStatus, paymentStatus,id);
         return "redirect:/admin/orders";

@@ -3,6 +3,8 @@ package com.jschool.service;
 import com.jschool.DTO.OrderDTO;
 import com.jschool.domain.Client;
 import com.jschool.domain.Order;
+import com.jschool.domain.OrderStatus;
+import com.jschool.domain.PaymentStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -23,17 +25,17 @@ class OrderServiceTest {
 
         order.setId(3L);
         order.setDateOfOrder(date);
-        order.setOrderStatus("orderStatus");
+        order.setOrderStatus(OrderStatus.DELIVERED);
         order.setProductsInOrderSet(new HashSet<>());
-        order.setPaymentStatus("paymentStatus");
+        order.setPaymentStatus(PaymentStatus.PENDING_PAYMENT);
         order.setClient(new Client());
         order.setDeliveryMethod("deliveryMethod");
         order.setProductsInOrderSet(new HashSet<>());
 
         orderDTO.setId(3L);
         orderDTO.setDateOfOrder(date);
-        orderDTO.setOrderStatus("orderStatus");
-        orderDTO.setPaymentStatus("paymentStatus");
+        orderDTO.setOrderStatus(OrderStatus.DELIVERED);
+        orderDTO.setPaymentStatus(PaymentStatus.PENDING_PAYMENT);
         orderDTO.setClient(new Client());
 
         Assertions.assertEquals(orderDTO,orderService.getOrderDTO(order));

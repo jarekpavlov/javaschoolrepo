@@ -1,6 +1,8 @@
 package com.jschool.DTO;
 
 import com.jschool.domain.Client;
+import com.jschool.domain.OrderStatus;
+import com.jschool.domain.PaymentStatus;
 import com.jschool.domain.Product;
 
 import java.util.Date;
@@ -9,8 +11,8 @@ import java.util.Set;
 
 public class OrderDTO {
     private Long id;
-    private String paymentStatus;
-    private String orderStatus;
+    private PaymentStatus paymentStatus;
+    private OrderStatus orderStatus;
     private Client client;
     private Date dateOfOrder;
     private Set<Product> productSet = new HashSet<>();
@@ -47,34 +49,34 @@ public class OrderDTO {
         this.productSet = productSet;
     }
 
-    public String getPaymentStatus() {
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
-    public String getOrderStatus() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
-    public boolean equals(Object object){
-        if (this==object)
+    public boolean equals(Object object) {
+        if (this == object)
             return true;
-        if(getClass()!=object.getClass())
+        if (getClass() != object.getClass())
             return false;
-        if(object==null)
+        if (object == null)
             return false;
         OrderDTO orderDTO = (OrderDTO) object;
         if (((OrderDTO) object).getId() == null)
-            if (this.id!=null)
+            if (this.id != null)
                 return false;
-        if(!this.id.equals(orderDTO.getId()))
+        if (!this.id.equals(orderDTO.getId()))
             return false;
         return true;
     }

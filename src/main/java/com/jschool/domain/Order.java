@@ -25,8 +25,8 @@ public class Order {
     private String payment;
     private String deliveryMethod;
     private Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
-    private String paymentStatus;
-    private String orderStatus;
+    private PaymentStatus paymentStatus;
+    private OrderStatus orderStatus;
     private Date dateOfOrder;
 
     public Date getDateOfOrder() {
@@ -92,21 +92,20 @@ public class Order {
         this.deliveryMethod = deliveryMethod;
     }
 
-    @Column(length = 45)
-    public String getPaymentStatus() {
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
     @Column(length = 45)
-    public String getOrderStatus() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
