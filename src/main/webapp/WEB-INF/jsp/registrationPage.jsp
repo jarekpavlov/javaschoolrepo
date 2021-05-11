@@ -38,8 +38,28 @@
                 <td><form:input path = "email"/></td>
             </tr>
             <tr>
-                <td>clientAddress:</td>
+                <td>Country:</td>
+                <td><form:input path = "address.country"/></td>
+            </tr>
+            <tr>
+                <td>City:</td>
                 <td><form:input path = "address.city"/></td>
+            </tr>
+            <tr>
+                <td>Street:</td>
+                <td><form:input path = "address.street"/></td>
+            </tr>
+            <tr>
+                <td>House:</td>
+                <td><form:input path = "address.house"/></td>
+            </tr>
+            <tr>
+                <td>Flat:</td>
+                <td><form:input path = "address.flat"/></td>
+            </tr>
+            <tr>
+                <td>Postal code:</td>
+                <td><form:input path = "address.postCode"/></td>
             </tr>
             <tr>
                 <td>Date of birth:</td>

@@ -62,10 +62,10 @@ public class ProductsInOrder {
         if (obj == null)
             return false;
         ProductsInOrder productsInOrder = (ProductsInOrder) obj;
-        if (this.id == null ) {
-            if (productsInOrder.getId() != null)
+        if (this.product.getId() == null ) {
+            if (productsInOrder.product.getId() != null)
                 return false;
-        } else if (!this.id.equals(productsInOrder.getId())) {
+        } else if (!this.product.getId().equals(productsInOrder.product.getId())) {
             return false;
         }
         return true;

@@ -28,22 +28,24 @@
             <th>Price</th>
             <th>Quantity</th>
         </tr>
-        <form:form action="/MmsPr/order/save-from-cart" method="post">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <c:forEach items="${productsInCart}" var="entity" varStatus="status">
-                <tr>
-                    <th>${status.index+1}</th>
-                    <th>${entity.product.brand}</th>
-                    <th>${entity.product.title}</th>
-                    <th>${entity.product.price}</th>
-                    <th><input type="text" value="${entity.quantity}" name="${entity.product.id}"></th>
-                    <th>
-                        <a href="/MmsPr/order/delete-from-cart?id=${entity.product.id}" class="btn btn-primary btn-sm" role="button">delete</a>
-                    </th>
-                </tr>
-            </c:forEach>
-            <input type="submit" value="Create Order"/>
-        </form:form>
+        <c:if test="${cartIsEmpty==false}">
+            <form:form action="/MmsPr/order/save-from-cart" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <c:forEach items="${productsInCart}" var="entity" varStatus="status">
+                    <tr>
+                        <th>${status.index+1}</th>
+                        <th>${entity.product.brand}</th>
+                        <th>${entity.product.title}</th>
+                        <th>${entity.product.price}</th>
+                        <th><input type="number" value="${entity.quantity}" name="${entity.product.id}"></th>
+                        <th>
+                            <a href="/MmsPr/order/delete-from-cart?id=${entity.product.id}" class="btn btn-primary btn-sm" role="button">delete</a>
+                        </th>
+                    </tr>
+                </c:forEach>
+                <input type="submit" value="Create Order"/>
+            </form:form>
+        </c:if>
 
     </table>
 </div>

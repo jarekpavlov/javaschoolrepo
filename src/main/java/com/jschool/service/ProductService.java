@@ -53,19 +53,19 @@ public class ProductService {
         if (!emptyS.equals(color)) {
             filteredList = productDtoList
                     .stream()
-                    .filter(l -> l.getColor().equals(color))
+                    .filter(l -> l.getColor().equalsIgnoreCase(color))
                     .collect(Collectors.toList());
         }
         if (!emptyS.equals(brand)) {
             if (filteredList == null) {
                 filteredList = productDtoList
                         .stream()
-                        .filter(l -> l.getBrand().equals(brand))
+                        .filter(l -> l.getBrand().equalsIgnoreCase(brand))
                         .collect(Collectors.toList());
             } else {
                 filteredList = filteredList
                         .stream()
-                        .filter(l -> l.getBrand().equals(brand))
+                        .filter(l -> l.getBrand().equalsIgnoreCase(brand))
                         .collect(Collectors.toList());
             }
         }
@@ -73,12 +73,12 @@ public class ProductService {
             if (filteredList == null) {
                 filteredList = productDtoList
                         .stream()
-                        .filter(l -> l.getTitle().equals(title))
+                        .filter(l -> l.getTitle().equalsIgnoreCase(title))
                         .collect(Collectors.toList());
             } else {
                 filteredList = filteredList
                         .stream()
-                        .filter(l -> l.getTitle().equals(title))
+                        .filter(l -> l.getTitle().equalsIgnoreCase(title))
                         .collect(Collectors.toList());
             }
         }

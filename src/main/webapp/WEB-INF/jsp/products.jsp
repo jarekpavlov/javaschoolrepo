@@ -41,24 +41,22 @@
         <input type="text" name="title"/>
         <input type="submit" value="Filter">
     </form:form>
-    <form:form action="/MmsPr/order/create" method="post">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <input type="submit" value="Create Order">
-    </form:form>
     <table border="3" cellpadding="5">
         <tr>
             <th>Number</th>
             <th>Title</th>
-            <th>Price</th>
             <th>Brand</th>
+            <th>Color</th>
+            <th>Price</th>
             <th>Quantity</th>
         </tr>
         <c:forEach items="${products}" var="product" varStatus="status">
             <tr align="center">
                 <th>${status.index+1}</th>
                 <th>${product.title}</th>
-                <th>${product.price}</th>
                 <th>${product.brand}</th>
+                <th>${product.color}</th>
+                <th>${product.price}</th>
                 <th>${product.quantity}</th>
                 <th>
                     <sec:authorize access="hasRole('EMPLOYEE')">
@@ -69,7 +67,7 @@
                     <sec:authorize access="!hasRole('EMPLOYEE')">
                         <form:form action="/MmsPr/order/add-to-cart?id=${product.id}" method="post">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                            <input type="text" name="numberForOrder"/>
+                            <input type="number" name="numberForOrder"/>
                             <input type="submit" value="Add to Cart">
                         </form:form>
                     </sec:authorize>

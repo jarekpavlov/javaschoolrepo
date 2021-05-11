@@ -44,8 +44,10 @@ public class OrderController {
     }
 
     @PostMapping(value = "/order/add-to-cart")
-    public String addToCart(@RequestParam int numberForOrder, HttpServletRequest request) {
+    public String addToCart(@RequestParam(defaultValue = "1") int numberForOrder, HttpServletRequest request) {
+        String emptyS = "";
         orderService.addToCart(numberForOrder, request);
+
         return "redirect:/products";
     }
 
@@ -57,8 +59,13 @@ public class OrderController {
 
     @GetMapping(value = "/order/products-in-cart")
     public String getProductsInCart(ModelMap map, HttpSession session) {
+        boolean cartIsEmpty = false;
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
+        if (productsInOrderSet == null || productsInOrderSet.size()==0) {
+            cartIsEmpty=true;
+        }
         map.addAttribute("productsInCart", productsInOrderSet);
+        map.addAttribute("cartIsEmpty", cartIsEmpty);
         return "cart";
     }
 
@@ -85,9 +92,9 @@ public class OrderController {
 
     @PostMapping(value = "admin/orders/save")
     public String saveOrderStatus(@RequestParam OrderStatus orderStatus
-                                  ,@RequestParam PaymentStatus paymentStatus
-                                  ,@RequestParam Long id) {
-        orderService.saveOrderStatus(orderStatus, paymentStatus,id);
+            , @RequestParam PaymentStatus paymentStatus
+            , @RequestParam Long id) {
+        orderService.saveOrderStatus(orderStatus, paymentStatus, id);
         return "redirect:/admin/orders";
     }
 
