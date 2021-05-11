@@ -138,6 +138,7 @@ public class OrderService {
     }
 
     public void saveOrderStatus(OrderStatus orderStatus, PaymentStatus paymentStatus, Long id) {
+        String emptyS = "";
         Order order = entityService.getEntity(Order.class, id);
         order.setOrderStatus(orderStatus);
         order.setPaymentStatus(paymentStatus);

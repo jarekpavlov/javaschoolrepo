@@ -14,10 +14,10 @@ public class Address {
     private Long id;
     private String country;
     private String city;
-    private int postCode;
+    private Integer postCode;
     private String street;
-    private short house;
-    private short flat;
+    private Short house;
+    private Short flat;
     private Client client;
 
     @OneToOne(mappedBy = "address")
@@ -57,11 +57,11 @@ public class Address {
         this.city = city;
     }
 
-    public int getPostCode() {
+    public Integer getPostCode() {
         return postCode;
     }
 
-    public void setPostCode(int postCode) {
+    public void setPostCode(Integer postCode) {
         this.postCode = postCode;
     }
 
@@ -74,19 +74,19 @@ public class Address {
         this.street = street;
     }
 
-    public short getHouse() {
+    public Short getHouse() {
         return house;
     }
 
-    public void setHouse(short house) {
+    public void setHouse(Short house) {
         this.house = house;
     }
 
-    public short getFlat() {
+    public Short getFlat() {
         return flat;
     }
 
-    public void setFlat(short flat) {
+    public void setFlat(Short flat) {
         this.flat = flat;
     }
 }

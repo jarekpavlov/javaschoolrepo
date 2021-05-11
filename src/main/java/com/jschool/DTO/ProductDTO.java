@@ -7,13 +7,13 @@ public class ProductDTO {
     private String category;
     private String brand;
     private String color;
-    private int quantity;
+    private Integer quantity;
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

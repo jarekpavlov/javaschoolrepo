@@ -65,6 +65,10 @@
                 <td>Date of birth:</td>
                 <td><form:input path = "dateOfBirth"/></td>
             </tr>
+            <tr>
+                <td>Phone:</td>
+                <td><form:input path = "phone"/></td>
+            </tr>
             <sec:authorize access="isAnonymous()">
                 <tr>
                     <td>Password:</td>

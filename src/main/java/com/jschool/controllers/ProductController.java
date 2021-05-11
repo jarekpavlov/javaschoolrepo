@@ -3,6 +3,8 @@ package com.jschool.controllers;
 import com.jschool.DTO.ProductDTO;
 import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
+import com.jschool.exceptions.EmptyFieldException;
+import com.jschool.exceptions.ProductIsInOrder;
 import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class ProductController {
         return "products";
     }
 
-    @GetMapping(value = "/product/edit")
+    @GetMapping(value = "admin/product/edit")
     public String editProduct(ModelMap map, HttpServletRequest request) {
         Long productId = Long.parseLong(request.getParameter("id"));
         Product product = entityService.getEntity(Product.class, productId);
@@ -53,22 +55,21 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/product/save", method = RequestMethod.POST)
-    public String saveProduct(Product product) {
+    public String saveProduct(Product product) throws EmptyFieldException {
         productService.saveProduct(product);
         return "redirect:/products";
     }
 
-    @GetMapping(value = "/product/new")
+    @GetMapping(value = "admin/product/new")
     public String newProduct(ModelMap map) {
         Product product = new Product();
         map.addAttribute("product", product);
         return "product";
     }
 
-    @GetMapping(value = "/product/delete")
-    public String deleteProduct(HttpServletRequest request) {
-        Long id = Long.parseLong(request.getParameter("id"));
-        entityService.deleteEntity(Product.class, id);
+    @GetMapping(value = "/admin/product/delete")
+    public String deleteProduct(HttpServletRequest request) throws ProductIsInOrder {
+        productService.deleteProduct(request);
         return "redirect:/products";
     }
 
@@ -76,7 +77,6 @@ public class ProductController {
     public String filterProduct(@RequestParam String color,
                                 @RequestParam String brand,
                                 @RequestParam String title, ModelMap map) {
-
 
         List<ProductDTO> filteredList = productService.getFilteredProductList(productService.getProductDtoList(), color, brand, title);
         map.addAttribute("products", filteredList);

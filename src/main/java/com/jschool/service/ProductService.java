@@ -2,11 +2,15 @@ package com.jschool.service;
 
 import com.jschool.DTO.ProductDTO;
 import com.jschool.domain.Product;
+import com.jschool.domain.ProductsInOrder;
+import com.jschool.exceptions.EmptyFieldException;
+import com.jschool.exceptions.ProductIsInOrder;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +36,11 @@ public class ProductService {
         return modelMapper;
     }
 
-    public void saveProduct(Product product) {
+    public void saveProduct(Product product) throws EmptyFieldException {
+        String emptyS = "";
+        if(emptyS.equals(product.getBrand()) || emptyS.equals(product.getTitle()) || emptyS.equals(product.getCategory()) || product.getPrice()==null){
+            throw new EmptyFieldException("All fields required to be filled!");
+        }
         if (product.getId() != null)
             entityService.updateEntity(product);
         else
@@ -83,6 +91,18 @@ public class ProductService {
             }
         }
         return filteredList;
+    }
+
+    public void deleteProduct(HttpServletRequest request) throws ProductIsInOrder {
+        List<ProductsInOrder> productsInOrderList = entityService.entityList(ProductsInOrder.class);
+        Long id = Long.parseLong(request.getParameter("id"));
+        Product product = entityService.getEntity(Product.class,id);
+        for (ProductsInOrder productsInOrder : productsInOrderList){
+            if(productsInOrder.getProduct().equals(product)){
+                throw new ProductIsInOrder("The product is in an order. You should delete the order first!");
+            }
+        }
+        entityService.deleteEntity(Product.class, id);
     }
 
     public ProductDTO getProductDTO(Product product) {

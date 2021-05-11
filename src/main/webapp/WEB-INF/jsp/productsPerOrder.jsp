@@ -27,11 +27,21 @@
             <input type="hidden" value="${order.id}" name="id">
             <div>
                 <label>Order status:</label>
-                <input type="text" name="orderStatus" value="${order.orderStatus}"/>
+                <select name="orderStatus">
+                    <option disabled selected value>--select an option--</option>
+                    <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
+                    <option value="WAITING_FOR_SHIPMENT">WAITING_FOR_SHIPMENT</option>
+                    <option value="SHIPPED">SHIPPED</option>
+                    <option value="DELIVERED">DELIVERED</option>
+                </select>
             </div>
             <div>
                 <label>Payment status:</label>
-                <input type="text" name="paymentStatus" value="${order.paymentStatus}"/>
+                <select name="paymentStatus">
+                    <option disabled selected value>--select an option--</option>
+                    <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
+                    <option value="PAID">PAID</option>
+                </select>
             </div>
             <input type="submit" value="Save"/>
         </form:form>

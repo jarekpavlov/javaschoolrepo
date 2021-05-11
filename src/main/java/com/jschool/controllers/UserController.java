@@ -54,7 +54,8 @@ public class UserController {
 
     @PostMapping(value = "/users/registration/save")
     public String saveUser(Client client, @AuthenticationPrincipal Client clientWithPassword) throws EmptyFieldException {
-        if ((client.getPassword().equals("") && clientWithPassword == null) || client.getName().equals("") || client.getSurname().equals("") || client.getPhone().equals("")) {
+        String emptyS = "";
+        if ((emptyS.equals(client.getPassword()) && clientWithPassword == null) || emptyS.equals(client.getName()) || emptyS.equals(client.getSurname()) || emptyS.equals(client.getPhone())) {
             throw new EmptyFieldException("All fields required to be filled!");
         }
         clientService.saveClient(client, clientWithPassword);
@@ -79,8 +80,5 @@ public class UserController {
         entityService.deleteEntity(Client.class, id);
         return "redirect:/admin/users";
     }
-    @ExceptionHandler(value = EmptyFieldException.class)
-    public String handleEmptyFieldException(){
-        return "emptyFieldExceptionPage";
-    }
+
 }

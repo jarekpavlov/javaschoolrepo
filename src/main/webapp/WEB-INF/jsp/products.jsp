@@ -22,7 +22,7 @@
 <div align="center">
     <h1>Products</h1>
     <sec:authorize access="hasRole('EMPLOYEE')">
-        <h3><a href="product/new">New Product</a></h3>
+        <h3><a href="admin/product/new">New Product</a></h3>
     </sec:authorize>
     <sec:authorize access="hasRole('USER')">
         <a href="/MmsPr/orders">Order History</a>
@@ -60,8 +60,8 @@
                 <th>${product.quantity}</th>
                 <th>
                     <sec:authorize access="hasRole('EMPLOYEE')">
-                        <a href="product/edit?id=${product.id}">Edit</a>
-                        <a href="product/delete?id=${product.id}">Delete</a>
+                        <a href="admin/product/edit?id=${product.id}">Edit</a>
+                        <a href="admin/product/delete?id=${product.id}">Delete</a>
                     </sec:authorize>
 
                     <sec:authorize access="!hasRole('EMPLOYEE')">

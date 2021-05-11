@@ -23,7 +23,7 @@ public class Product {
     private String color;
     private Float mass;
     private Float volume;
-    private int quantity;
+    private Integer quantity;
     private Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
@@ -105,11 +105,11 @@ public class Product {
         this.volume = volume;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
