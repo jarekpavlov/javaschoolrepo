@@ -1,6 +1,7 @@
 package com.jschool.domain;
 
 import com.jschool.security.Authority;
+import com.sun.istack.NotNull;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

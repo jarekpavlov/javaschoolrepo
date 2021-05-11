@@ -2,14 +2,14 @@ package com.jschool.controllers;
 
 import com.jschool.DTO.ClientDTO;
 import com.jschool.domain.Client;
+import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.security.CustomSecurityClient;
 import com.jschool.service.ClientService;
 import com.jschool.service.EntityService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,19 +53,23 @@ public class UserController {
     }
 
     @PostMapping(value = "/users/registration/save")
-    public String saveUser(Client client, @AuthenticationPrincipal Client clientWithPassword) {
+    public String saveUser(Client client, @AuthenticationPrincipal Client clientWithPassword) throws EmptyFieldException {
+        if ((client.getPassword().equals("") && clientWithPassword == null) || client.getName().equals("") || client.getSurname().equals("") || client.getPhone().equals("")) {
+            throw new EmptyFieldException("All fields required to be filled!");
+        }
         clientService.saveClient(client, clientWithPassword);
         return "redirect:/";
     }
 
     @GetMapping(value = "/user/registration/change-password")
-    public String getChangePassword(){
+    public String getChangePassword() {
         return "changePassword";
     }
+
     @PostMapping(value = "/user/registration/change-password")
     public String changePassword(@RequestParam String newPassword1
-                                    ,@RequestParam String newPassword2, @AuthenticationPrincipal CustomSecurityClient client){
-        clientService.saveClientWithChangedPassword(newPassword1,newPassword2,client);
+            , @RequestParam String newPassword2, @AuthenticationPrincipal CustomSecurityClient client) {
+        clientService.saveClientWithChangedPassword(newPassword1, newPassword2, client);
         return "redirect:/";
     }
 
@@ -74,5 +78,9 @@ public class UserController {
         Long id = Long.parseLong(request.getParameter("id"));
         entityService.deleteEntity(Client.class, id);
         return "redirect:/admin/users";
+    }
+    @ExceptionHandler(value = EmptyFieldException.class)
+    public String handleEmptyFieldException(){
+        return "emptyFieldExceptionPage";
     }
 }
