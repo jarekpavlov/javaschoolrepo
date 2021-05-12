@@ -1,29 +1,26 @@
 package com.jschool.controllers;
 
-import com.jschool.count.JoinCountByClient;
-import com.jschool.count.JoinCountByProduct;
-import com.jschool.count.JoinCountSum;
 import com.jschool.service.EntityService;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.Set;
 
 @Controller
 public class HelloController {
 
     @Autowired
     private EntityService entityService;
+   private static final Logger logger = Logger.getLogger(HelloController.class);
 
     @GetMapping(value = "/test")
     public String hello() {
-        Set<JoinCountByClient> set = entityService.getBestClient(20);
-        System.out.println(set);
-        JoinCountSum joinCountSum = entityService.getSum(20);
-        System.out.println(joinCountSum);
-        Set<JoinCountByProduct> setP = entityService.getBestProduct(20);
-        System.out.println(setP);
+        logger.trace("A TRACE Message");
+        logger.debug("A DEBUG Message");
+        logger.info("An INFO Message");
+        logger.warn("A WARN Message");
+        logger.error("An ERROR Message");
         return "users";
     }
 
