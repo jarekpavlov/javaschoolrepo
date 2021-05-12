@@ -1,7 +1,6 @@
 package com.jschool.domain;
 
 import com.jschool.security.Authority;
-import com.sun.istack.NotNull;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -107,7 +105,7 @@ public class Client {
         this.dateOfBirth = dateOfBirth;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "client")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "client")
     public Set<Order> getOrders() {
         return orders;
     }

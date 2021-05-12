@@ -43,6 +43,18 @@
                         </th>
                     </tr>
                 </c:forEach>
+                <label>Payment method:</label>
+                <select name="paymentMethod">
+                    <option disabled selected value>--select an option--</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Card">Card</option>
+                </select>
+                <label>Delivery method:</label>
+                <select name="deliveryMethod">
+                    <option disabled selected value>--select an option--</option>
+                    <option value="Home delivery">Home delivery</option>
+                    <option value="Delivery to the store">Delivery to the store</option>
+                </select>
                 <input type="submit" value="Create Order"/>
             </form:form>
         </c:if>

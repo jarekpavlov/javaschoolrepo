@@ -16,7 +16,7 @@ public class Address {
     private String city;
     private Integer postCode;
     private String street;
-    private Short house;
+    private String house;
     private Short flat;
     private Client client;
 
@@ -74,11 +74,12 @@ public class Address {
         this.street = street;
     }
 
-    public Short getHouse() {
+    @Column(length = 45)
+    public String getHouse() {
         return house;
     }
 
-    public void setHouse(Short house) {
+    public void setHouse(String house) {
         this.house = house;
     }
 

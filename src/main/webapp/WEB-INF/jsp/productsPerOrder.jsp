@@ -28,7 +28,7 @@
             <div>
                 <label>Order status:</label>
                 <select name="orderStatus">
-                    <option disabled selected value>--select an option--</option>
+                    <option disabled selected value>${order.orderStatus}</option>
                     <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
                     <option value="WAITING_FOR_SHIPMENT">WAITING_FOR_SHIPMENT</option>
                     <option value="SHIPPED">SHIPPED</option>
@@ -38,7 +38,7 @@
             <div>
                 <label>Payment status:</label>
                 <select name="paymentStatus">
-                    <option disabled selected value>--select an option--</option>
+                    <option disabled selected value>${order.paymentStatus}</option>
                     <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
                     <option value="PAID">PAID</option>
                 </select>
@@ -64,6 +64,10 @@
             </tr>
         </c:forEach>
     </table>
+    <sec:authorize access="hasRole('EMPLOYEE')">
+        <a href="/MmsPr/admin/orders/delete?id=${order.id}" class="btn btn-primary">Delete order</a>
+    </sec:authorize>
+
 </div>
 </body>
 </body>

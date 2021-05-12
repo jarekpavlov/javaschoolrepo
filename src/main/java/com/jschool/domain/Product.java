@@ -26,7 +26,7 @@ public class Product {
     private Integer quantity;
     private Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "product")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
     public Set<ProductsInOrder> getProductsInOrderSet() {
         return productsInOrderSet;
     }

@@ -77,13 +77,15 @@ public class OrderService {
      * @param httpSession to a new Order object to store it
      *                    into the database
      */
-    public void createOrder(HttpSession httpSession, Client client) {
+    public void createOrder(HttpSession httpSession, Client client,String paymentMethod, String deliveryMethod) {
         Set<ProductsInOrder> productsInOrderSetTemp = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
 
         Order order = new Order();
         Date date = new Date();
         order.setDateOfOrder(date);
         order.setClient(client);
+        order.setDeliveryMethod(deliveryMethod);
+        order.setPayment(paymentMethod);
         order.setProductsInOrderSet(productsInOrderSetTemp);
 
         for (ProductsInOrder temp : productsInOrderSetTemp) {
@@ -109,15 +111,19 @@ public class OrderService {
         session.setAttribute("productsInOrderSet", productsInOrderSet);
     }
 
-    public void saveFromCart(Map<String, String> quantityMap, HttpSession session, @AuthenticationPrincipal Client client) {
-        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
+    public void saveFromCart(Map<String, String> quantityMap, HttpSession session, @AuthenticationPrincipal Client client, String paymentMethod, String deliveryMethod) {
+        if (paymentMethod == null)
+            paymentMethod = "Card";
+        if (deliveryMethod == null)
+            deliveryMethod = "Delivery to the store";
+        Set < ProductsInOrder > productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
         for (ProductsInOrder temp : productsInOrderSet) {
             Long ProductId = temp.getProduct().getId();
             String quantity = quantityMap.get(String.valueOf(ProductId));
             temp.setQuantity(Integer.parseInt(quantity));
         }
         session.setAttribute("productsInOrderSet", productsInOrderSet);
-        createOrder(session, client);
+        createOrder(session, client,paymentMethod,deliveryMethod);
     }
 
     public Set<ProductsInOrder> getProductsInOrder(HttpServletRequest request) {

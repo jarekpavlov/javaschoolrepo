@@ -2,8 +2,10 @@ package com.jschool.controllers;
 
 import com.jschool.DTO.OrderDTO;
 import com.jschool.domain.Client;
+import com.jschool.domain.Order;
 import com.jschool.domain.OrderStatus;
 import com.jschool.domain.PaymentStatus;
+import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.service.EntityService;
 import com.jschool.service.OrderService;
@@ -42,6 +44,12 @@ public class OrderController {
         map.addAttribute("orders", ordersByClient);
         return "orders";
     }
+    @GetMapping(value = "/admin/orders/delete")
+    public String deleteOrder(HttpServletRequest request){
+        Long id = Long.parseLong(request.getParameter("id"));
+        entityService.deleteEntity(Order.class,id);
+        return "redirect:/admin/orders";
+    }
 
     @PostMapping(value = "/order/add-to-cart")
     public String addToCart(@RequestParam(defaultValue = "1") int numberForOrder, HttpServletRequest request) {
@@ -49,12 +57,6 @@ public class OrderController {
         orderService.addToCart(numberForOrder, request);
 
         return "redirect:/products";
-    }
-
-    @PostMapping(value = "/order/create")
-    public String createOrder(HttpSession httpSession, @AuthenticationPrincipal Client client) {
-        orderService.createOrder(httpSession, client);
-        return "redirect:/orders";
     }
 
     @GetMapping(value = "/order/products-in-cart")
@@ -76,8 +78,10 @@ public class OrderController {
     }
 
     @PostMapping(value = "/order/save-from-cart")
-    public String saveOrderFromCart(@RequestParam Map<String, String> quantityMap, HttpSession session, @AuthenticationPrincipal Client client) {
-        orderService.saveFromCart(quantityMap, session, client);
+    public String saveOrderFromCart(@RequestParam Map<String, String> quantityMap, HttpSession session,
+                                    @AuthenticationPrincipal Client client, @RequestParam(required = false) String paymentMethod,
+                                    @RequestParam(required = false) String deliveryMethod) {
+        orderService.saveFromCart(quantityMap, session, client, paymentMethod, deliveryMethod);
         return "redirect:/orders";
     }
 
@@ -91,8 +95,8 @@ public class OrderController {
     }
 
     @PostMapping(value = "admin/orders/save")
-    public String saveOrderStatus(@RequestParam OrderStatus orderStatus
-            , @RequestParam PaymentStatus paymentStatus
+    public String saveOrderStatus(@RequestParam(required = false) OrderStatus orderStatus
+            , @RequestParam(required = false) PaymentStatus paymentStatus
             , @RequestParam Long id) {
         orderService.saveOrderStatus(orderStatus, paymentStatus, id);
         return "redirect:/admin/orders";

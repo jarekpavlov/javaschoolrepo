@@ -46,7 +46,7 @@
     <sec:authorize access="hasRole('EMPLOYEE')">
         <form action="/MmsPr/admin/statistic" method="get">
             <label>Days before:</label>
-            <input type="text" name="days" id="days">
+            <input type="number" name="days" id="days">
             <input type="submit" value="Get Statistic" class="btn btn-primary"/>
         </form>
     </sec:authorize>
