@@ -23,7 +23,6 @@ import java.util.Set;
 
 @Controller
 public class ProductController {
-
     private EntityService entityService;
     private ProductService productService;
 

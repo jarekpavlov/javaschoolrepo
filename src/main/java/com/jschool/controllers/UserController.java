@@ -6,10 +6,10 @@ import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.security.CustomSecurityClient;
 import com.jschool.service.ClientService;
 import com.jschool.service.EntityService;
+import org.apache.log4j.Logger;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Controller
 public class UserController {
-
+    Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
     private ClientService clientService;
 
@@ -56,6 +56,7 @@ public class UserController {
     public String saveUser(Client client, @AuthenticationPrincipal Client clientWithPassword) throws EmptyFieldException {
         String emptyS = "";
         if ((emptyS.equals(client.getPassword()) && clientWithPassword == null) || emptyS.equals(client.getName()) || emptyS.equals(client.getSurname()) || emptyS.equals(client.getPhone())) {
+            logger.warn("User does not fill all fields in client registration/editing page");
             throw new EmptyFieldException("All fields required to be filled!");
         }
         clientService.saveClient(client, clientWithPassword);

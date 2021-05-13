@@ -5,10 +5,10 @@ import com.jschool.domain.Client;
 import com.jschool.domain.Order;
 import com.jschool.domain.OrderStatus;
 import com.jschool.domain.PaymentStatus;
-import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.service.EntityService;
 import com.jschool.service.OrderService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Controller
 public class OrderController {
-
+    Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
     private OrderService orderService;
 
@@ -44,10 +44,13 @@ public class OrderController {
         map.addAttribute("orders", ordersByClient);
         return "orders";
     }
+
     @GetMapping(value = "/admin/orders/delete")
-    public String deleteOrder(HttpServletRequest request){
+    public String deleteOrder(HttpServletRequest request) {
+        logger.info("Employee entered the deleteMethod");
         Long id = Long.parseLong(request.getParameter("id"));
-        entityService.deleteEntity(Order.class,id);
+        entityService.deleteEntity(Order.class, id);
+        logger.info("Employee left the deleteMethod");
         return "redirect:/admin/orders";
     }
 
@@ -63,8 +66,8 @@ public class OrderController {
     public String getProductsInCart(ModelMap map, HttpSession session) {
         boolean cartIsEmpty = false;
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
-        if (productsInOrderSet == null || productsInOrderSet.size()==0) {
-            cartIsEmpty=true;
+        if (productsInOrderSet == null || productsInOrderSet.size() == 0) {
+            cartIsEmpty = true;
         }
         map.addAttribute("productsInCart", productsInOrderSet);
         map.addAttribute("cartIsEmpty", cartIsEmpty);
