@@ -37,6 +37,7 @@ public class UserController {
 
     @GetMapping(value = "/users/registration/register")
     public String registrationMeth(ModelMap map, @AuthenticationPrincipal Client client) {
+        logger.info("User creation/editing method was entered");
         if (client == null) {
             client = new Client();
         }
@@ -46,6 +47,7 @@ public class UserController {
 
     @GetMapping(value = "/users/edit")
     public String userEdit(HttpServletRequest request, ModelMap map) {
+        logger.info("User editing method was entered");
         Long id = Long.parseLong(request.getParameter("id"));
         Client client = entityService.getEntity(Client.class, id);
         map.addAttribute(client);
@@ -60,6 +62,7 @@ public class UserController {
             throw new EmptyFieldException("All fields required to be filled!");
         }
         clientService.saveClient(client, clientWithPassword);
+        logger.info("The user creation/editing method was accomplished");
         return "redirect:/";
     }
 

@@ -7,6 +7,7 @@ import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.ProductIsInOrder;
 import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +24,7 @@ import java.util.Set;
 
 @Controller
 public class ProductController {
+    Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
     private ProductService productService;
 
@@ -47,6 +49,7 @@ public class ProductController {
 
     @GetMapping(value = "admin/product/edit")
     public String editProduct(ModelMap map, HttpServletRequest request) {
+        logger.info("employee entered the editProduct controller method");
         Long productId = Long.parseLong(request.getParameter("id"));
         Product product = entityService.getEntity(Product.class, productId);
         map.addAttribute("product", product);
@@ -55,12 +58,14 @@ public class ProductController {
 
     @RequestMapping(value = "/product/save", method = RequestMethod.POST)
     public String saveProduct(Product product) throws EmptyFieldException {
+        logger.debug("Employee entered saveProduct method");
         productService.saveProduct(product);
         return "redirect:/products";
     }
 
     @GetMapping(value = "admin/product/new")
     public String newProduct(ModelMap map) {
+        logger.info("employee entered the newProduct controller method");
         Product product = new Product();
         map.addAttribute("product", product);
         return "product";

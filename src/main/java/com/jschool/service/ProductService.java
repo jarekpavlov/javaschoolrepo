@@ -5,6 +5,7 @@ import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.ProductIsInOrder;
+import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
-
+    Logger logger = Logger.getLogger(this.getClass());
     private ModelMapper modelMapper;
     private EntityService entityService;
 
@@ -39,12 +40,15 @@ public class ProductService {
     public void saveProduct(Product product) throws EmptyFieldException {
         String emptyS = "";
         if(emptyS.equals(product.getBrand()) || emptyS.equals(product.getTitle()) || emptyS.equals(product.getCategory()) || product.getPrice()==null){
+            logger.warn("Not all fields were filled in saveProduct service method");
             throw new EmptyFieldException("All fields required to be filled!");
         }
         if (product.getId() != null)
             entityService.updateEntity(product);
-        else
+        else {
             entityService.saveEntity(product);
+        }
+        logger.info("Employee left the saveProduct service method");
     }
 
     /**
@@ -99,6 +103,7 @@ public class ProductService {
         Product product = entityService.getEntity(Product.class,id);
         for (ProductsInOrder productsInOrder : productsInOrderList){
             if(productsInOrder.getProduct().equals(product)){
+                logger.warn("Employee tried to delete a product which is in order");
                 throw new ProductIsInOrder("The product is in an order. You should delete the order first!");
             }
         }
