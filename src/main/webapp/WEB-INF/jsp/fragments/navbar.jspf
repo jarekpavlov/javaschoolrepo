@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/MmsPr/products"><img src="<c:url value="/resources/images/T-Systems.png"/>"/></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <sec:authorize access="hasRole('EMPLOYEE')">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/MmsPr/admin/users">Users</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/MmsPr/admin/orders">Employee information</a>
+                </li>
+            </ul>
+        </sec:authorize>
+
+        <div class="navbar-nav ml-auto">
+            <sec:authorize access="!isAuthenticated()">
+                <a href="/MmsPr/login" class="btn btn-primary btn-lg" >Log in</a>
+            </sec:authorize>
+            <sec:authorize access="isAuthenticated()">
+                <form action="/MmsPr/login" method="post">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    <button class="btn btn-secondary btn-lg" type="submit" >Logout</button>
+                </form>
+            </sec:authorize>
+        </div>
+    </div>
+</nav>

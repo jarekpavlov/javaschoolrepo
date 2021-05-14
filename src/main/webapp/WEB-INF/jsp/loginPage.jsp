@@ -10,37 +10,52 @@
 <html>
 <head>
     <title>Login</title>
+    <%@ include file="fragments/bootstrap.jspf" %>
 </head>
 <body>
-
-<h1>Login Form</h1>
-
-<form name='login' action="" method='POST'>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <fieldset>
-        <legend>Please login</legend>
-        <c:if test="${param.error !=null}">
-            <div>
-                Failed to login
-                <c:if test="${SPRING_SECURITY_LAST_EXCEPTION !=null}">
-                    Reason: <c:out
-                        value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>
-                </c:if>
-            </div>
-        </c:if>
-        <c:if test="${param.logout!=null}">
-            <div>You have been logged out</div>
-        </c:if>
-        <p>
-            <label for="username">Username</label><input type="text" id="username" name="username">
-        </p>
-        <p>
-            <label for="password">Password</label><input type="password" id="password" name="password">
-        </p>
-        <div>
-            <button type="submit" class="btn">Login</button>
+<%@ include file="fragments/navbar.jspf" %>
+<div class="container">
+    <div class="card" style="margin-top: 1.5em">
+        <div class="card-header"><h2>Please login</h2></div>
+        <div class="card-body">
+            <form name='login' action="" method='POST'>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <fieldset>
+                    <c:if test="${param.error !=null}">
+                        <div class="alert alert-danger" role="alert">Failed to login</div>
+                        <c:if test="${SPRING_SECURITY_LAST_EXCEPTION !=null}">
+                            Reason:
+                                <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>
+                        </c:if>
+                    </c:if>
+                    <c:if test="${param.logout!=null}">
+                        You have been logged out
+                    </c:if>
+                    <div class="form-group row">
+                        <label for="username" class="col-sm-3 col-md-2 col-form-label">Username:</label>
+                        <div class="col-sm-9 col-md-10 ">
+                            <input type="text" class="form-control" id="username" name="username">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="password" class="col-sm-3 col-md-2 col-form-label">Password</label>
+                        <div class="col-sm-9 col-md-10 ">
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-lg btn-primary">Login</button>
+                        </div>
+                        <div class="col-6">
+                            <a href="/MmsPr/users/registration/register" class="btn btn-lg btn-info float-right">Register</a>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-    </fieldset>
-</form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
