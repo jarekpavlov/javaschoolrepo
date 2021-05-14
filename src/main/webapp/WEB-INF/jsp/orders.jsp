@@ -19,7 +19,7 @@
 <div align="center">
     <h1>Orders</h1>
     <table border="3" cellpadding="5">
-        <tr>
+        <tr align="center">
             <th>Number</th>
             <sec:authorize access="hasRole('EMPLOYEE')">
                 <th>Client</th>
@@ -29,7 +29,7 @@
             <th>Products</th>
         </tr>
         <c:forEach items="${orders}" var="order" varStatus="status">
-            <tr>
+            <tr align="center">
                 <th>${status.index+1}</th>
                 <sec:authorize access="hasRole('EMPLOYEE')">
                     <th>${order.client.email}</th>

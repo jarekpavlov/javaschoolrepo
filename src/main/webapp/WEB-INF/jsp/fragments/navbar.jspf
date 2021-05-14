@@ -4,18 +4,15 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
-        <sec:authorize access="hasRole('EMPLOYEE')">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+            <div class="navbar-nav">
+                <sec:authorize access="hasRole('EMPLOYEE')">
                     <a class="nav-link" href="/MmsPr/admin/users">Users</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
                     <a class="nav-link" href="/MmsPr/admin/orders">Employee information</a>
-                </li>
-            </ul>
-        </sec:authorize>
+                </sec:authorize>
+                <sec:authorize access="isAuthenticated()">
+                    <a class="nav-link " href="/MmsPr/users/registration/register">Settings</a>
+                </sec:authorize>
+            </div>
 
         <div class="navbar-nav ml-auto">
             <sec:authorize access="!isAuthenticated()">

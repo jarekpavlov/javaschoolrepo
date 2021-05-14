@@ -2,6 +2,7 @@ package com.jschool.controllers;
 
 import com.jschool.DTO.ClientDTO;
 import com.jschool.domain.Client;
+import com.jschool.exceptions.ChangePasswordException;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.security.CustomSecurityClient;
 import com.jschool.service.ClientService;
@@ -73,7 +74,11 @@ public class UserController {
 
     @PostMapping(value = "/user/registration/change-password")
     public String changePassword(@RequestParam String newPassword1
-            , @RequestParam String newPassword2, @AuthenticationPrincipal CustomSecurityClient client) {
+            , @RequestParam String newPassword2, @AuthenticationPrincipal CustomSecurityClient client) throws ChangePasswordException {
+        if(!newPassword1.equals(newPassword2)){
+            logger.warn("The passwords didn't match during the changing");
+            throw new ChangePasswordException("The passwords didn't match during the changing");
+        }
         clientService.saveClientWithChangedPassword(newPassword1, newPassword2, client);
         return "redirect:/";
     }

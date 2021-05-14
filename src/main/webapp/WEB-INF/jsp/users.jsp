@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
@@ -19,7 +20,7 @@
 <div align="center">
     <h1>Clients</h1>
     <table border="3" cellpadding="5">
-        <tr>
+        <tr align="center">
             <th>Number</th>
             <th>Name</th>
             <th>Surname</th>
@@ -27,9 +28,10 @@
             <th>address</th>
             <th>Phone</th>
             <th>Date of birth</th>
+            <th>Action</th>
         </tr>
         <c:forEach items="${userList}" var="user" varStatus="status">
-            <tr>
+            <tr align="center">
                 <th>${status.index+1}</th>
                 <th>${user.name}</th>
                 <th>${user.surname}</th>

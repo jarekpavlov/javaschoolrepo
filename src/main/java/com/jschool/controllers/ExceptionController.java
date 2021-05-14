@@ -1,5 +1,6 @@
 package com.jschool.controllers;
 
+import com.jschool.exceptions.ChangePasswordException;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.ProductIsInOrder;
 import org.apache.log4j.Logger;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExceptionController {
     Logger logger = Logger.getLogger(this.getClass());
 
-//    @ExceptionHandler(value = Exception.class)
-//    public String getGenericException() {
-//        return "genericExceptionPage";
-//    }
+    @ExceptionHandler(value = ChangePasswordException.class)
+    public String getGenericException() {
+        return "changePasswordExceptionPage";
+    }
 
     @ExceptionHandler(value = EmptyFieldException.class)
     public String handleEmptyFieldException() {

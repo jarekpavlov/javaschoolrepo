@@ -7,6 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <title>Login</title>
@@ -43,14 +45,16 @@
                             <input type="password" class="form-control" id="password" name="password">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <button type="submit" class="btn btn-lg btn-primary">Login</button>
+                    <sec:authorize access="!isAuthenticated()">
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-lg btn-primary">Login</button>
+                            </div>
+                            <div class="col-6">
+                                <a href="/MmsPr/users/registration/register" class="btn btn-lg btn-info float-right">Register</a>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <a href="/MmsPr/users/registration/register" class="btn btn-lg btn-info float-right">Register</a>
-                        </div>
-                    </div>
+                    </sec:authorize>
                 </fieldset>
             </form>
         </div>

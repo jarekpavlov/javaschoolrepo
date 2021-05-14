@@ -36,16 +36,17 @@
         <input type="text" name="brand"/>
         <label>Title:</label>
         <input type="text" name="title"/>
-        <input type="submit" value="Filter">
+        <input type="submit" class="btn btn-info btn-sm" value="Filter">
     </form:form>
     <table border="3" cellpadding="5">
-        <tr>
+        <tr align = "center">
             <th>Number</th>
             <th>Title</th>
             <th>Brand</th>
             <th>Color</th>
             <th>Price</th>
             <th>Quantity</th>
+            <th>Action</th>
         </tr>
         <c:forEach items="${products}" var="product" varStatus="status">
             <tr align="center">
@@ -57,15 +58,15 @@
                 <th>${product.quantity}</th>
                 <th>
                     <sec:authorize access="hasRole('EMPLOYEE')">
-                        <a href="admin/product/edit?id=${product.id}">Edit</a>
-                        <a href="admin/product/delete?id=${product.id}">Delete</a>
+                        <a class="btn btn-secondary btn-sm" href="admin/product/edit?id=${product.id}">Edit</a>
+                        <a class="btn btn-secondary btn-sm" href="admin/product/delete?id=${product.id}">Delete</a>
                     </sec:authorize>
 
                     <sec:authorize access="!hasRole('EMPLOYEE')">
                         <form:form action="/MmsPr/order/add-to-cart?id=${product.id}" method="post">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <input type="number" name="numberForOrder"/>
-                            <input type="submit" value="Add to Cart">
+                            <input class="btn btn-success btn-sm" type="submit" value="Add to Cart">
                         </form:form>
                     </sec:authorize>
                 </th>
