@@ -103,7 +103,7 @@ public class ProductService {
         Product product = entityService.getEntity(Product.class,id);
         for (ProductsInOrder productsInOrder : productsInOrderList){
             if(productsInOrder.getProduct().equals(product)){
-                logger.warn("Employee tried to delete a product which is in order");
+                logger.warn("Employee tried to delete a product which is in an order");
                 throw new ProductIsInOrder("The product is in an order. You should delete the order first!");
             }
         }

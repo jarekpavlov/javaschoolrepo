@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class ExceptionController {
     Logger logger = Logger.getLogger(this.getClass());
+
 //    @ExceptionHandler(value = Exception.class)
 //    public String getGenericException() {
 //        return "genericExceptionPage";

@@ -28,9 +28,9 @@
         <a href="/MmsPr/orders">Order History</a>
     </sec:authorize>
     <sec:authorize access="hasRole('USER') or isAnonymous()">
-        <label>Products in cart:</label>
+        <img src="<c:url value="/resources/images/productCart.jpg"/>"/>
         <label>${productsInCart}</label>
-        <a href="/MmsPr/order/products-in-cart" class="btn btn-primary btn-sm" role="button">Cart</a>
+        <a href="/MmsPr/order/products-in-cart"  class="btn btn-primary btn-sm" role="button">Cart</a>
     </sec:authorize>
     <form:form action="/MmsPr/product/filter" method="post">
         <label>Color:</label>
