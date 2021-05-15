@@ -11,7 +11,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title>Registration Page</title>
+    <title>User Information</title>
     <%@ include file="fragments/bootstrap.jspf" %>
 </head>
 <body>
@@ -78,7 +78,7 @@
             </tr>
         </form:form>
     </table>
-    <sec:authorize access="hasRole('USER')">
+    <sec:authorize access="isAuthenticated()">
         <a href="/MmsPr/user/registration/change-password">Change Password</a>
     </sec:authorize>
 </div>

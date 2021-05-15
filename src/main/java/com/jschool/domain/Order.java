@@ -21,7 +21,6 @@ public class Order {
 
     private Long id;
     private Client client;
-    private String clientAddress;
     private String payment;
     private String deliveryMethod;
     private Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
@@ -66,13 +65,6 @@ public class Order {
         this.client = client;
     }
 
-    public String getClientAddress() {
-        return clientAddress;
-    }
-
-    public void setClientAddress(String clientAddress) {
-        this.clientAddress = clientAddress;
-    }
 
     @Column(length = 45)
     public String getPayment() {
@@ -113,12 +105,12 @@ public class Order {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if(getClass()!=obj.getClass())
+        if (getClass() != obj.getClass())
             return false;
         if (obj == null)
             return false;
         Order order = (Order) obj;
-        if (this.id == null ) {
+        if (this.id == null) {
             if (order.getId() != null)
                 return false;
         } else if (!this.id.equals(order.getId())) {

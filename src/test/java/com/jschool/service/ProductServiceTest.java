@@ -3,6 +3,7 @@ package com.jschool.service;
 import com.jschool.DTO.ProductDTO;
 import com.jschool.domain.Product;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
@@ -10,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ProductServiceTest {
+
     ProductService productService = new ProductService();
+    List<ProductDTO> list = new ArrayList<>();
+    List<ProductDTO> expectedList = new ArrayList<>();
 
-    @Test
-    void getFilteredProductList() {
-
-        List<ProductDTO> list = new ArrayList<>();
-        List<ProductDTO> filteredList = new ArrayList<>();
+    @BeforeEach
+    void beforeEach(){
 
         ProductDTO product1 = new ProductDTO();
         ProductDTO product2 = new ProductDTO();
@@ -55,14 +56,25 @@ class ProductServiceTest {
         list.add(product4);
         list.add(product5);
 
-        filteredList.add(product1);
-        filteredList.add(product2);
-        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProductList(list,"color1","brand1","");
-        System.out.println(filteredListAfterMethod);
-
-        Assertions.assertEquals(filteredList,filteredListAfterMethod);
-        Assertions.assertNotEquals(list, productService.getFilteredProductList(list,"color2","brand3",""));
+        expectedList.add(product1);
+        expectedList.add(product2);
+        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProductList(list, "color1", "brand1", "");
     }
+
+    @Test
+    void getFilteredProductList() {
+
+        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProductList(list, "color1", "brand1", "");
+        Assertions.assertEquals(expectedList, filteredListAfterMethod);
+    }
+
+    @Test
+    void getFilteredProductList2() {
+
+        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProductList(list, "color1", "brand1", "");
+        Assertions.assertNotEquals(list, productService.getFilteredProductList(list, "color2", "brand3", ""));
+    }
+
 
     @Test
     void getProductDTO() {
@@ -86,6 +98,6 @@ class ProductServiceTest {
         productDTO.setPrice(100F);
         productDTO.setQuantity(10);
         productDTO.setTitle("title1");
-        Assertions.assertEquals(productDTO,productService.getProductDTO(product));
+        Assertions.assertEquals(productDTO, productService.getProductDTO(product));
     }
 }
