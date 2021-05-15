@@ -27,7 +27,7 @@
     <sec:authorize access="hasRole('USER') or isAnonymous()">
         <img src="<c:url value="/resources/images/productCart.jpg"/>"/>
         <label>${productsInCart}</label>
-        <a href="/MmsPr/order/products-in-cart"  class="btn btn-primary btn-sm" role="button">Cart</a>
+        <a href="/MmsPr/order/products-in-cart"  class="btn btn-info btn-sm" role="button">Cart</a>
     </sec:authorize>
     <form:form action="/MmsPr/product/filter" method="post">
         <label>Color:</label>
@@ -36,7 +36,7 @@
         <input type="text" name="brand"/>
         <label>Title:</label>
         <input type="text" name="title"/>
-        <input type="submit" class="btn btn-info btn-sm" value="Filter">
+        <input type="submit" class="btn btn-primary btn-sm" value="Filter">
     </form:form>
     <table border="3" cellpadding="5">
         <tr align = "center">
@@ -58,15 +58,15 @@
                 <th>${product.quantity}</th>
                 <th>
                     <sec:authorize access="hasRole('EMPLOYEE')">
-                        <a class="btn btn-secondary btn-sm" href="admin/product/edit?id=${product.id}">Edit</a>
-                        <a class="btn btn-secondary btn-sm" href="admin/product/delete?id=${product.id}">Delete</a>
+                        <a class="btn btn-info btn-sm" href="admin/product/edit?id=${product.id}">Edit</a>
+                        <a class="btn btn-info btn-sm" href="admin/product/delete?id=${product.id}">Delete</a>
                     </sec:authorize>
 
                     <sec:authorize access="!hasRole('EMPLOYEE')">
                         <form:form action="/MmsPr/order/add-to-cart?id=${product.id}" method="post">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <input type="number" name="numberForOrder"/>
-                            <input class="btn btn-success btn-sm" type="submit" value="Add to Cart">
+                            <input class="btn btn-info btn-sm" type="submit" value="Add to Cart">
                         </form:form>
                     </sec:authorize>
                 </th>

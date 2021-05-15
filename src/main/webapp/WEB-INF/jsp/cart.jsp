@@ -54,7 +54,7 @@
                     <option value="Home delivery">Home delivery</option>
                     <option value="Delivery to the store">Delivery to the store</option>
                 </select>
-                <input type="submit" class="btn btn-success btn-sm" value="Create Order"/>
+                <input type="submit" class="btn btn-info btn-sm" value="Create Order"/>
             </form:form>
         </c:if>
 
