@@ -4,7 +4,8 @@ import com.jschool.DTO.ProductDTO;
 import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.exceptions.EmptyFieldException;
-import com.jschool.exceptions.ProductIsInOrder;
+import com.jschool.exceptions.NonValidNumberException;
+import com.jschool.exceptions.ProductIsInOrderException;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -37,7 +38,11 @@ public class ProductService {
         return modelMapper;
     }
 
-    public void saveProduct(Product product) throws EmptyFieldException {
+    public void saveProduct(Product product) throws EmptyFieldException, NonValidNumberException {
+        if(product.getPrice()<1 || product.getMass()<1 || product.getPrice()<1 || product.getQuantity()<1){
+            logger.warn("Employee entered incorrect number ");
+            throw new NonValidNumberException("Some numbers are incorrect");
+        }
         String emptyS = "";
         if(emptyS.equals(product.getBrand()) || emptyS.equals(product.getTitle()) || emptyS.equals(product.getCategory()) || product.getPrice()==null){
             logger.warn("Not all fields were filled in saveProduct service method");
@@ -97,14 +102,14 @@ public class ProductService {
         return filteredList;
     }
 
-    public void deleteProduct(HttpServletRequest request) throws ProductIsInOrder {
+    public void deleteProduct(HttpServletRequest request) throws ProductIsInOrderException {
         List<ProductsInOrder> productsInOrderList = entityService.entityList(ProductsInOrder.class);
         Long id = Long.parseLong(request.getParameter("id"));
         Product product = entityService.getEntity(Product.class,id);
         for (ProductsInOrder productsInOrder : productsInOrderList){
             if(productsInOrder.getProduct().equals(product)){
                 logger.warn("Employee tried to delete a product which is in an order");
-                throw new ProductIsInOrder("The product is in an order. You should delete the order first!");
+                throw new ProductIsInOrderException("The product is in an order. You should delete the order first!");
             }
         }
         entityService.deleteEntity(Product.class, id);

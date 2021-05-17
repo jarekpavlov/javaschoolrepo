@@ -1,5 +1,6 @@
 package com.jschool.controllers;
 
+import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.service.EntityService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,12 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "admin/statistic")
-    public String getStatistic(ModelMap map, HttpServletRequest request) {
+    public String getStatistic(ModelMap map, HttpServletRequest request) throws NonValidNumberException {
         logger.info("Employee entered getStatistic method");
         int days = Integer.valueOf(request.getParameter("days"));
+        if (days<1){
+            throw new NonValidNumberException("Some numbers are incorrect");
+        }
         map.addAttribute("bestClientTree", entityService.getBestClient(days));
         map.addAttribute("bestProductTree", entityService.getBestProduct(days));
         map.addAttribute("total", entityService.getSum(days));

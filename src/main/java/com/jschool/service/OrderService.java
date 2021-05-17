@@ -7,6 +7,7 @@ import com.jschool.domain.OrderStatus;
 import com.jschool.domain.PaymentStatus;
 import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
+import com.jschool.exceptions.NonValidNumberException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +112,7 @@ public class OrderService {
         session.setAttribute("productsInOrderSet", productsInOrderSet);
     }
 
-    public void saveFromCart(Map<String, String> quantityMap, HttpSession session, @AuthenticationPrincipal Client client, String paymentMethod, String deliveryMethod) {
+    public void saveFromCart(Map<String, String> quantityMap, HttpSession session, @AuthenticationPrincipal Client client, String paymentMethod, String deliveryMethod) throws NonValidNumberException {
         if (paymentMethod == null)
             paymentMethod = "Card";
         if (deliveryMethod == null)
@@ -120,6 +121,9 @@ public class OrderService {
         for (ProductsInOrder temp : productsInOrderSet) {
             Long ProductId = temp.getProduct().getId();
             String quantity = quantityMap.get(String.valueOf(ProductId));
+            if(Integer.parseInt(quantity)<1){
+                throw new NonValidNumberException("Some numbers are incorrect");
+            }
             temp.setQuantity(Integer.parseInt(quantity));
         }
         session.setAttribute("productsInOrderSet", productsInOrderSet);

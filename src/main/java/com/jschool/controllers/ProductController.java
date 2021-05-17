@@ -4,7 +4,8 @@ import com.jschool.DTO.ProductDTO;
 import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.exceptions.EmptyFieldException;
-import com.jschool.exceptions.ProductIsInOrder;
+import com.jschool.exceptions.NonValidNumberException;
+import com.jschool.exceptions.ProductIsInOrderException;
 import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
 import org.apache.log4j.Logger;
@@ -57,7 +58,7 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/product/save", method = RequestMethod.POST)
-    public String saveProduct(Product product) throws EmptyFieldException {
+    public String saveProduct(Product product) throws EmptyFieldException, NonValidNumberException {
         logger.debug("Employee entered saveProduct method");
         productService.saveProduct(product);
         return "redirect:/products";
@@ -72,7 +73,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "/admin/product/delete")
-    public String deleteProduct(HttpServletRequest request) throws ProductIsInOrder {
+    public String deleteProduct(HttpServletRequest request) throws ProductIsInOrderException {
         productService.deleteProduct(request);
         return "redirect:/products";
     }

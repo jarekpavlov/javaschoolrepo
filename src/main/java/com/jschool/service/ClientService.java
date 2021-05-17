@@ -3,8 +3,10 @@ package com.jschool.service;
 import com.jschool.DTO.ClientDTO;
 import com.jschool.domain.Address;
 import com.jschool.domain.Client;
+import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.security.Authority;
 import com.jschool.security.CustomSecurityClient;
+import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
-
+    Logger logger = Logger.getLogger(this.getClass());
     private ModelMapper modelMapper;
     private EntityService entityService;
 
@@ -37,7 +39,11 @@ public class ClientService {
         this.modelMapper = modelMapper;
     }
 
-    public void saveClient(Client client, Client clientWithPassword) {
+    public void saveClient(Client client, Client clientWithPassword) throws NonValidNumberException {
+        if(client.getAddress().getFlat()<1 || client.getAddress().getPostCode()<1){
+            logger.warn("User entered incorrect number ");
+            throw new NonValidNumberException("Some numbers are incorrect");
+        }
 
         Address address = client.getAddress();
 

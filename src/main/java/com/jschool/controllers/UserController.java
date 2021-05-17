@@ -4,6 +4,7 @@ import com.jschool.DTO.ClientDTO;
 import com.jschool.domain.Client;
 import com.jschool.exceptions.ChangePasswordException;
 import com.jschool.exceptions.EmptyFieldException;
+import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.security.CustomSecurityClient;
 import com.jschool.service.ClientService;
 import com.jschool.service.EntityService;
@@ -56,7 +57,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/users/registration/save")
-    public String saveUser(Client client, @AuthenticationPrincipal Client clientWithPassword) throws EmptyFieldException {
+    public String saveUser(Client client, @AuthenticationPrincipal Client clientWithPassword) throws EmptyFieldException, NonValidNumberException {
         String emptyS = "";
         if ((emptyS.equals(client.getPassword()) && clientWithPassword == null) || emptyS.equals(client.getName()) || emptyS.equals(client.getSurname()) || emptyS.equals(client.getPhone())) {
             logger.warn("User does not fill all fields in client registration/editing page");

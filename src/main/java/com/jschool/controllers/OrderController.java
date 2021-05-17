@@ -6,6 +6,7 @@ import com.jschool.domain.Order;
 import com.jschool.domain.OrderStatus;
 import com.jschool.domain.PaymentStatus;
 import com.jschool.domain.ProductsInOrder;
+import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.service.EntityService;
 import com.jschool.service.OrderService;
 import org.apache.log4j.Logger;
@@ -55,7 +56,11 @@ public class OrderController {
     }
 
     @PostMapping(value = "/order/add-to-cart")
-    public String addToCart(@RequestParam(defaultValue = "1") int numberForOrder, HttpServletRequest request) {
+    public String addToCart(@RequestParam(defaultValue = "1") int numberForOrder, HttpServletRequest request) throws NonValidNumberException {
+        if (numberForOrder<1){
+            logger.warn("User entered incorrect number ");
+            throw new NonValidNumberException("Some numbers are incorrect");
+        }
         String emptyS = "";
         orderService.addToCart(numberForOrder, request);
 
@@ -83,7 +88,7 @@ public class OrderController {
     @PostMapping(value = "/order/save-from-cart")
     public String saveOrderFromCart(@RequestParam Map<String, String> quantityMap, HttpSession session,
                                     @AuthenticationPrincipal Client client, @RequestParam(required = false) String paymentMethod,
-                                    @RequestParam(required = false) String deliveryMethod) {
+                                    @RequestParam(required = false) String deliveryMethod) throws NonValidNumberException {
         orderService.saveFromCart(quantityMap, session, client, paymentMethod, deliveryMethod);
         return "redirect:/orders";
     }
