@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class ExceptionController {
@@ -36,8 +35,9 @@ public class ExceptionController {
         logger.warn("User used incorrect type during typing in input");
         return "exceptions/badRequestExceptionPage";
     }
+
     @ExceptionHandler(value = NonValidNumberException.class)
-    public String getNonValidNumberException(){
+    public String getNonValidNumberException() {
         return "exceptions/notValidNumberPage";
     }
 }

@@ -56,7 +56,7 @@
                 <th>${status.index+1}</th>
                 <th>${product.product.title}</th>
                 <th>${product.product.brand}</th>
-                <th>${product.product.price}</th>
+                <th>${product.price}</th>
                 <th>${product.quantity}</th>
             </tr>
         </c:forEach>

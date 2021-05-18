@@ -65,8 +65,8 @@ public class ProductService {
      * @return
      */
     public List<ProductDTO> getFilteredProductList(List<ProductDTO> productDtoList, String color, String brand, String title) {
-        List<ProductDTO> filteredList = null;
         String emptyS = "";
+        List<ProductDTO> filteredList = null;
         if (!emptyS.equals(color)) {
             filteredList = productDtoList
                     .stream()
@@ -99,6 +99,8 @@ public class ProductService {
                         .collect(Collectors.toList());
             }
         }
+        if (filteredList==null)
+            return productDtoList;
         return filteredList;
     }
 

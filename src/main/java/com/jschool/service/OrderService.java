@@ -59,6 +59,7 @@ public class OrderService {
         ProductsInOrder productsInOrder = new ProductsInOrder();
         productsInOrder.setProduct(product);
         productsInOrder.setQuantity(numberForOrder);
+        productsInOrder.setPrice(product.getPrice());
 
         HttpSession httpSession = request.getSession();
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");

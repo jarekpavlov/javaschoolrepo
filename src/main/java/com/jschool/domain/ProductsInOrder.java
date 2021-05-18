@@ -14,11 +14,20 @@ public class ProductsInOrder {
     private Order order;
     private Product product;
     private int quantity;
+    private Float price;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     public void setId(Long id) {
