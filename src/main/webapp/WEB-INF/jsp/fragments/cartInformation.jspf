@@ -1,0 +1,5 @@
+<sec:authorize access="hasRole('USER') or isAnonymous()">
+    <img src="<c:url value="/resources/images/productCart.jpg"/>"/>
+    <label>${productsInCart}</label>
+    <a href="/MmsPr/order/products-in-cart"  class="btn btn-info btn-sm" role="button">Cart</a>
+</sec:authorize>

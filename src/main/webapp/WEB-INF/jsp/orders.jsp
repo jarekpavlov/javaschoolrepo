@@ -16,6 +16,9 @@
 </head>
 <body>
 <%@ include file="fragments/navbar.jspf" %>
+<div align="right" style="margin-right: 1.5em" >
+    <%@ include file="fragments/cartInformation.jspf" %>
+</div>
 <div align="center">
     <h1>Orders</h1>
     <table border="3" cellpadding="5">

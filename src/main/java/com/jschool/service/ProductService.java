@@ -11,9 +11,12 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,6 +118,15 @@ public class ProductService {
             }
         }
         entityService.deleteEntity(Product.class, id);
+    }
+    public ModelMap getCartModelMap(ModelMap map, HttpSession httpSession){
+        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
+        if (productsInOrderSet != null) {
+            map.addAttribute("productsInCart", productsInOrderSet.size());
+        } else {
+            map.addAttribute("productsInCart", "0");
+        }
+        return map;
     }
 
     public ProductDTO getProductDTO(Product product) {

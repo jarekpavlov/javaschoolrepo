@@ -9,6 +9,7 @@ import com.jschool.domain.ProductsInOrder;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.service.EntityService;
 import com.jschool.service.OrderService;
+import com.jschool.service.ProductService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,19 +31,22 @@ public class OrderController {
     Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
     private OrderService orderService;
+    private ProductService productService;
 
     @Autowired
-    public OrderController(EntityService entityService, OrderService orderService) {
+    public OrderController(EntityService entityService, OrderService orderService, ProductService productService) {
         this.entityService = entityService;
         this.orderService = orderService;
+        this.productService = productService;
     }
 
     @GetMapping(value = "/orders")
-    public String getOrdersByClient(ModelMap map, @AuthenticationPrincipal Client client) {
+    public String getOrdersByClient(ModelMap map, @AuthenticationPrincipal Client client, HttpSession httpSession) {
         List<OrderDTO> orders = orderService.getOrderDtoList();
         List<OrderDTO> ordersByClient = orders.stream()
                 .filter(order -> order.getClient().equals(client)).collect(Collectors.toList());
         map.addAttribute("orders", ordersByClient);
+        productService.getCartModelMap(map, httpSession);
         return "orders";
     }
 
@@ -99,6 +103,8 @@ public class OrderController {
         OrderDTO orderDTO = orderService.getOrderFromJoinTable(productsInOrderSet);
         map.addAttribute("order", orderDTO);
         map.addAttribute("products", productsInOrderSet);
+        HttpSession httpSession = request.getSession();
+        productService.getCartModelMap(map, httpSession);
         return "productsPerOrder";
     }
 

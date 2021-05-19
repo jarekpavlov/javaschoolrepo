@@ -8,6 +8,7 @@ import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.security.CustomSecurityClient;
 import com.jschool.service.ClientService;
 import com.jschool.service.EntityService;
+import com.jschool.service.ProductService;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -24,10 +26,12 @@ public class UserController {
     Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
     private ClientService clientService;
+    private ProductService productService;
 
-    public UserController(EntityService entityService, ClientService clientService) {
+    public UserController(EntityService entityService, ClientService clientService, ProductService productService) {
         this.entityService = entityService;
         this.clientService = clientService;
+        this.productService = productService;
     }
 
     @GetMapping(value = "/admin/users")
@@ -38,21 +42,23 @@ public class UserController {
     }
 
     @GetMapping(value = "/users/registration/register")
-    public String registrationMeth(ModelMap map, @AuthenticationPrincipal Client client) {
+    public String registrationMeth(ModelMap map, @AuthenticationPrincipal Client client, HttpSession httpSession) {
         logger.info("User creation/editing method was entered");
         if (client == null) {
             client = new Client();
         }
         map.addAttribute("client", client);
+        productService.getCartModelMap(map, httpSession);
         return "registrationPage";
     }
 
     @GetMapping(value = "/users/edit")
-    public String userEdit(HttpServletRequest request, ModelMap map) {
+    public String userEdit(HttpServletRequest request, ModelMap map, HttpSession httpSession) {
         logger.info("User editing method was entered");
         Long id = Long.parseLong(request.getParameter("id"));
         Client client = entityService.getEntity(Client.class, id);
         map.addAttribute(client);
+        productService.getCartModelMap(map, httpSession);
         return "registrationPage";
     }
 

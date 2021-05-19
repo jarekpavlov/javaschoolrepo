@@ -16,18 +16,13 @@
 </head>
 <body>
 <%@ include file="fragments/navbar.jspf" %>
+<div align="right" style="margin-right: 1.5em" >
+    <%@ include file="fragments/cartInformation.jspf" %>
+</div>
 <div align="center">
     <h1>Products</h1>
     <sec:authorize access="hasRole('EMPLOYEE')">
         <h3><a href="admin/product/new">New Product</a></h3>
-    </sec:authorize>
-    <sec:authorize access="hasRole('USER')">
-        <a href="/MmsPr/orders">Order History</a>
-    </sec:authorize>
-    <sec:authorize access="hasRole('USER') or isAnonymous()">
-        <img src="<c:url value="/resources/images/productCart.jpg"/>"/>
-        <label>${productsInCart}</label>
-        <a href="/MmsPr/order/products-in-cart"  class="btn btn-info btn-sm" role="button">Cart</a>
     </sec:authorize>
     <form:form action="/MmsPr/product/filter" method="post">
         <label>Color:</label>

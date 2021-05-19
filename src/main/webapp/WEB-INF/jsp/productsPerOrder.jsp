@@ -18,6 +18,9 @@
 <body>
 <div align="center">
     <%@ include file="fragments/navbar.jspf" %>
+    <div align="right" style="margin-right: 1.5em" >
+        <%@ include file="fragments/cartInformation.jspf" %>
+    </div>
     <h1>Products in order</h1>
     <sec:authorize access="hasRole('EMPLOYEE')">
         <form:form action="/MmsPr/admin/orders/save" method="post">
