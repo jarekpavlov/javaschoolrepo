@@ -53,8 +53,8 @@
                 <th>${product.quantity}</th>
                 <th>
                     <sec:authorize access="hasRole('EMPLOYEE')">
-                        <a class="btn btn-info btn-sm" href="admin/product/edit?id=${product.id}">Edit</a>
-                        <a class="btn btn-info btn-sm" href="admin/product/delete?id=${product.id}">Delete</a>
+                        <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/edit?id=${product.id}">Edit</a>
+                        <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/delete?id=${product.id}">Delete</a>
                     </sec:authorize>
 
                     <sec:authorize access="!hasRole('EMPLOYEE')">

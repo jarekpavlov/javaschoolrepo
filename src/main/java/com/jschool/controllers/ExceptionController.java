@@ -29,12 +29,12 @@ public class ExceptionController {
         return "exceptions/productIsInOrderPage";
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String badRequestException(Exception e) {
-        logger.warn("User used incorrect type during typing in input");
-        return "exceptions/badRequestExceptionPage";
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public String badRequestException(Exception e) {
+//        logger.warn("User used incorrect type during typing in input");
+//        return "exceptions/badRequestExceptionPage";
+//    }
 
     @ExceptionHandler(value = NonValidNumberException.class)
     public String getNonValidNumberException() {
