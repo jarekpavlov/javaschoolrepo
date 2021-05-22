@@ -1,6 +1,7 @@
 package com.jschool.service;
 
 import com.jschool.DTO.OrderDTO;
+import com.jschool.count.JoinCountByProduct;
 import com.jschool.domain.Client;
 import com.jschool.domain.Order;
 import com.jschool.domain.OrderStatus;
@@ -10,6 +11,7 @@ import com.jschool.domain.ProductsInOrder;
 import com.jschool.exceptions.NonValidNumberException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -29,14 +31,16 @@ public class OrderService {
 
     private EntityService entityService;
     private ModelMapper modelMapper;
+    private AmqpTemplate template;
 
     public OrderService() {
     }
 
     @Autowired
-    public OrderService(EntityService entityService, ModelMapper modelMapper) {
+    public OrderService(EntityService entityService, ModelMapper modelMapper,AmqpTemplate template ) {
         this.entityService = entityService;
         this.modelMapper = modelMapper;
+        this.template = template;
     }
 
     public ModelMapper getModelMapper() {
@@ -149,11 +153,19 @@ public class OrderService {
     }
 
     public void saveOrderStatus(OrderStatus orderStatus, PaymentStatus paymentStatus, Long id) {
-        String emptyS = "";
+        Set<JoinCountByProduct> bestProductBefore = null;
+
+        if (orderStatus.equals(OrderStatus.DELIVERED) && paymentStatus.equals(PaymentStatus.PAID)){
+            bestProductBefore = entityService.getBestProduct(30);
+        }
         Order order = entityService.getEntity(Order.class, id);
         order.setOrderStatus(orderStatus);
         order.setPaymentStatus(paymentStatus);
         entityService.updateEntity(order);
+        Set<JoinCountByProduct> bestProductAfter = entityService.getBestProduct(30);
+        if(!bestProductAfter.equals(bestProductBefore)){
+            template.convertAndSend("queue1","The best products list is changed");
+        }
     }
 
     public OrderDTO getOrderDTO(Order order) {
