@@ -1,15 +1,13 @@
 package com.jschool.controllers;
 
 import com.jschool.count.JoinCountByProduct;
-import com.jschool.domain.Product;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.service.EntityService;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -21,7 +19,7 @@ public class StatisticController {
         this.entityService = entityService;
     }
 
-    @GetMapping(value = "get-statistic")
+    @RequestMapping(value = "get-statistic")
     @ResponseBody
     public Set<JoinCountByProduct> getProductStatistic(@RequestParam int days) throws NonValidNumberException {
         if (days < 1)
