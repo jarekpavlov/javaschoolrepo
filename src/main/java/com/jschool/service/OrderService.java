@@ -153,11 +153,9 @@ public class OrderService {
     }
 
     public void saveOrderStatus(OrderStatus orderStatus, PaymentStatus paymentStatus, Long id) {
-        Set<JoinCountByProduct> bestProductBefore = null;
 
-        if (orderStatus.equals(OrderStatus.DELIVERED) && paymentStatus.equals(PaymentStatus.PAID)){
-            bestProductBefore = entityService.getBestProduct(30);
-        }
+        Set<JoinCountByProduct> bestProductBefore = entityService.getBestProduct(30);
+
         Order order = entityService.getEntity(Order.class, id);
         order.setOrderStatus(orderStatus);
         order.setPaymentStatus(paymentStatus);
