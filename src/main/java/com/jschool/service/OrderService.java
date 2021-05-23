@@ -51,8 +51,7 @@ public class OrderService {
         this.modelMapper = modelMapper;
     }
 
-    /**
-     * This method is taking @param numberForOrder to create a session using
+    /** This method is taking @param numberForOrder to create a session using
      *
      * @param request with ProductsInOrder instance to store the Products into the cart
      */

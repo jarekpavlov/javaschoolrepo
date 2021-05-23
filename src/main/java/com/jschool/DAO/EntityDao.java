@@ -56,19 +56,19 @@ public class EntityDao {
     public List<?> getBestClient(int daysAgo) {
         String dateBefore_daysS = getDateBefore(daysAgo);
         Query query = currentSession.createQuery("select sum(m.price*m.quantity) as resultAmount, m.order.client.id as" +
-                "  client_id from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
+                "  client_id from products_in_order m" +
                 " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" +
-                " and m.order.orderStatus = '3' group by m.order.client.id order by sum(m.product.price*m.quantity)");
+                " and m.order.orderStatus = '3' group by m.order.client.id order by sum(m.price*m.quantity) desc");
         query.setMaxResults(10);
         return query.getResultList();
     }
 
     public List<?> getBestProduct(int daysAgo) {
         String dateBefore_daysS = getDateBefore(daysAgo);
-        Query query = currentSession.createQuery("select sum(m.price*m.quantity), m.product.id, m.quantity" +
-                " from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
+        Query query = currentSession.createQuery("select sum(m.price*m.quantity), m.product.id " +
+                " from products_in_order m" +
                 " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" +
-                "and m.order.orderStatus = '3' group by m.product.id order by sum(m.product.price*m.quantity)");
+                " and m.order.orderStatus = '3' group by m.product.id order by sum(m.price*m.quantity) desc");
         query.setMaxResults(10);
         return query.getResultList();
     }
@@ -76,7 +76,7 @@ public class EntityDao {
     public Object getSum(int daysAgo) {
         String dateBefore_daysS = getDateBefore(daysAgo);
         Query query = currentSession.createQuery("select sum(m.price*m.quantity)" +
-                " from products_in_order m inner join m.order inner join m.product inner join m.order.client" +
+                " from products_in_order m" +
                 " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" + "and m.order.orderStatus = '3'");
         return query.getSingleResult();
     }
