@@ -9,6 +9,7 @@ import com.jschool.domain.PaymentStatus;
 import com.jschool.domain.Product;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.exceptions.NonValidNumberException;
+import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -32,7 +33,7 @@ public class OrderService {
     private EntityService entityService;
     private ModelMapper modelMapper;
     private AmqpTemplate template;
-
+    Logger logger = Logger.getLogger(this.getClass());
     public OrderService() {
     }
 
@@ -161,7 +162,11 @@ public class OrderService {
         entityService.updateEntity(order);
         Set<JoinCountByProduct> bestProductAfter = entityService.getBestProduct(30);
         if(!bestProductAfter.equals(bestProductBefore)){
-            template.convertAndSend("queue1","The best products list is changed");
+            try {
+                template.convertAndSend("queue1","The best products list is changed");
+            }catch (Exception e){
+                logger.error("You have now mq connection");
+            }
         }
     }
 
