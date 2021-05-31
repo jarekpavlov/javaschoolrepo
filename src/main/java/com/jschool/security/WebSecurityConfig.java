@@ -39,9 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
             .authorizeRequests()
-            .antMatchers("/products").permitAll()
+            .antMatchers("/products","/pictures/**").permitAll()
             .antMatchers("/users/registration/**").permitAll()
-            .antMatchers("/order/add-to-cart").permitAll()
+            .antMatchers("/order/add-to-cart" ).permitAll()
             .antMatchers("/get-statistic").permitAll()
             .antMatchers("/order/products-in-cart").permitAll()
             .antMatchers("/order/delete-from-cart").permitAll()

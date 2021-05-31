@@ -2,9 +2,11 @@ package com.jschool.config;
 
 import com.jschool.security.WebSecurityConfig;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -17,11 +19,16 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableWebSecurity
 @ComponentScan(basePackages = "com.jschool")
 @Import({WebSecurityConfig.class})
+@PropertySource("classpath:application.properties")
 public class SpringMvcConfig implements WebMvcConfigurer {
+
+    @Value("${upload.path}")
+    String uploadPath;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        registry.addResourceHandler("/pictures/**").addResourceLocations("file://"+uploadPath+"/");
     }
 
     @Bean

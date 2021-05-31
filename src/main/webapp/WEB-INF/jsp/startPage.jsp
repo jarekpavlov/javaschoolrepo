@@ -19,5 +19,6 @@
 <div align="right" style="margin-right: 1.5em" >
     <%@ include file="fragments/cartInformation.jspf" %>
 </div>
+<img src="<c:url value="/pictures/robot.jpg"/>"/>
 </body>
 </html>

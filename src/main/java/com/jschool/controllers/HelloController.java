@@ -3,6 +3,7 @@ package com.jschool.controllers;
 import com.jschool.service.ProductService;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +24,13 @@ public class HelloController {
         this.productService = productService;
     }
 
+    @Value("${upload.path}")
+    String some;
+
     @GetMapping(value = "/test")
     @ResponseBody
     public String hello() {
-        template.convertAndSend("queue1","Message to queue Hellooooooo");
+        System.out.println(some);
         return "users";
     }
 

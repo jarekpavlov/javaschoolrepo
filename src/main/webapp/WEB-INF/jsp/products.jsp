@@ -70,7 +70,7 @@
             </tr>
         </c:forEach>
     </table>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation    ">
         <ul class="pagination justify-content-center">
             <a class="page-link" href="#" tabindex="-1">Previous</a>
             <c:forEach begin = "1" end = "${pageQuantity}" var="page">
