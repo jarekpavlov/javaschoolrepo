@@ -16,51 +16,77 @@
 </head>
 <body>
 <%@ include file="fragments/navbar.jspf" %>
-    <div align="center">
-        <h1>Product</h1>
-        <table>
+<div class="container">
+    <div class = "card" style="margin-top: 1.5em">
+        <div class="card-header">
+            <h2>Client Information</h2>
+        </div>
+        <div class="card-body">
             <form:form action="/MmsPr/product/save/" method="post" modelAttribute="product"  >
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <form:hidden path = "id"/>
-                <tr>
-                    <td>Brand:</td>
-                    <td><form:input path = "brand"/></td>
-                </tr>
-                <tr>
-                    <td>Category:</td>
-                    <td><form:input path = "category"/></td>
-                </tr>
-                <tr>
-                    <td>Color:</td>
-                    <td><form:input path = "color"/></td>
-                </tr>
-                <tr>
-                    <td>Mass:</td>
-                    <td><form:input path = "mass"/></td>
-                </tr>
-                <tr>
-                    <td>Price:</td>
-                    <td><form:input path = "price"/></td>
-                </tr>
-                <tr>
-                    <td>Quantity:</td>
-                    <td><form:input path = "quantity"/></td>
-                </tr>
-                <tr>
-                    <td>Title:</td>
-                    <td><form:input path = "title"/></td>
-                </tr>
-                <tr>
-                    <td>Volume:</td>
-                    <td><form:input path = "volume"/></td>
-                </tr>
-                <tr>
-                    <input  type="submit" value="Save"/>
-                </tr>
+                <div class="form-group row">
+                    <label for="brand" class="col-sm-3 col-md-2 col-form-label">Brand:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id="brand" path = "brand"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="category" class="col-sm-3 col-md-2 col-form-label">Category:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id="category" path = "category"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="color" class="col-sm-3 col-md-2 col-form-label">Color:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id="color" path = "color"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="mass" class="col-sm-3 col-md-2 col-form-label">Mass:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id="mass" path = "mass"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="price" class="col-sm-3 col-md-2 col-form-label">Price:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">€</span>
+                            </div>
+                            <form:input class="form-control" id="price" path = "price"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="quantity" class="col-sm-3 col-md-2 col-form-label">Quantity:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id="quantity" path = "quantity"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="title" class="col-sm-3 col-md-2 col-form-label">Title:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id="title" path = "title"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="volume" class="col-sm-3 col-md-2 col-form-label">Volume:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id="volume" path = "volume"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn btn-lg btn-primary"  type="submit">Save</button>
+                    </div>
+                </div>
             </form:form>
-        </table>
-
+        </div>
     </div>
+</div>
 
 </body>
 </html>

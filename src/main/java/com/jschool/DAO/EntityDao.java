@@ -47,6 +47,12 @@ public class EntityDao {
         Query query = currentSession.createQuery("select c from " + type.getName() + " c");
         return (List<T>) query.getResultList();
     }
+    public <T> List<T> entityList(Class<T> type, int offset, int limit ){
+        Query query = currentSession.createQuery("select c from " + type.getName() + " c");
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        return (List<T>) query.getResultList();
+    }
 
     public <T> List<T> getEntityByEmail(Class<T> type, String email) {
         Query query = currentSession.createQuery("select c from " + type.getName() + " c where c.email='" + email + "'");

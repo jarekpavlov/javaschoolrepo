@@ -12,6 +12,7 @@
 <html>
 <head>
     <title>Product page</title>
+    <link rel="stylesheet" type="text/css" href="/MmsPr/resources/css/custom-css.css">
     <%@ include file="fragments/bootstrap.jspf" %>
 </head>
 <body>
@@ -69,6 +70,16 @@
             </tr>
         </c:forEach>
     </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+            <c:forEach begin = "1" end = "${pageQuantity}" var="page">
+                <li class="page-item"><a class="page-link" href="/MmsPr/products?page=${page}">${page}</a></li>
+            </c:forEach>
+            <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 </body>
 </html>

@@ -19,35 +19,47 @@
 <div align="right" style="margin-right: 1.5em" >
     <%@ include file="fragments/cartInformation.jspf" %>
 </div>
-<div align="center">
-    <h1>Orders</h1>
-    <table border="3" cellpadding="5">
-        <tr align="center">
-            <th>Number</th>
-            <sec:authorize access="hasRole('EMPLOYEE')">
-                <th>Client</th>
-            </sec:authorize>
-            <th>Order Status</th>
-            <th>Payment Status</th>
-            <th>Products</th>
-        </tr>
-        <c:forEach items="${orders}" var="order" varStatus="status">
+<div class="container" >
+    <h1 style="margin-left: 0.5em;margin-top: 1em">Orders</h1>
+    <table class="table">
+        <thead class="thead-light">
             <tr align="center">
-                <th>${status.index+1}</th>
+                <th scope="col">Number</th>
                 <sec:authorize access="hasRole('EMPLOYEE')">
-                    <th>${order.client.email}</th>
+                    <th scope="col">Client</th>
                 </sec:authorize>
-                <th>${order.orderStatus}</th>
-                <th>${order.paymentStatus}</th>
-                <th><a href="/MmsPr/order/products-in-order?id=${order.id}">products in order</a></th>
+                <th scope="col">Order Status</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Products</th>
             </tr>
-        </c:forEach>
+        </thead>
+        <tbody>
+            <c:forEach items="${orders}" var="order" varStatus="status">
+                <tr align="center">
+                    <th  scope="row">${status.index+1}</th>
+                    <sec:authorize access="hasRole('EMPLOYEE')">
+                        <td>${order.client.email}</td>
+                    </sec:authorize>
+                    <td>${order.orderStatus}</td>
+                    <td>${order.paymentStatus}</td>
+                    <td><a href="/MmsPr/order/products-in-order?id=${order.id}">products in order</a></td>
+                </tr>
+            </c:forEach>
+        </tbody>
     </table>
     <sec:authorize access="hasRole('EMPLOYEE')">
         <form action="/MmsPr/admin/statistic" method="get">
-            <label>Days before:</label>
-            <input type="number" name="days" id="days">
-            <input type="submit" value="Get Statistic" class="btn btn-primary"/>
+            <div class="form-group row col-10 col-sm-9 col-md-7 col-lg-5" style="margin-left: 1em">
+                <label for="statistic" class="col-5 col-sm-5 col-md-5 col-lg-5 col-form-label">Days before:</label>
+                <div>
+                    <input class="form-control" type="number" name="days" id="statistic">
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 1.5em; margin-left: 2em">
+                <div class="col-6">
+                    <button type="submit" class="btn btn-primary">Get Statistic</button>
+                </div>
+            </div>
         </form>
     </sec:authorize>
 </div>

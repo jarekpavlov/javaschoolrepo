@@ -16,14 +16,34 @@
 </head>
 <body>
     <%@ include file="fragments/navbar.jspf" %>
-    <form action="/MmsPr/user/registration/change-password" method="post">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <h1>Changing the password</h1>
-        <label>Enter a new password:</label>
-        <input type="password" name="newPassword1">
-        <label>Repeat the new password:</label>
-        <input type="password" name="newPassword2">
-        <input type="submit" class="btn btn-primary" value="Change Password"/>
-    </form>
+    <div class="container">
+        <div class = "card" style="margin-top: 1.5em">
+            <div class="card-header">
+                <h2>Change Password</h2>
+            </div>
+            <div class="card-body">
+                <form action="/MmsPr/user/registration/change-password" method="post">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <div class="form-group row">
+                        <label for="newPassword1" class="col-sm-4 col-md-5 col-form-label">Enter a new password:</label>
+                        <div class="col-sm-9 col-md-12">
+                            <input class="form-control" id = "newPassword1" type="password" name="newPassword1">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="newPassword2" class="col-sm-4 col-md-5 col-form-label">Repeat the new password:</label>
+                        <div class="col-sm-9 col-md-12">
+                            <input id="newPassword2" class="form-control" type="password" name="newPassword2">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button class="btn btn-lg btn-primary" type="submit" class="btn btn-primary">Change Password</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

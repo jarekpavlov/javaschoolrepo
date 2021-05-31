@@ -17,36 +17,40 @@
 </head>
 <body>
 <%@ include file="fragments/navbar.jspf" %>
-<div align="center">
-    <h1>Clients</h1>
-    <table border="3" cellpadding="5">
-        <tr align="center">
-            <th>Number</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Email</th>
-            <th>address</th>
-            <th>Phone</th>
-            <th>Date of birth</th>
-            <th>Action</th>
-        </tr>
-        <c:forEach items="${userList}" var="user" varStatus="status">
+<div class="container">
+    <h1 style="margin-left: 0.5em;margin-top: 1em">Clients</h1>
+    <table class="table">
+        <thead class="thead-light">
             <tr align="center">
-                <th>${status.index+1}</th>
-                <th>${user.name}</th>
-                <th>${user.surname}</th>
-                <th>${user.email}</th>
-
-                <th>${user.address.city}</th>
-                <th>${user.phone}</th>
-                <th>${user.dateOfBirth}</th>
-                <th>
-                    <a href="/MmsPr/admin/users/delete?id=${user.id}">delete</a>
-                    &nbsp;&nbsp;
-                    <a href="/MmsPr/users/edit?id=${user.id}">edit</a>
-                </th>
+                <th scope="col">Number</th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Email</th>
+                <th scope="col">address</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Date of birth</th>
+                <th scope="col">Action</th>
             </tr>
-        </c:forEach>
+        </thead>
+        <tbody>
+            <c:forEach items="${userList}" var="user" varStatus="status">
+                <tr align="center">
+                    <th scope="row">${status.index+1}</th>
+                    <td>${user.name}</td>
+                    <td>${user.surname}</td>
+                    <td>${user.email}</td>
+
+                    <td>${user.address.city}</td>
+                    <td>${user.phone}</td>
+                    <td>${user.dateOfBirth}</td>
+                    <td>
+                        <a href="/MmsPr/admin/users/delete?id=${user.id}">delete</a>
+                        &nbsp;&nbsp;
+                        <a href="/MmsPr/users/edit?id=${user.id}">edit</a>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
     </table>
 </div>
 

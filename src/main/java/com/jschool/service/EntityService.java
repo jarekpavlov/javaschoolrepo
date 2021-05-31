@@ -49,6 +49,10 @@ public class EntityService {
         entityDaoImpl.openCurrentSession();
         return entityDaoImpl.entityList(type);
     }
+    public <T> List<T> entityList(Class<T> type, int offset, int limit) {
+        entityDaoImpl.openCurrentSession();
+        return entityDaoImpl.entityList(type,offset,limit);
+    }
 
     public <T> T getEntityByEmail(Class<T> type, String email) {
         T someEntity;

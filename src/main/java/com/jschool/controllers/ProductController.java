@@ -30,9 +30,8 @@ public class ProductController {
     }
 
     @GetMapping(value = "/products")
-    public String getProducts(ModelMap map, HttpSession httpSession) {
-        List<ProductDTO> productList = productService.getProductDtoList();
-        map.addAttribute("products", productList);
+    public String getProducts(ModelMap map, HttpSession httpSession, @RequestParam(required = false) Integer page) {
+        productService.getPaginatedMap(map,page);
         productService.getCartModelMap(map, httpSession);
         return "products";
     }

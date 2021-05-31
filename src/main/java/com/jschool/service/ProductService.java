@@ -119,6 +119,7 @@ public class ProductService {
         }
         entityService.deleteEntity(Product.class, id);
     }
+
     public ModelMap getCartModelMap(ModelMap map, HttpSession httpSession){
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
         if (productsInOrderSet != null) {
@@ -126,6 +127,26 @@ public class ProductService {
         } else {
             map.addAttribute("productsInCart", "0");
         }
+        return map;
+    }
+    public ModelMap getPaginatedMap(ModelMap map, Integer page){
+        final double onPage = 10;
+        List<ProductDTO> productList = getProductDtoList();
+        List<ProductDTO> productListPaginated;
+        int pageQuantity;
+
+        if((productList.size()/onPage) % 1 != 0){
+            pageQuantity = productList.size()/10 + 1;
+        } else {
+            pageQuantity = productList.size()/10;
+        }
+        if(page == null){
+            productListPaginated = getProductDtoList(0,(int)onPage);
+        } else {
+            productListPaginated = getProductDtoList(((page-1)*(int)onPage),(int)onPage);
+        }
+        map.addAttribute("products", productListPaginated);
+        map.addAttribute("pageQuantity",pageQuantity);
         return map;
     }
 
@@ -138,6 +159,12 @@ public class ProductService {
 
     public List<ProductDTO> getProductDtoList() {
         return entityService.entityList(Product.class)
+                .stream()
+                .map(this::getProductDTO)
+                .collect(Collectors.toList());
+    }
+    public List<ProductDTO> getProductDtoList(int offset, int limit) {
+        return entityService.entityList(Product.class, offset, limit)
                 .stream()
                 .map(this::getProductDTO)
                 .collect(Collectors.toList());

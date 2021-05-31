@@ -16,18 +16,20 @@
 </head>
 <body>
 <body>
-<div align="center">
-    <%@ include file="fragments/navbar.jspf" %>
+<%@ include file="fragments/navbar.jspf" %>
+<div class="container">
     <div align="right" style="margin-right: 1.5em" >
         <%@ include file="fragments/cartInformation.jspf" %>
     </div>
-    <h1>Products in order</h1>
+    <h1 style="margin-left: 0.5em; margin-top: 1em">Products in order</h1>
     <sec:authorize access="hasRole('EMPLOYEE')">
         <form:form action="/MmsPr/admin/orders/save" method="post">
             <input type="hidden" value="${order.id}" name="id">
-            <div>
-                <label>Order status:</label>
-                <select name="orderStatus">
+            <div class="input-group mb-3 col-10 col-sm-9 col-md-8 col-lg-4" align="left">
+                <div class="input-group-prepend">
+                    <label for="orderStatus" class="input-group-text">Order status&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                </div>
+                <select class="custom-select" id="orderStatus" name="orderStatus">
                     <option disabled selected value>${order.orderStatus}</option>
                     <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
                     <option value="WAITING_FOR_SHIPMENT">WAITING_FOR_SHIPMENT</option>
@@ -35,39 +37,52 @@
                     <option value="DELIVERED">DELIVERED</option>
                 </select>
             </div>
-            <div>
-                <label>Payment status:</label>
-                <select name="paymentStatus">
+            <div class="input-group mb-3 col-10 col-sm-9 col-md-8 col-lg-4" align="left">
+                <div class="input-group-prepend">
+                    <label for="paymentStatus" class="input-group-text">Payment status</label>
+                </div>
+                <select class="custom-select" id="paymentStatus" name="paymentStatus">
                     <option disabled selected value>${order.paymentStatus}</option>
                     <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
                     <option value="PAID">PAID</option>
                 </select>
             </div>
-            <input type="submit" value="Save"/>
+            <div class="row">
+                <div class="col-6" style="margin-left: 1.5em">
+                    <button type="submit" class="btn btn-primary">Save Status</button>
+                </div>
+            </div>
         </form:form>
     </sec:authorize>
-    <table border="3" cellpadding="5">
-        <tr>
-            <th>Number</th>
-            <th>Title</th>
-            <th>Brand</th>
-            <th>Price</th>
-            <th>Quantity</th>
-        </tr>
-        <c:forEach items="${products}" var="product" varStatus="status">
+    <table class="table">
+        <thead class="thead-light">
             <tr align="center">
-                <th>${status.index+1}</th>
-                <th>${product.product.title}</th>
-                <th>${product.product.brand}</th>
-                <th>${product.price}</th>
-                <th>${product.quantity}</th>
+                <th scope="col">Number</th>
+                <th scope="col">Title</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
             </tr>
-        </c:forEach>
+        </thead>
+        <tbody>
+            <c:forEach items="${products}" var="product" varStatus="status">
+                <tr align="center">
+                    <th scope="row">${status.index+1}</th>
+                    <td>${product.product.title}</td>
+                    <td>${product.product.brand}</td>
+                    <td>${product.price}</td>
+                    <td>${product.quantity}</td>
+                </tr>
+            </c:forEach>
+        </tbody>
     </table>
     <sec:authorize access="hasRole('EMPLOYEE')">
-        <a href="/MmsPr/admin/orders/delete?id=${order.id}" class="btn btn-primary">Delete order</a>
+        <div class="row">
+            <div class="col-6" align="left" style="margin-left: 1.5em">
+                <a href="/MmsPr/admin/orders/delete?id=${order.id}" class="btn btn-primary">Delete Order</a>
+            </div>
+        </div>
     </sec:authorize>
-
 </div>
 </body>
 </body>

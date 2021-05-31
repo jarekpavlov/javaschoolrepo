@@ -19,70 +19,104 @@
 <div align="right" style="margin-right: 1.5em" >
     <%@ include file="fragments/cartInformation.jspf" %>
 </div>
-<div align="center">
-    <h1>Client</h1>
-    <table>
-        <form:form action="/MmsPr/users/registration/save/" method="post" modelAttribute="client"  >
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <form:hidden path = "address.id"/>
-            <form:hidden path = "id"/>
-            <tr>
-                <td>Name:</td>
-                <td><form:input path = "name"/></td>
-            </tr>
-            <tr>
-                <td>Surname:</td>
-                <td><form:input path = "surname"/></td>
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td><form:input path = "email"/></td>
-            </tr>
-            <tr>
-                <td>Country:</td>
-                <td><form:input path = "address.country"/></td>
-            </tr>
-            <tr>
-                <td>City:</td>
-                <td><form:input path = "address.city"/></td>
-            </tr>
-            <tr>
-                <td>Street:</td>
-                <td><form:input path = "address.street"/></td>
-            </tr>
-            <tr>
-                <td>House:</td>
-                <td><form:input path = "address.house"/></td>
-            </tr>
-            <tr>
-                <td>Flat:</td>
-                <td><form:input path = "address.flat"/></td>
-            </tr>
-            <tr>
-                <td>Postal code:</td>
-                <td><form:input path = "address.postCode"/></td>
-            </tr>
-            <tr>
-                <td>Date of birth:</td>
-                <td><form:input path = "dateOfBirth"/></td>
-            </tr>
-            <tr>
-                <td>Phone:</td>
-                <td><form:input path = "phone"/></td>
-            </tr>
-            <sec:authorize access="isAnonymous()">
-                <tr>
-                    <td>Password:</td>
-                    <td><form:password path = "password"/></td>
-                </tr>
-            </sec:authorize>
-            <tr>
-                <input  type="submit" value="Save"/>
-            </tr>
-        </form:form>
-    </table>
+<div class="container">
+    <div class = "card" style="margin-top: 1.5em">
+        <div class="card-header">
+            <h2>Client Information</h2>
+        </div>
+        <div class="card-body">
+            <form:form action="/MmsPr/users/registration/save/" method="post" modelAttribute="client"  >
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <form:hidden path = "address.id"/>
+                <form:hidden path = "id"/>
+                <div class="form-group row">
+                    <label for="name" class="col-sm-3 col-md-2 col-form-label">Name:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id="name" path = "name"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="surname" class="col-sm-3 col-md-2 col-form-label">Surname:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id="surname" path = "surname"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="email" class="col-sm-3 col-md-2 col-form-label">Email:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id = "email" path = "email"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="country" class="col-sm-3 col-md-2 col-form-label">Country:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id = "country" path = "address.country"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="city" class="col-sm-3 col-md-2 col-form-label">City:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id = "city" path = "address.city"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="street" class="col-sm-3 col-md-2 col-form-label">Street:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id = "street" path = "address.street"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="house" class="col-sm-3 col-md-2 col-form-label">House:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id = "house" path = "address.house"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="flat" class="col-sm-3 col-md-2 col-form-label">Flat:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id = "flat" path = "address.flat"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="postCode" class="col-sm-3 col-md-2 col-form-label">Postal code:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id = "postCode" path = "address.postCode"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="dateOfBirth" class="col-sm-3 col-md-2 col-form-label">Date of birth:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id = "dateOfBirth" path = "dateOfBirth"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="phone" class="col-sm-3 col-md-2 col-form-label">Phone:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <form:input class="form-control" id = "phone" path = "phone"/>
+                    </div>
+                </div>
+                <sec:authorize access="isAnonymous()">
+                    <div class="form-group row">
+                        <label for="password" class="col-sm-3 col-md-2 col-form-label">Password:</label>
+                        <div class="col-sm-9 col-md-10">
+                            <form:password class="form-control" id = "password" path = "password"/>
+                        </div>
+                    </div>
+                </sec:authorize>
+                <div class="row">
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                    </div>
+                </div>
+            </form:form>
+        </div>
+
+    </div>
     <sec:authorize access="isAuthenticated()">
-        <a href="/MmsPr/user/registration/change-password">Change Password</a>
+        <div style="margin-bottom: 1.5em">
+            <a href="/MmsPr/user/registration/change-password">Change Password</a>
+        </div>
     </sec:authorize>
 </div>
 </body>
