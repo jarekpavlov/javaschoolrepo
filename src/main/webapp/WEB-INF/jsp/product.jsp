@@ -22,7 +22,7 @@
             <h2>Client Information</h2>
         </div>
         <div class="card-body">
-            <form:form action="/MmsPr/product/save/" method="post" modelAttribute="product"  >
+            <form:form action="/MmsPr/product/save?${_csrf.parameterName}=${_csrf.token}" method="post" modelAttribute="product" enctype="multipart/form-data"  >
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <form:hidden path = "id"/>
                 <div class="form-group row">
@@ -76,6 +76,12 @@
                     <label for="volume" class="col-sm-3 col-md-2 col-form-label">Volume:</label>
                     <div class="col-sm-9 col-md-10">
                         <form:input class="form-control" id="volume" path = "volume"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="productPicture" class="col-sm-3 col-md-2 col-form-label">Picture:</label>
+                    <div class="col-sm-9 col-md-10">
+                        <input type="file" name="productPicture"  id="productPicture" />
                     </div>
                 </div>
                 <div class="row">

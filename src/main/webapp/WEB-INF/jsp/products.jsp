@@ -34,25 +34,16 @@
         <input type="text" name="title"/>
         <input type="submit" class="btn btn-primary btn-sm" value="Filter">
     </form:form>
-    <table border="3" cellpadding="5">
-        <tr align = "center">
-            <th>Number</th>
-            <th>Title</th>
-            <th>Brand</th>
-            <th>Color</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Action</th>
-        </tr>
+
+    <div class="card-columns">
         <c:forEach items="${products}" var="product" varStatus="status">
-            <tr align="center">
-                <th>${status.index+1}</th>
-                <th>${product.title}</th>
-                <th>${product.brand}</th>
-                <th>${product.color}</th>
-                <th>${product.price}</th>
-                <th>${product.quantity}</th>
-                <th>
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top"  src="<c:url value="/pictures/${product.imgName}"/>" alt="Card image cap">
+                <div class="card-body">
+                    ${product.title}
+                    ${product.brand}
+                    ${product.price}
+                    ${product.quantity}
                     <sec:authorize access="hasRole('EMPLOYEE')">
                         <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/edit?id=${product.id}">Edit</a>
                         <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/delete?id=${product.id}">Delete</a>
@@ -61,15 +52,15 @@
                     <sec:authorize access="!hasRole('EMPLOYEE')">
                         <form:form action="/MmsPr/order/add-to-cart?id=${product.id}" method="post">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                            <input type="number" name="numberForOrder"/>
                             <input class="btn btn-info btn-sm" type="submit" value="Add to Cart">
                         </form:form>
                     </sec:authorize>
-                </th>
+                </div>
 
-            </tr>
+            </div>
         </c:forEach>
-    </table>
+    </div>
+
     <nav aria-label="Page navigation    ">
         <ul class="pagination justify-content-center">
             <a class="page-link" href="#" tabindex="-1">Previous</a>

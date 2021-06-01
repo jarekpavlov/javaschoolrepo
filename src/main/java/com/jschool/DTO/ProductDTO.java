@@ -8,6 +8,7 @@ public class ProductDTO {
     private String brand;
     private String color;
     private Integer quantity;
+    private String imgName;
 
     public Integer getQuantity() {
         return quantity;
@@ -63,6 +64,14 @@ public class ProductDTO {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getImgName() {
+        return imgName;
+    }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
     }
 
     public boolean equals(Object object){

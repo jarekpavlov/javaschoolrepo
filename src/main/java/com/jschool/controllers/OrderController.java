@@ -60,11 +60,8 @@ public class OrderController {
     }
 
     @PostMapping(value = "/order/add-to-cart")
-    public String addToCart(@RequestParam(defaultValue = "1") int numberForOrder, HttpServletRequest request) throws NonValidNumberException {
-        if (numberForOrder<1){
-            logger.warn("User entered incorrect number ");
-            throw new NonValidNumberException("Some numbers are incorrect");
-        }
+    public String addToCart(HttpServletRequest request) throws NonValidNumberException {
+        int numberForOrder = 1;
         String emptyS = "";
         orderService.addToCart(numberForOrder, request);
 

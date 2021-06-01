@@ -9,16 +9,25 @@ import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class ProductController {
+
+    @Value("${upload.path}")
+    private String uploadPath;
+
     Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
     private ProductService productService;
@@ -46,9 +55,10 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/product/save", method = RequestMethod.POST)
-    public String saveProduct(Product product) throws EmptyFieldException, NonValidNumberException {
+    public String saveProduct(Product product, @RequestParam(required = false) MultipartFile productPicture) throws EmptyFieldException, NonValidNumberException, IOException {
+
         logger.debug("Employee entered saveProduct method");
-        productService.saveProduct(product);
+        productService.saveProduct(product, productPicture);
         return "redirect:/products";
     }
 

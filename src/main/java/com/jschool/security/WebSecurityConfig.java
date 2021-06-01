@@ -32,7 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(getPasswordEncoder());
+
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -58,5 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 .permitAll();
+
     }
 }

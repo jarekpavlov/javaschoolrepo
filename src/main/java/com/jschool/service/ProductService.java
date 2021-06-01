@@ -10,17 +10,26 @@ import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
+
+    @Value("${upload.path}")
+    private String uploadPath;
+
     Logger logger = Logger.getLogger(this.getClass());
     private ModelMapper modelMapper;
     private EntityService entityService;
@@ -41,7 +50,27 @@ public class ProductService {
         return modelMapper;
     }
 
-    public void saveProduct(Product product) throws EmptyFieldException, NonValidNumberException {
+    /**
+     * This method is saving/updating a @param product entity regarding if there is an id.
+     * It process @param productPicture, creating a random name for it and saves it to data base and
+     * upload path directory
+     * @throws EmptyFieldException
+     * @throws NonValidNumberException
+     * @throws IOException
+     */
+    public void saveProduct(Product product, MultipartFile productPicture) throws EmptyFieldException, NonValidNumberException, IOException {
+
+        if(productPicture!=null){
+            File uploadDir = new File(uploadPath);
+            if(!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+            String uuidName = UUID.randomUUID().toString();
+            String resultName = uuidName+"-"+productPicture.getOriginalFilename();
+            product.setImgName(resultName);
+            productPicture.transferTo(new File(uploadPath+"/"+resultName));
+        }
+
         if(product.getPrice()<1 || product.getMass()<1 || product.getPrice()<1 || product.getQuantity()<1){
             logger.warn("Employee entered incorrect number ");
             throw new NonValidNumberException("Some numbers are incorrect");

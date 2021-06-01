@@ -24,6 +24,7 @@ public class Product {
     private Float mass;
     private Float volume;
     private Integer quantity;
+    private String imgName;
     private Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
@@ -111,6 +112,14 @@ public class Product {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getImgName() {
+        return imgName;
+    }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
     }
 
     @Override
