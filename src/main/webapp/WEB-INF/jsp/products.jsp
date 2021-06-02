@@ -20,38 +20,39 @@
 <div align="right" style="margin-right: 1.5em" >
     <%@ include file="fragments/cartInformation.jspf" %>
 </div>
-    <div class="container">
+    <div class="container" style="margin-top: 1.5em">
         <div class="row">
             <div class="col-6 col-sm-5 col-md-3 col-lg-3 col-xl-3 ">
-                <h1>Products</h1>
                 <sec:authorize access="hasRole('EMPLOYEE')">
-                    <h3><a href="admin/product/new">New Product</a></h3>
+                    <h3><a href="admin/product/new" class="btn btn-primary btn-lg">New Product</a></h3>
                 </sec:authorize>
                 <form:form action="/MmsPr/product/filter" method="post">
-                <div class="form-group row">
-                    <label for="color" class="col-sm-3 col-md-2 col-form-label">Color:</label>
-                    <div class="col-sm-9 col-md-10">
-                        <input class="form-control" id="color" type="text" name="color"/>
+                    <div class = "card" style="margin-top: 1.5em">
+                        <div class="card-header">
+                            <h5>Products Filter</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="color">Color:</label>
+                                <input class="form-control" id="color" type="text" name="color" placeholder="Enter a product color"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="brand" >Brand:</label>
+                                <input class="form-control" id="brand" type="text" name="brand" placeholder="Enter a product brand"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="title" >Title:</label>
+                                <input class="form-control" id="title" type="text" name="title" placeholder="Enter a product title"/>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="submit" class="btn btn-primary btn-sm" value="Filter">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label for="brand" class="col-sm-3 col-md-2 col-form-label">Brand:</label>
-                    <div class="col-sm-9 col-md-10">
-                        <input class="form-control" id="brand" type="text" name="brand"/>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="title" class="col-sm-3 col-md-2 col-form-label">Title:</label>
-                    <div class="col-sm-9 col-md-10">
-                        <input class="form-control" id="title" type="text" name="title"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <input type="submit" class="btn btn-primary btn-sm" value="Filter">
-                    </div>
-                </div>
                 </form:form>
+                <img src="<c:url value="/resources/images/fire.png"/>">
             </div>
             <div class="col-6 col-sm-7 col-md-9 col-lg-9 col-xl-9">
                 <div class="card-columns">

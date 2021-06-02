@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
+
+    @Value("${queue.name}")
+    private String queueName;
 
     private EntityService entityService;
     private ModelMapper modelMapper;
@@ -124,8 +128,8 @@ public class OrderService {
             deliveryMethod = "Delivery to the store";
         Set < ProductsInOrder > productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
         for (ProductsInOrder temp : productsInOrderSet) {
-            Long ProductId = temp.getProduct().getId();
-            String quantity = quantityMap.get(String.valueOf(ProductId));
+            Long productId = temp.getProduct().getId();
+            String quantity = quantityMap.get(String.valueOf(productId));
             if(Integer.parseInt(quantity)<1){
                 throw new NonValidNumberException("Some numbers are incorrect");
             }
@@ -163,9 +167,9 @@ public class OrderService {
         Set<JoinCountByProduct> bestProductAfter = entityService.getBestProduct(30);
         if(!bestProductAfter.equals(bestProductBefore)){
             try {
-                template.convertAndSend("queue1","The best products list is changed");
+                template.convertAndSend(queueName,"The best products list is changed");
             }catch (Exception e){
-                logger.error("You have now mq connection");
+                logger.error("You have no mq connection");
             }
         }
     }

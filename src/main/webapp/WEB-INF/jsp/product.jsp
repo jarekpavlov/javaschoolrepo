@@ -16,10 +16,10 @@
 </head>
 <body>
 <%@ include file="fragments/navbar.jspf" %>
-<div class="container">
+<div class="container" >
     <div class = "card" style="margin-top: 1.5em">
         <div class="card-header">
-            <h2>Client Information</h2>
+            <h4>Client Information</h4>
         </div>
         <div class="card-body">
             <form:form action="/MmsPr/product/save?${_csrf.parameterName}=${_csrf.token}" method="post" modelAttribute="product" enctype="multipart/form-data"  >

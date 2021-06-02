@@ -27,8 +27,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
+    private final String emptyS = "";
+
     @Value("${upload.path}")
     private String uploadPath;
+
+    @Value("${products.list.quantity}")
+    private double prodListQuantity;
 
     Logger logger = Logger.getLogger(this.getClass());
     private ModelMapper modelMapper;
@@ -75,7 +80,6 @@ public class ProductService {
             logger.warn("Employee entered incorrect number ");
             throw new NonValidNumberException("Some numbers are incorrect");
         }
-        String emptyS = "";
         if(emptyS.equals(product.getBrand()) || emptyS.equals(product.getTitle()) || emptyS.equals(product.getCategory()) || product.getPrice()==null){
             logger.warn("Not all fields were filled in saveProduct service method");
             throw new EmptyFieldException("All fields required to be filled!");
@@ -97,7 +101,6 @@ public class ProductService {
      * @return
      */
     public List<ProductDTO> getFilteredProductList(List<ProductDTO> productDtoList, String color, String brand, String title) {
-        String emptyS = "";
         List<ProductDTO> filteredList = null;
         if (!emptyS.equals(color)) {
             filteredList = productDtoList
@@ -159,20 +162,19 @@ public class ProductService {
         return map;
     }
     public ModelMap getPaginatedMap(ModelMap map, Integer page){
-        final double onPage = 10;
         List<ProductDTO> productList = getProductDtoList();
         List<ProductDTO> productListPaginated;
         int pageQuantity;
 
-        if((productList.size()/onPage) % 1 != 0){
-            pageQuantity = productList.size()/10 + 1;
+        if((productList.size()/prodListQuantity) % 1 != 0){
+            pageQuantity = productList.size()/(int)prodListQuantity + 1;
         } else {
-            pageQuantity = productList.size()/10;
+            pageQuantity = productList.size()/(int)prodListQuantity;
         }
         if(page == null){
-            productListPaginated = getProductDtoList(0,(int)onPage);
+            productListPaginated = getProductDtoList(0,(int)prodListQuantity);
         } else {
-            productListPaginated = getProductDtoList(((page-1)*(int)onPage),(int)onPage);
+            productListPaginated = getProductDtoList(((page-1)*(int)prodListQuantity),(int)prodListQuantity);
         }
         map.addAttribute("products", productListPaginated);
         map.addAttribute("pageQuantity",pageQuantity);

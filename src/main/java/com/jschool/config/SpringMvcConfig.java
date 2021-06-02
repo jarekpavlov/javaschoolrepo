@@ -24,7 +24,10 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class SpringMvcConfig implements WebMvcConfigurer {
 
     @Value("${upload.path}")
-    String uploadPath;
+    private String uploadPath;
+
+    @Value("${file.maxSize}")
+    private long maxSize;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -49,7 +52,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
     @Bean
     public CommonsMultipartResolver multipartResolver(){
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setMaxUploadSize(1000000);
+        resolver.setMaxUploadSize(maxSize);
         resolver.setDefaultEncoding("UTF-8");
         return resolver;
     }
