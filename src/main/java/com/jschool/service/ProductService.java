@@ -60,7 +60,7 @@ public class ProductService {
      */
     public void saveProduct(Product product, MultipartFile productPicture) throws EmptyFieldException, NonValidNumberException, IOException {
 
-        if(productPicture!=null){
+        if(productPicture.getSize()!=0){
             File uploadDir = new File(uploadPath);
             if(!uploadDir.exists()){
                 uploadDir.mkdir();

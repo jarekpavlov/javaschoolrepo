@@ -25,6 +25,7 @@
             <form:form action="/MmsPr/product/save?${_csrf.parameterName}=${_csrf.token}" method="post" modelAttribute="product" enctype="multipart/form-data"  >
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <form:hidden path = "id"/>
+
                 <div class="form-group row">
                     <label for="brand" class="col-sm-3 col-md-2 col-form-label">Brand:</label>
                     <div class="col-sm-9 col-md-10">
