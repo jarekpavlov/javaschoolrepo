@@ -62,7 +62,6 @@ public class OrderController {
     @PostMapping(value = "/order/add-to-cart")
     public String addToCart(HttpServletRequest request) throws NonValidNumberException {
         int numberForOrder = 1;
-        String emptyS = "";
         orderService.addToCart(numberForOrder, request);
 
         return "redirect:/products";
@@ -79,7 +78,6 @@ public class OrderController {
         map.addAttribute("cartIsEmpty", cartIsEmpty);
         return "cart";
     }
-
     @GetMapping(value = "/order/delete-from-cart")
     public String deleteProductFromCart(HttpServletRequest request) {
         orderService.deleteFromCart(request);

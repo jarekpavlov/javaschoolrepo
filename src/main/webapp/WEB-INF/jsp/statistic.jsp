@@ -51,6 +51,6 @@
     <h3>Sales amount</h3>
     <h4>${total.resultSum}</h4>
 </div>
-
+<%@ include file="fragments/JS.jspf" %>
 </body>
 </html>

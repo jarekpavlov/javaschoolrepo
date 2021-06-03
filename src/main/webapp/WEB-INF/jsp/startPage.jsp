@@ -12,13 +12,19 @@
 <html>
 <head>
     <title>MmsPr Start Page</title>
+    <link href="resources/css/startPage.css" rel="stylesheet" type="text/css">
     <%@ include file="fragments/bootstrap.jspf" %>
 </head>
 <body>
 <%@ include file="fragments/navbar.jspf" %>
-<div align="right" style="margin-right: 1.5em" >
-    <%@ include file="fragments/cartInformation.jspf" %>
+<div class="container">
+    <div>
+        <img style="width:100%;" src="<c:url value="resources/images/robot.jpg"/>"/>
+    </div>
+    <div class="top-right" >
+        <%@ include file="fragments/cartInformation.jspf" %>
+    </div>
 </div>
-<img src="<c:url value="/pictures/robot.jpg"/>"/>
+<%@ include file="fragments/JS.jspf" %>
 </body>
 </html>

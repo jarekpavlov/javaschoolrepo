@@ -11,18 +11,20 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
+
     <title>Product page</title>
-    <link rel="stylesheet" type="text/css" href="/MmsPr/resources/css/custom-css.css">
     <%@ include file="fragments/bootstrap.jspf" %>
+    <link href="resources/css/productPage.css" rel="stylesheet" type="text/css">
+
 </head>
 <body>
 <%@ include file="fragments/navbar.jspf" %>
-<div align="right" style="margin-right: 1.5em" >
-    <%@ include file="fragments/cartInformation.jspf" %>
-</div>
-    <div class="container" style="margin-top: 1.5em">
+    <div class="container">
         <div class="row">
             <div class="col-6 col-sm-5 col-md-3 col-lg-3 col-xl-3 ">
+                <div class="bottom-left">
+                    <img src="<c:url value="/resources/images/fire.png"/>">
+                </div>
                 <sec:authorize access="hasRole('EMPLOYEE')">
                     <h3><a href="admin/product/new" class="btn btn-primary btn-lg">New Product</a></h3>
                 </sec:authorize>
@@ -52,10 +54,16 @@
                         </div>
                     </div>
                 </form:form>
-                <img src="<c:url value="/resources/images/fire.png"/>">
+
             </div>
             <div class="col-6 col-sm-7 col-md-9 col-lg-9 col-xl-9">
-                <div class="card-columns">
+                <div class="top-right" >
+                    <%@ include file="fragments/cartInformation.jspf" %>
+                </div>
+                <div class="bottom-left">
+                    <button class="btn btn-info btn-sm" id="someBtn">Button</button>
+                </div>
+                <div class="card-columns" style="text-align: center; margin-top: 1.5em">
                     <c:forEach items="${products}" var="product" varStatus="status">
                         <div class="card text-left" style="width: 14rem">
                             <c:if test="${product.imgName!=null}">
@@ -93,7 +101,7 @@
                                             <c:if test="${product.quantity!=0}">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <input class="btn btn-info btn-sm"  type="submit" value="Add to Cart" >
+                                                        <button class="btn btn-info btn-sm" id="cartBtn-${product.id}">Add to Cart</button>
                                                     </div>
                                                 </div>
                                             </c:if>
@@ -118,5 +126,17 @@
             </div>
         </div>
     </div>
+<%@ include file="fragments/JS.jspf" %>
+<script type="text/javascript">
+    $(function (){
+        $("button[id*='cartBtn-']").click(function (){
+            let buttonId = $(this).prop("id").split("-")[1]
+            $.get('/data.txt',  // url
+                function (data, textStatus, jqXHR) {  // success callback
+                    alert('status: ' + textStatus + ', data:' + data);
+                });
+        })
+    })
+</script>
 </body>
 </html>

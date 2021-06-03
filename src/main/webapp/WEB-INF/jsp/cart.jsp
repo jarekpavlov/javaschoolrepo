@@ -60,6 +60,6 @@
 
     </table>
 </div>
-
+<%@ include file="fragments/JS.jspf" %>
 </body>
 </html>

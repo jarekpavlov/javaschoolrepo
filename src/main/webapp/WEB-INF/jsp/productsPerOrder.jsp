@@ -15,7 +15,6 @@
     <%@ include file="fragments/bootstrap.jspf" %>
 </head>
 <body>
-<body>
 <%@ include file="fragments/navbar.jspf" %>
 <div class="container">
     <div align="right" style="margin-right: 1.5em" >
@@ -84,6 +83,6 @@
         </div>
     </sec:authorize>
 </div>
-</body>
+<%@ include file="fragments/JS.jspf" %>
 </body>
 </html>

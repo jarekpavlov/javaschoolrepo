@@ -45,5 +45,6 @@
             </div>
         </div>
     </div>
+    <%@ include file="fragments/JS.jspf" %>
 </body>
 </html>
