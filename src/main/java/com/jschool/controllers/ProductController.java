@@ -37,8 +37,12 @@ public class ProductController {
     }
 
     @GetMapping(value = "/products")
-    public String getProducts(ModelMap map, HttpSession httpSession, @RequestParam(required = false) Integer page) {
-        productService.getPaginatedMap(map,page);
+    public String getProducts(ModelMap map, HttpSession httpSession
+            ,@RequestParam(required = false) Integer page
+            ,@RequestParam(required = false) String color
+            ,@RequestParam(required = false) String brand
+            ,@RequestParam(required = false) String title) {
+        productService.getPaginationMethod(map,page,color,brand,title);
         productService.getCartModelMap(map, httpSession);
         return "products";
     }

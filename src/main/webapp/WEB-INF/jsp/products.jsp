@@ -20,6 +20,7 @@
 <body>
     <%@ include file="fragments/navbar.jspf" %>
     <div class="container">
+
         <div class="row">
             <div class="col-6 col-sm-5 col-md-3 col-lg-3 col-xl-3 ">
                 <div class="bottom-left">
@@ -28,7 +29,7 @@
                 <sec:authorize access="hasRole('EMPLOYEE')">
                     <h3><a href="admin/product/new" class="btn btn-primary btn-lg">New Product</a></h3>
                 </sec:authorize>
-                <form:form action="/MmsPr/product/filter" method="post">
+                <form action="/MmsPr/products" method="get">
                     <div class = "card" style="margin-top: 1.5em">
                         <div class="card-header">
                             <h5>Products Filter</h5>
@@ -36,15 +37,15 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="color">Color:</label>
-                                <input class="form-control" id="color" type="text" name="color" placeholder="Enter a product color"/>
+                                <input class="form-control" id="color" value="${color}" type="text" name="color" placeholder="Enter a product color"/>
                             </div>
                             <div class="form-group">
                                 <label for="brand" >Brand:</label>
-                                <input class="form-control" id="brand" type="text" name="brand" placeholder="Enter a product brand"/>
+                                <input class="form-control" id="brand" value="${brand}" type="text" name="brand" placeholder="Enter a product brand"/>
                             </div>
                             <div class="form-group">
                                 <label for="title" >Title:</label>
-                                <input class="form-control" id="title" type="text" name="title" placeholder="Enter a product title"/>
+                                <input class="form-control" id="title" value="${title}" type="text" name="title" placeholder="Enter a product title"/>
                             </div>
                             <div class="row">
                                 <div class="col-6">
@@ -53,7 +54,7 @@
                             </div>
                         </div>
                     </div>
-                </form:form>
+                </form>
             </div>
             <div class="col-6 col-sm-7 col-md-9 col-lg-9 col-xl-9">
                 <div class="top-right" >
@@ -121,6 +122,7 @@
                 </nav>
             </div>
         </div>
+
     </div>
 <%@ include file="fragments/JS.jspf" %>
 <%--<script type="text/javascript">--%>
