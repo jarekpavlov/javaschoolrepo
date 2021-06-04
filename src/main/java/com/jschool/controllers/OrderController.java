@@ -78,6 +78,7 @@ public class OrderController {
         map.addAttribute("cartIsEmpty", cartIsEmpty);
         return "cart";
     }
+
     @GetMapping(value = "/order/delete-from-cart")
     public String deleteProductFromCart(HttpServletRequest request) {
         orderService.deleteFromCart(request);

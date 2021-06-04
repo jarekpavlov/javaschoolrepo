@@ -17,10 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class ProductController {
@@ -81,7 +79,7 @@ public class ProductController {
                                 @RequestParam String brand,
                                 @RequestParam String title, ModelMap map) {
 
-        List<ProductDTO> filteredList = productService.getFilteredProductList(productService.getProductDtoList(), color, brand, title);
+        List<ProductDTO> filteredList = productService.getFilteredProducts(productService.getProductDtoList(), color, brand, title);
         map.addAttribute("products", filteredList);
         return "products";
     }

@@ -2,12 +2,7 @@ package com.jschool.service;
 
 import com.jschool.DTO.OrderDTO;
 import com.jschool.count.JoinCountByProduct;
-import com.jschool.domain.Client;
-import com.jschool.domain.Order;
-import com.jschool.domain.OrderStatus;
-import com.jschool.domain.PaymentStatus;
-import com.jschool.domain.Product;
-import com.jschool.domain.ProductsInOrder;
+import com.jschool.domain.*;
 import com.jschool.exceptions.NonValidNumberException;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -20,12 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,11 +28,12 @@ public class OrderService {
     private ModelMapper modelMapper;
     private AmqpTemplate template;
     Logger logger = Logger.getLogger(this.getClass());
+
     public OrderService() {
     }
 
     @Autowired
-    public OrderService(EntityService entityService, ModelMapper modelMapper,AmqpTemplate template ) {
+    public OrderService(EntityService entityService, ModelMapper modelMapper, AmqpTemplate template) {
         this.entityService = entityService;
         this.modelMapper = modelMapper;
         this.template = template;
@@ -56,7 +47,8 @@ public class OrderService {
         this.modelMapper = modelMapper;
     }
 
-    /** This method is taking @param numberForOrder to create a session using
+    /**
+     * This method is taking @param numberForOrder to create a session using
      *
      * @param request with ProductsInOrder instance to store the Products into the cart
      */
@@ -64,10 +56,11 @@ public class OrderService {
         Long id = Long.parseLong(request.getParameter("id"));
 
         Product product = entityService.getEntity(Product.class, id);
-        ProductsInOrder productsInOrder = new ProductsInOrder();
-        productsInOrder.setProduct(product);
-        productsInOrder.setQuantity(numberForOrder);
-        productsInOrder.setPrice(product.getPrice());
+        ProductsInOrder productsInOrder = new ProductsInOrderBuilder()
+                .setProduct(product)
+                .setQuantity(numberForOrder)
+                .setPrice(product.getPrice())
+                .build();
 
         HttpSession httpSession = request.getSession();
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
@@ -87,22 +80,21 @@ public class OrderService {
      * @param httpSession to a new Order object to store it
      *                    into the database
      */
-    public void createOrder(HttpSession httpSession, Client client,String paymentMethod, String deliveryMethod) {
+    public void createOrder(HttpSession httpSession, Client client, String paymentMethod, String deliveryMethod) {
         Set<ProductsInOrder> productsInOrderSetTemp = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
-
-        Order order = new Order();
         Date date = new Date();
-        order.setDateOfOrder(date);
-        order.setClient(client);
-        order.setDeliveryMethod(deliveryMethod);
-        order.setPayment(paymentMethod);
-        order.setProductsInOrderSet(productsInOrderSetTemp);
-
+        Order order = new OrderBuilder()
+                .setDateOfOrder(date)
+                .setClient(client)
+                .setDeliveryMethod(deliveryMethod)
+                .setPayment(paymentMethod)
+                .setProductsInOrderSet(productsInOrderSetTemp)
+                .setOrderStatus(OrderStatus.PENDING_PAYMENT)
+                .setPaymentStatus(PaymentStatus.PENDING_PAYMENT)
+                .build();
         for (ProductsInOrder temp : productsInOrderSetTemp) {
             temp.setOrder(order);
         }
-        order.setOrderStatus(OrderStatus.PENDING_PAYMENT);
-        order.setPaymentStatus(PaymentStatus.PENDING_PAYMENT);
         entityService.saveEntity(order);
         httpSession.removeAttribute("productsInOrderSet");
     }
@@ -126,24 +118,23 @@ public class OrderService {
             paymentMethod = "Card";
         if (deliveryMethod == null)
             deliveryMethod = "Delivery to the store";
-        Set < ProductsInOrder > productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
+        Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
         for (ProductsInOrder temp : productsInOrderSet) {
             Long productId = temp.getProduct().getId();
             String quantity = quantityMap.get(String.valueOf(productId));
-            if(Integer.parseInt(quantity)<1){
+            if (Integer.parseInt(quantity) < 1) {
                 throw new NonValidNumberException("Some numbers are incorrect");
             }
             temp.setQuantity(Integer.parseInt(quantity));
         }
         session.setAttribute("productsInOrderSet", productsInOrderSet);
-        createOrder(session, client,paymentMethod,deliveryMethod);
+        createOrder(session, client, paymentMethod, deliveryMethod);
     }
 
     public Set<ProductsInOrder> getProductsInOrder(HttpServletRequest request) {
         Long id = Long.parseLong(request.getParameter("id"));
         Order order = entityService.getEntity(Order.class, id);
-        Set<ProductsInOrder> productsInOrderSet = order.getProductsInOrderSet();
-        return productsInOrderSet;
+        return order.getProductsInOrderSet();
     }
 
     public OrderDTO getOrderFromJoinTable(Set<ProductsInOrder> productsInOrderSet) {
@@ -165,10 +156,10 @@ public class OrderService {
         order.setPaymentStatus(paymentStatus);
         entityService.updateEntity(order);
         Set<JoinCountByProduct> bestProductAfter = entityService.getBestProduct(30);
-        if(!bestProductAfter.equals(bestProductBefore)){
+        if (!bestProductAfter.equals(bestProductBefore)) {
             try {
-                template.convertAndSend(queueName,"The best products list is changed");
-            }catch (Exception e){
+                template.convertAndSend(queueName, "The best products list is changed");
+            } catch (Exception e) {
                 logger.error("You have no mq connection");
             }
         }

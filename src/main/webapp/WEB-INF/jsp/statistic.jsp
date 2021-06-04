@@ -29,7 +29,7 @@
             <tr align="center">
                 <th>${status.index+1}</th>
                 <th>${bestClient.client_id}</th>
-                <th>${bestClient.resultAmount}</th>
+                <th>${bestClient.resultAmount}€</th>
             </tr>
         </c:forEach>
     </table>
@@ -44,12 +44,12 @@
             <tr align="center">
                 <th>${status.index+1}</th>
                 <th>${bestProduct.product_id}</th>
-                <th>${bestProduct.resultAmount}</th>
+                <th>${bestProduct.resultAmount}€</th>
             </tr>
         </c:forEach>
     </table>
     <h3>Sales amount</h3>
-    <h4>${total.resultSum}</h4>
+    <h4>${total.resultSum}€</h4>
 </div>
 <%@ include file="fragments/JS.jspf" %>
 </body>

@@ -58,21 +58,21 @@ class ProductServiceTest {
 
         expectedList.add(product1);
         expectedList.add(product2);
-        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProductList(list, "color1", "brand1", "");
+        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProducts(list, "color1", "brand1", "");
     }
 
     @Test
-    void getFilteredProductList() {
+    void getFilteredProducts() {
 
-        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProductList(list, "color1", "brand1", "");
+        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProducts(list, "color1", "brand1", "");
         Assertions.assertEquals(expectedList, filteredListAfterMethod);
     }
 
     @Test
-    void getFilteredProductList2() {
+    void getFilteredProducts2() {
 
-        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProductList(list, "color1", "brand1", "");
-        Assertions.assertNotEquals(list, productService.getFilteredProductList(list, "color2", "brand3", ""));
+        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProducts(list, "color1", "brand1", "");
+        Assertions.assertNotEquals(list, productService.getFilteredProducts(list, "color2", "brand3", ""));
     }
 
 

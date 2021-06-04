@@ -53,9 +53,9 @@
             </div>
         </form:form>
     </sec:authorize>
-    <table class="table">
+    <table class="table" style="text-align: center">
         <thead class="thead-light">
-            <tr align="center">
+            <tr>
                 <th scope="col">Number</th>
                 <th scope="col">Title</th>
                 <th scope="col">Brand</th>
@@ -65,7 +65,7 @@
         </thead>
         <tbody>
             <c:forEach items="${products}" var="product" varStatus="status">
-                <tr align="center">
+                <tr>
                     <th scope="row">${status.index+1}</th>
                     <td>${product.product.title}</td>
                     <td>${product.product.brand}</td>
