@@ -3,6 +3,7 @@ package com.jschool.controllers;
 import com.jschool.count.JoinCountByProduct;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.service.EntityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +16,7 @@ public class StatisticController {
 
     private EntityService entityService;
 
+    @Autowired
     public StatisticController(EntityService entityService) {
         this.entityService = entityService;
     }
@@ -24,8 +26,7 @@ public class StatisticController {
     public Set<JoinCountByProduct> getProductStatistic(@RequestParam int days) throws NonValidNumberException {
         if (days < 1)
             throw new NonValidNumberException("You've entered the wrong format number");
-        Set<JoinCountByProduct> bestProductSet = entityService.getBestProduct(days);
-        return bestProductSet;
+        return entityService.getBestProduct(days);
     }
 
 

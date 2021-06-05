@@ -79,13 +79,13 @@ public class ProductService {
             productPicture.transferTo(new File(uploadPath + "/" + resultName));
         }
 
+        if (emptyProductFields(product)) {
+            logger.warn("Not all fields were filled in saveProduct service method");
+            throw new EmptyFieldException("All fields required to be filled!");
+        }
         if (product.getPrice() < 0.1 || product.getMass() < 0.1 || product.getQuantity() < 1) {
             logger.warn("Employee entered incorrect number ");
             throw new NonValidNumberException("Some numbers are incorrect");
-        }
-        if (emptyS.equals(product.getBrand()) || emptyS.equals(product.getTitle()) || emptyS.equals(product.getCategory()) || product.getPrice() == null) {
-            logger.warn("Not all fields were filled in saveProduct service method");
-            throw new EmptyFieldException("All fields required to be filled!");
         }
         if (product.getId() != null)
             entityService.updateEntity(product);
@@ -93,6 +93,15 @@ public class ProductService {
             entityService.saveEntity(product);
         }
         logger.info("Employee left the saveProduct service method");
+    }
+
+    public boolean emptyProductFields(Product product) {
+        if (emptyS.equals(product.getBrand()) || emptyS.equals(product.getTitle()) || emptyS.equals(product.getCategory())
+                || product.getMass() == null || product.getQuantity() == null || product.getPrice() == null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -141,7 +150,7 @@ public class ProductService {
             return productDtoList;
         return filteredList;
     }
-
+    
     public boolean filterIsEmpty(String color, String brand, String title) {
         if ((emptyS.equals(color) || color == null) && (emptyS.equals(brand) || brand == null) && (emptyS.equals(title) || title == null)) {
             return true;
@@ -180,9 +189,9 @@ public class ProductService {
         }
         map.addAttribute("products", paginatedFilteredList);
         getPageQuantityModelMap(filteredList, map);
-        map.addAttribute("color",color);
-        map.addAttribute("brand",brand);
-        map.addAttribute("title",title);
+        map.addAttribute("color", color);
+        map.addAttribute("brand", brand);
+        map.addAttribute("title", title);
         return map;
     }
 

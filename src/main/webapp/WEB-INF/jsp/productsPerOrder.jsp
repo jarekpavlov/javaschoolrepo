@@ -61,6 +61,7 @@
                 <th scope="col">Brand</th>
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -69,12 +70,16 @@
                     <th scope="row">${status.index+1}</th>
                     <td>${product.product.title}</td>
                     <td>${product.product.brand}</td>
-                    <td>${product.price}</td>
+                    <td>${product.price}€</td>
                     <td>${product.quantity}</td>
+                    <td>${product.quantity*product.price}€</td>
                 </tr>
             </c:forEach>
         </tbody>
     </table>
+    <div style="text-align: right; margin-right: 2.5em ">
+        <i style="font-size: 1.5em"><b><u>${total}€</u></b></i>
+    </div>
     <sec:authorize access="hasRole('EMPLOYEE')">
         <div class="row">
             <div class="col-6" align="left" style="margin-left: 1.5em">

@@ -99,6 +99,7 @@ public class OrderController {
         OrderDTO orderDTO = orderService.getOrderFromJoinTable(productsInOrderSet);
         map.addAttribute("order", orderDTO);
         map.addAttribute("products", productsInOrderSet);
+        map.addAttribute("total",orderService.getTotalPerOrder(productsInOrderSet));
         HttpSession httpSession = request.getSession();
         productService.getCartModelMap(map, httpSession);
         return "productsPerOrder";

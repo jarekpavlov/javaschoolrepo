@@ -71,7 +71,7 @@ public class EntityDao {
 
     public List<?> getBestProduct(int daysAgo) {
         String dateBefore_daysS = getDateBefore(daysAgo);
-        Query query = currentSession.createQuery("select sum(m.price*m.quantity), m.product.id " +
+        Query query = currentSession.createQuery("select sum(m.price*m.quantity), m.product.id, m.product.brand, sum(m.quantity) " +
                 " from products_in_order m" +
                 " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" +
                 " and m.order.orderStatus = '3' group by m.product.id order by sum(m.price*m.quantity) desc");

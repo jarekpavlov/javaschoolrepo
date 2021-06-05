@@ -88,6 +88,8 @@ public class EntityService {
             Object[] result = (Object[]) bestProduct.get(i);
             joinCountByProduct.setResultAmount((Double) result[0]);
             joinCountByProduct.setProduct_id((Long) result[1]);
+            joinCountByProduct.setBrand(result[2].toString());
+            joinCountByProduct.setQuantity((Long)result[3]);
             joinCountByProductSet.add(joinCountByProduct);
         }
         return joinCountByProductSet;

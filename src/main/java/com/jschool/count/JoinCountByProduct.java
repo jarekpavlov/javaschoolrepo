@@ -4,6 +4,8 @@ public class JoinCountByProduct implements  Comparable<JoinCountByProduct> {
 
     private Long product_id;
     private Double resultAmount;
+    private Long quantity;
+    private String brand;
 
     public Long getProduct_id() {
         return product_id;
@@ -21,6 +23,21 @@ public class JoinCountByProduct implements  Comparable<JoinCountByProduct> {
         this.resultAmount = resultAmount;
     }
 
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 
     @Override
     public int compareTo(JoinCountByProduct that) {

@@ -27,7 +27,9 @@
                     <img src="<c:url value="/resources/images/fire.png"/>">
                 </div>
                 <sec:authorize access="hasRole('EMPLOYEE')">
-                    <h3><a href="admin/product/new" class="btn btn-primary btn-lg">New Product</a></h3>
+                    <div class="aboveAll">
+                        <h3><a  href="admin/product/new" class="btn btn-primary btn-lg">New Product</a></h3>
+                    </div>
                 </sec:authorize>
                 <form action="/MmsPr/products" method="get">
                     <div class = "card" style="margin-top: 1.5em">

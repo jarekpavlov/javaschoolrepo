@@ -18,3 +18,7 @@
     bottom: 0;
     left: 0;
 }
+.aboveAll{
+    z-index: 1;
+    position: sticky;
+}

@@ -80,7 +80,7 @@ public class OrderService {
      * @param httpSession to a new Order object to store it
      *                    into the database
      */
-    public void createOrder(HttpSession httpSession, Client client, String paymentMethod, String deliveryMethod) {
+    public void createOrder(HttpSession httpSession, Client client, String paymentMethod, String deliveryMethod) throws NonValidNumberException {
         Set<ProductsInOrder> productsInOrderSetTemp = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
         Date date = new Date();
         Order order = new OrderBuilder()
@@ -94,6 +94,11 @@ public class OrderService {
                 .build();
         for (ProductsInOrder temp : productsInOrderSetTemp) {
             temp.setOrder(order);
+            Long product_id = temp.getProduct().getId();
+            Product product = entityService.getEntity(Product.class, product_id);
+            int newQuantity = product.getQuantity() - temp.getQuantity();
+            product.setQuantity(newQuantity);
+            entityService.updateEntity(product);
         }
         entityService.saveEntity(order);
         httpSession.removeAttribute("productsInOrderSet");
@@ -177,5 +182,13 @@ public class OrderService {
                 .stream()
                 .map(this::getOrderDTO)
                 .collect(Collectors.toList());
+    }
+
+    public double getTotalPerOrder(Set<ProductsInOrder> productsInOrderSet) {
+        double totalPerOrder = 0D;
+        for (ProductsInOrder product : productsInOrderSet) {
+            totalPerOrder = totalPerOrder + product.getPrice() * product.getQuantity();
+        }
+        return totalPerOrder;
     }
 }
