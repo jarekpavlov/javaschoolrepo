@@ -1,11 +1,7 @@
 package com.jschool.controllers;
 
 import com.jschool.DTO.OrderDTO;
-import com.jschool.domain.Client;
-import com.jschool.domain.Order;
-import com.jschool.domain.OrderStatus;
-import com.jschool.domain.PaymentStatus;
-import com.jschool.domain.ProductsInOrder;
+import com.jschool.domain.*;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.service.EntityService;
 import com.jschool.service.OrderService;
@@ -28,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Controller
 public class OrderController {
+
     Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
     private OrderService orderService;
@@ -99,7 +96,7 @@ public class OrderController {
         OrderDTO orderDTO = orderService.getOrderFromJoinTable(productsInOrderSet);
         map.addAttribute("order", orderDTO);
         map.addAttribute("products", productsInOrderSet);
-        map.addAttribute("total",orderService.getTotalPerOrder(productsInOrderSet));
+        map.addAttribute("total", orderService.getTotalPerOrder(productsInOrderSet));
         HttpSession httpSession = request.getSession();
         productService.getCartModelMap(map, httpSession);
         return "productsPerOrder";
@@ -114,9 +111,8 @@ public class OrderController {
     }
 
     @GetMapping(value = "/admin/orders")
-    public String getAllOrders(ModelMap map) {
-        List<OrderDTO> orderDtoList = orderService.getOrderDtoList();
-        map.addAttribute("orders", orderDtoList);
+    public String getAllOrders(ModelMap map, @RequestParam(required = false) Integer page) {
+        orderService.getPaginatedMap(map, page);
         return "orders";
     }
 }

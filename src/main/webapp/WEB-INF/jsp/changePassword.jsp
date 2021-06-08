@@ -27,13 +27,13 @@
                     <div class="form-group row">
                         <label for="newPassword1" class="col-sm-4 col-md-5 col-form-label">Enter a new password:</label>
                         <div class="col-sm-9 col-md-12">
-                            <input class="form-control" id = "newPassword1" type="password" name="newPassword1">
+                            <input class="form-control" required="required" minlength="2" maxlength="30" id = "newPassword1" type="password" name="newPassword1">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="newPassword2" class="col-sm-4 col-md-5 col-form-label">Repeat the new password:</label>
                         <div class="col-sm-9 col-md-12">
-                            <input id="newPassword2" class="form-control" type="password" name="newPassword2">
+                            <input id="newPassword2" required="required" minlength="2" maxlength="30" class="form-control" type="password" name="newPassword2">
                         </div>
                     </div>
                     <div class="row">

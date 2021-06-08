@@ -24,30 +24,30 @@
         <div class="card-body">
             <form:form action="/MmsPr/product/save?${_csrf.parameterName}=${_csrf.token}" method="post" modelAttribute="product" enctype="multipart/form-data"  >
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <form:hidden path = "id"/>
-
+                <input type="hidden" value="${product.id}" name= "id"/>
+                <input type="hidden" value="${product.imgName}" name= "imgName"/>
                 <div class="form-group row">
                     <label for="brand" class="col-sm-3 col-md-2 col-form-label">Brand:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id="brand" path = "brand"/>
+                        <input type="text" required="required" minlength="2" maxlength="20" class="form-control" id="brand" value="${product.brand}" name = "brand"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="category" class="col-sm-3 col-md-2 col-form-label">Category:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id="category" path = "category"/>
+                        <input type="text" required="required" minlength="2" maxlength="20" class="form-control" id="category" value="${product.category}" name = "category"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="color" class="col-sm-3 col-md-2 col-form-label">Color:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id="color" path = "color"/>
+                        <input type="text" required="required" minlength="2" class="form-control" maxlength="20" id="color" value="${product.color}" name = "color"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="mass" class="col-sm-3 col-md-2 col-form-label">Mass:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id="mass" path = "mass"/>
+                        <input type="number" required="required" min="1" max="50000" class="form-control" id="mass" value="${product.mass}" name = "mass"/>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -57,26 +57,26 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">€</span>
                             </div>
-                            <form:input class="form-control" id="price" path = "price"/>
+                            <input type="number" required="required" min="0" max="10000000" class="form-control" id="price" value="${product.price}" name = "price"/>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="quantity" class="col-sm-3 col-md-2 col-form-label">Quantity:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id="quantity" path = "quantity"/>
+                        <input type="number" required="required" min="1" max="50000" class="form-control" id="quantity" value="${product.quantity}" name = "quantity"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="title" class="col-sm-3 col-md-2 col-form-label">Title:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id="title" path = "title"/>
+                        <input type="text" required="required" minlength="2" maxlength="20" class="form-control" id="title" value="${product.title}" name = "title"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="volume" class="col-sm-3 col-md-2 col-form-label">Volume:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id="volume" path = "volume"/>
+                        <input type="number" required="required" min="1" max="50000" class="form-control" id="volume" value="${product.volume}" name = "volume"/>
                     </div>
                 </div>
                 <div class="form-group row">

@@ -27,80 +27,80 @@
         <div class="card-body">
             <form:form action="/MmsPr/users/registration/save/" method="post" modelAttribute="client"  >
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <form:hidden path = "address.id"/>
-                <form:hidden path = "id"/>
+                <input type="hidden" name="address_id" value="${client.address.id}"/>
+                <input type="hidden" name = "id" value="${client.id}"/>
                 <div class="form-group row">
                     <label for="name" class="col-sm-3 col-md-2 col-form-label">Name:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id="name" path = "name"/>
+                        <input type="text" required="required" minlength="2" maxlength="20" class="form-control" id="name" value="${client.name}" name = "name"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="surname" class="col-sm-3 col-md-2 col-form-label">Surname:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id="surname" path = "surname"/>
+                        <input type="text" required="required" minlength="2" maxlength="20" class="form-control" id="surname" value="${client.surname}" name = "surname"/>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="email" class="col-sm-3 col-md-2 col-form-label">Email:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id = "email" path = "email"/>
+                        <input type="email" required="required" minlength="4" maxlength="20" class="form-control" id = "email" value="${client.email}" name = "email"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="country" class="col-sm-3 col-md-2 col-form-label">Country:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id = "country" path = "address.country"/>
+                        <input type="text" required="required" minlength="2" maxlength="20" class="form-control" id="country" value="${client.address.country}" name = "country"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="city" class="col-sm-3 col-md-2 col-form-label">City:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id = "city" path = "address.city"/>
+                        <input type="text" required="required" minlength="2" maxlength="20" class="form-control" id="city" value="${client.address.city}" name = "city"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="street" class="col-sm-3 col-md-2 col-form-label">Street:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id = "street" path = "address.street"/>
+                        <input type="text" required="required" minlength="2" maxlength="20" class="form-control" id="street" value="${client.address.street}" name = "street"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="house" class="col-sm-3 col-md-2 col-form-label">House:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id = "house" path = "address.house"/>
+                        <input type="text" required="required" minlength="1" maxlength="6" class="form-control" id="house" value="${client.address.house}" name = "house"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="flat" class="col-sm-3 col-md-2 col-form-label">Flat:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id = "flat" path = "address.flat"/>
+                        <input type="number" required="required" min="1" max="1000" class="form-control" id="flat" value="${client.address.flat}" name = "flat"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="postCode" class="col-sm-3 col-md-2 col-form-label">Postal code:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id = "postCode" path = "address.postCode"/>
+                        <input type="number" required="required" min="1" max="1000000" class="form-control" id="postCode" value="${client.address.postCode}" name = "postCode"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="dateOfBirth" class="col-sm-3 col-md-2 col-form-label">Date of birth:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id = "dateOfBirth" path = "dateOfBirth"/>
+                        <input type="date" required="required" class="form-control" id = "dateOfBirth" value="${client.dateOfBirth}" name = "dateOfBirth"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="phone" class="col-sm-3 col-md-2 col-form-label">Phone:</label>
                     <div class="col-sm-9 col-md-10">
-                        <form:input class="form-control" id = "phone" path = "phone"/>
+                        <input type="tel" minlength="7" maxlength="14" required = "required" class="form-control" id = "phone" value ="${client.phone}" name = "phone"/>
                     </div>
                 </div>
                 <sec:authorize access="isAnonymous()">
                     <div class="form-group row">
                         <label for="password" class="col-sm-3 col-md-2 col-form-label">Password:</label>
                         <div class="col-sm-9 col-md-10">
-                            <form:password class="form-control" id = "password" path = "password"/>
+                            <input class="form-control" required="required" minlength="2" maxlength="30" id = "password" type="password" name="password"/>
                         </div>
                     </div>
                 </sec:authorize>

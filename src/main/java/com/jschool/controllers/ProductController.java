@@ -2,6 +2,7 @@ package com.jschool.controllers;
 
 import com.jschool.DTO.ProductDTO;
 import com.jschool.domain.Product;
+import com.jschool.domain.ProductBuilder;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.exceptions.ProductIsInOrderException;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProductController {
@@ -38,11 +40,11 @@ public class ProductController {
 
     @GetMapping(value = "/products")
     public String getProducts(ModelMap map, HttpSession httpSession
-            ,@RequestParam(required = false) Integer page
-            ,@RequestParam(required = false) String color
-            ,@RequestParam(required = false) String brand
-            ,@RequestParam(required = false) String title) {
-        productService.getPaginationMethod(map,page,color,brand,title);
+            , @RequestParam(required = false) Integer page
+            , @RequestParam(required = false) String color
+            , @RequestParam(required = false) String brand
+            , @RequestParam(required = false) String title) {
+        productService.getPaginationMethod(map, page, color, brand, title);
         productService.getCartModelMap(map, httpSession);
         return "products";
     }
@@ -57,9 +59,31 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/product/save", method = RequestMethod.POST)
-    public String saveProduct(Product product, @RequestParam(required = false) MultipartFile productPicture) throws EmptyFieldException, NonValidNumberException, IOException {
-
+    public String saveProduct(@RequestParam(required = false) MultipartFile productPicture
+            , @RequestParam(required = false) Long id
+            , @RequestParam(required = false) Float price
+            , @RequestParam(required = false) Integer quantity
+            , @RequestParam(required = false) String brand
+            , @RequestParam(required = false) String title
+            , @RequestParam(required = false) String color
+            , @RequestParam(required = false) String category
+            , @RequestParam(required = false) String imgName
+            , @RequestParam(required = false) Float mass
+            , @RequestParam(required = false) Float volume
+    ) throws EmptyFieldException, NonValidNumberException, IOException {
         logger.debug("Employee entered saveProduct method");
+        Product product = new ProductBuilder()
+                .setBrand(brand)
+                .setCategory(category)
+                .setColor(color)
+                .setId(id)
+                .setMass(mass)
+                .setPrice(price)
+                .setQuantity(quantity)
+                .setImgName(imgName)
+                .setTitle(title)
+                .setVolume(volume)
+                .build();
         productService.saveProduct(product, productPicture);
         return "redirect:/products";
     }

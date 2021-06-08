@@ -23,6 +23,7 @@
         <thead class="thead-light">
             <tr align="center">
                 <th scope="col">Number</th>
+                <th scope="col">Id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Surname</th>
                 <th scope="col">Email</th>
@@ -36,10 +37,10 @@
             <c:forEach items="${userList}" var="user" varStatus="status">
                 <tr align="center">
                     <th scope="row">${status.index+1}</th>
+                    <td>${user.id}</td>
                     <td>${user.name}</td>
                     <td>${user.surname}</td>
                     <td>${user.email}</td>
-
                     <td>${user.address.city}</td>
                     <td>${user.phone}</td>
                     <td>${user.dateOfBirth}</td>
@@ -52,6 +53,15 @@
             </c:forEach>
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+            <c:forEach begin = "1" end = "${pageQuantity}" var="page">
+                <li class="page-item"><a class="page-link" href="/MmsPr/admin/users?page=${page}">${page}</a></li>
+            </c:forEach>
+            <a class="page-link" href="#">Next</a>
+        </ul>
+    </nav>
 </div>
 <%@ include file="fragments/JS.jspf" %>
 </body>

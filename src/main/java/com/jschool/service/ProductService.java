@@ -2,6 +2,7 @@ package com.jschool.service;
 
 import com.jschool.DTO.ProductDTO;
 import com.jschool.domain.Product;
+import com.jschool.domain.ProductBuilder;
 import com.jschool.domain.ProductsInOrder;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.NonValidNumberException;
@@ -19,10 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +32,7 @@ public class ProductService {
     private String uploadPath;
 
     @Value("${products.list.quantity}")
-    private double prodListQuantity;
+    private int prodListQuantity;
 
     Logger logger = Logger.getLogger(this.getClass());
     private ModelMapper modelMapper;
@@ -150,9 +148,10 @@ public class ProductService {
             return productDtoList;
         return filteredList;
     }
-    
+
     public boolean filterIsEmpty(String color, String brand, String title) {
-        if ((emptyS.equals(color) || color == null) && (emptyS.equals(brand) || brand == null) && (emptyS.equals(title) || title == null)) {
+        if ((emptyS.equals(color) || color == null) && (emptyS.equals(brand) || brand == null)
+                && (emptyS.equals(title) || title == null)) {
             return true;
         }
         return false;
@@ -175,20 +174,20 @@ public class ProductService {
         List<ProductDTO> filteredList = getFilteredProducts(productList, color, brand, title);
         List<ProductDTO> paginatedFilteredList = new ArrayList<>();
         int size = filteredList.size();
-        double end = (page - 1) * prodListQuantity + prodListQuantity;
+        int end = (page - 1) * prodListQuantity + prodListQuantity;
         if (filteredList.size() < prodListQuantity) {
             paginatedFilteredList.addAll(filteredList);
         } else if (size < end) {
-            for (int i = (int) ((page - 1) * prodListQuantity); i < size; i++) {
+            for (int i = ((page - 1) * prodListQuantity); i < size; i++) {
                 paginatedFilteredList.add(filteredList.get(i));
             }
         } else {
-            for (int i = (int) ((page - 1) * prodListQuantity); i < (int) ((page - 1) * prodListQuantity) + prodListQuantity; i++) {
+            for (int i = ((page - 1) * prodListQuantity); i < ((page - 1) * prodListQuantity) + prodListQuantity; i++) {
                 paginatedFilteredList.add(filteredList.get(i));
             }
         }
         map.addAttribute("products", paginatedFilteredList);
-        getPageQuantityModelMap(filteredList, map);
+        getPageQuantityModelMap(filteredList, map, prodListQuantity);
         map.addAttribute("color", color);
         map.addAttribute("brand", brand);
         map.addAttribute("title", title);
@@ -223,22 +222,21 @@ public class ProductService {
         List<ProductDTO> productListPaginated;
 
         if (page == null) {
-            productListPaginated = getProductDtoList(0, (int) prodListQuantity);
+            productListPaginated = getProductDtoList(0, prodListQuantity);
         } else {
-            productListPaginated = getProductDtoList(((page - 1) * (int) prodListQuantity), (int) prodListQuantity);
+            productListPaginated = getProductDtoList(((page - 1) * prodListQuantity), prodListQuantity);
         }
         map.addAttribute("products", productListPaginated);
-        getPageQuantityModelMap(productList, map);
+        getPageQuantityModelMap(productList, map, prodListQuantity);
         return map;
     }
 
-    public ModelMap getPageQuantityModelMap(List<ProductDTO> productList, ModelMap map) {
-
+    public ModelMap getPageQuantityModelMap(List<?> list, ModelMap map, int quantity) {
         int pageQuantity;
-        if ((productList.size() / prodListQuantity) % 1 != 0) {
-            pageQuantity = productList.size() / (int) prodListQuantity + 1;
+        if ((list.size() / (double) quantity) % 1 != 0) {
+            pageQuantity = list.size() / quantity + 1;
         } else {
-            pageQuantity = productList.size() / (int) prodListQuantity;
+            pageQuantity = list.size() / quantity;
         }
         map.addAttribute("pageQuantity", pageQuantity);
         return map;

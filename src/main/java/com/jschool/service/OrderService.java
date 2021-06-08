@@ -1,6 +1,7 @@
 package com.jschool.service;
 
 import com.jschool.DTO.OrderDTO;
+import com.jschool.DTO.ProductDTO;
 import com.jschool.count.JoinCountByProduct;
 import com.jschool.domain.*;
 import com.jschool.exceptions.NonValidNumberException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,22 +23,27 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
 
+    @Value("${orders.list.quantity}")
+    private int ordersOnPage;
+
     @Value("${queue.name}")
     private String queueName;
 
     private EntityService entityService;
     private ModelMapper modelMapper;
     private AmqpTemplate template;
-    Logger logger = Logger.getLogger(this.getClass());
+    private Logger logger = Logger.getLogger(this.getClass());
+    private ProductService productService;
 
     public OrderService() {
     }
 
     @Autowired
-    public OrderService(EntityService entityService, ModelMapper modelMapper, AmqpTemplate template) {
+    public OrderService(EntityService entityService,ProductService productService, ModelMapper modelMapper, AmqpTemplate template) {
         this.entityService = entityService;
         this.modelMapper = modelMapper;
         this.template = template;
+        this.productService = productService;
     }
 
     public ModelMapper getModelMapper() {
@@ -170,6 +177,20 @@ public class OrderService {
         }
     }
 
+    public ModelMap getPaginatedMap(ModelMap map, Integer page){
+        List<OrderDTO> orderList = getOrderDtoList();
+        List<OrderDTO> orderListPaginated;
+
+        if (page == null) {
+            orderListPaginated = getOrderDtoList(0, ordersOnPage);
+        } else {
+            orderListPaginated = getOrderDtoList(((page - 1) * ordersOnPage), ordersOnPage);
+        }
+        map.addAttribute("orders", orderListPaginated);
+        productService.getPageQuantityModelMap(orderList, map, ordersOnPage);
+        return map;
+    }
+
     public OrderDTO getOrderDTO(Order order) {
         getModelMapper()
                 .getConfiguration()
@@ -179,6 +200,12 @@ public class OrderService {
 
     public List<OrderDTO> getOrderDtoList() {
         return (entityService.entityList(Order.class))
+                .stream()
+                .map(this::getOrderDTO)
+                .collect(Collectors.toList());
+    }
+    public List<OrderDTO> getOrderDtoList(int offset, int limit) {
+        return (entityService.entityList(Order.class, offset, limit))
                 .stream()
                 .map(this::getOrderDTO)
                 .collect(Collectors.toList());

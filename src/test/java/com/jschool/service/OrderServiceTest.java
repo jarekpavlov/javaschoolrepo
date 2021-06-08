@@ -40,4 +40,8 @@ class OrderServiceTest {
 
         Assertions.assertEquals(orderDTO,orderService.getOrderDTO(order));
     }
+
+    @Test
+    void createOrder() {
+    }
 }
