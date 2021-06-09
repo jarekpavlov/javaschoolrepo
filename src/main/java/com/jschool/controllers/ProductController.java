@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -47,6 +48,16 @@ public class ProductController {
         productService.getPaginationMethod(map, page, color, brand, title);
         productService.getCartModelMap(map, httpSession);
         return "products";
+    }
+    @GetMapping(value = "/products-json")
+    @ResponseBody
+    public List<ProductDTO> getProductsJson(@RequestParam(required = false) Integer page
+            , @RequestParam(required = false) String color
+            , @RequestParam(required = false) String brand
+            , @RequestParam(required = false) String title) {
+       System.out.println(color);
+       List<ProductDTO> list= productService.getFilteredPaginatedList(page,color,brand,title);
+        return list;
     }
 
     @GetMapping(value = "admin/product/edit")

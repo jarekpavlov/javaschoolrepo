@@ -31,12 +31,12 @@
                         <h3><a  href="admin/product/new" class="btn btn-primary btn-lg">New Product</a></h3>
                     </div>
                 </sec:authorize>
-                <form action="/MmsPr/products" method="get">
+                <form id="form1" action="/MmsPr/products" method="get">
                     <div class = "card" style="margin-top: 1.5em">
                         <div class="card-header">
                             <h5>Products Filter</h5>
                         </div>
-                        <div class="card-body">
+                        <div id="filter" class="card-body">
                             <div class="form-group">
                                 <label for="color">Color:</label>
                                 <input class="form-control" id="color" value="${color}" type="text" name="color" placeholder="Enter a product color"/>
@@ -113,30 +113,20 @@
                         </div>
                     </c:forEach>
                 </div>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        <c:forEach begin = "1" end = "${pageQuantity}" var="page">
-                            <li class="page-item"><a class="page-link" href="/MmsPr/products?page=${page}">${page}</a></li>
-                        </c:forEach>
-                        <a class="page-link" href="#">Next</a>
-                    </ul>
-                </nav>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            <c:forEach begin = "1" end = "${pageQuantity}" var="page">
+                                <li class="page-item"><input type="button" id = "pgBtn-${page}" class="page-link" value="${page}"/></li>
+                            </c:forEach>
+                            <a class="page-link" href="#">Next</a>
+                        </ul>
+                    </nav>
             </div>
         </div>
 
     </div>
 <%@ include file="fragments/JS.jspf" %>
-<%--<script type="text/javascript">--%>
-<%--    $(function (){--%>
-<%--        $("button[id*='cartBtn-']").click(function (){--%>
-<%--            let buttonId = $(this).prop("id").split("-")[1]--%>
-<%--            $.get('/data.txt',  // url--%>
-<%--                function (data, textStatus, jqXHR) {  // success callback--%>
-<%--                    alert('status: ' + textStatus + ', data:' + data);--%>
-<%--                });--%>
-<%--        })--%>
-<%--    })--%>
-<%--</script>--%>
+<script type="text/javascript" src="/MmsPr/resources/JS/filter.js"></script>
 </body>
 </html>

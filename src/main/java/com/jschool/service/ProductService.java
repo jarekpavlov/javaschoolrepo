@@ -230,6 +230,25 @@ public class ProductService {
         getPageQuantityModelMap(productList, map, prodListQuantity);
         return map;
     }
+    public List<ProductDTO> getFilteredPaginatedList(Integer page, String color, String brand, String title){
+        List<ProductDTO> productList = getProductDtoList();
+        List<ProductDTO> filteredList = getFilteredProducts(productList, color, brand, title);
+        List<ProductDTO> paginatedFilteredList = new ArrayList<>();
+        int size = filteredList.size();
+        int end = (page - 1) * prodListQuantity + prodListQuantity;
+        if (filteredList.size() < prodListQuantity) {
+            paginatedFilteredList.addAll(filteredList);
+        } else if (size < end) {
+            for (int i = ((page - 1) * prodListQuantity); i < size; i++) {
+                paginatedFilteredList.add(filteredList.get(i));
+            }
+        } else {
+            for (int i = ((page - 1) * prodListQuantity); i < ((page - 1) * prodListQuantity) + prodListQuantity; i++) {
+                paginatedFilteredList.add(filteredList.get(i));
+            }
+        }
+        return paginatedFilteredList;
+    }
 
     public ModelMap getPageQuantityModelMap(List<?> list, ModelMap map, int quantity) {
         int pageQuantity;
