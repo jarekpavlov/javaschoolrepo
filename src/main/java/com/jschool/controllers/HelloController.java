@@ -42,7 +42,7 @@ public class HelloController {
 
     @GetMapping(value = "")
     public String startPage(ModelMap map, HttpSession httpSession) {
-        productService.getCartModelMap(map, httpSession);
+        map.addAttribute("productsInCart",productService.getProductInCartQuantity(httpSession));
         return "startPage";
     }
 

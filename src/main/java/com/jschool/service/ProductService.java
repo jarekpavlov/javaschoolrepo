@@ -157,15 +157,21 @@ public class ProductService {
         return false;
     }
 
-    public void getPaginationMethod(ModelMap map, Integer page, String color, String brand, String title) {
+    public List<ProductDTO> getPaginationMethod(Integer page, String color, String brand, String title) {
         if (filterIsEmpty(color, brand, title)) {
-            getPaginatedMap(map, page);
-        } else {
-            getFilteredProductsPaginated(map, page, color, brand, title);
+            return getPaginatedList(page);
         }
+        return getFilteredProductsPaginated(page, color, brand, title);
+
+    }
+    public List<ProductDTO> getFullOrFilteredList(String color, String brand, String title){
+        if (filterIsEmpty(color, brand, title)) {
+            return getProductDtoList();
+        }
+        return getFilteredProducts(getProductDtoList(),color,brand,title);
     }
 
-    public ModelMap getFilteredProductsPaginated(ModelMap map, Integer page, String color, String brand, String title) {
+    public List<ProductDTO> getFilteredProductsPaginated(Integer page, String color, String brand, String title) {
         if (page == null) {
             page = 1;
         }
@@ -186,12 +192,7 @@ public class ProductService {
                 paginatedFilteredList.add(filteredList.get(i));
             }
         }
-        map.addAttribute("products", paginatedFilteredList);
-        getPageQuantityModelMap(filteredList, map, prodListQuantity);
-        map.addAttribute("color", color);
-        map.addAttribute("brand", brand);
-        map.addAttribute("title", title);
-        return map;
+        return paginatedFilteredList;
     }
 
     public void deleteProduct(HttpServletRequest request) throws ProductIsInOrderException {
@@ -207,17 +208,15 @@ public class ProductService {
         entityService.deleteEntity(Product.class, id);
     }
 
-    public ModelMap getCartModelMap(ModelMap map, HttpSession httpSession) {
+    public int getProductInCartQuantity(HttpSession httpSession) {
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
         if (productsInOrderSet != null) {
-            map.addAttribute("productsInCart", productsInOrderSet.size());
-        } else {
-            map.addAttribute("productsInCart", "0");
+            return productsInOrderSet.size();
         }
-        return map;
+        return 0;
     }
 
-    public ModelMap getPaginatedMap(ModelMap map, Integer page) {
+    public List<ProductDTO> getPaginatedList(Integer page) {
         List<ProductDTO> productList = getProductDtoList();
         List<ProductDTO> productListPaginated;
 
@@ -226,39 +225,17 @@ public class ProductService {
         } else {
             productListPaginated = getProductDtoList(((page - 1) * prodListQuantity), prodListQuantity);
         }
-        map.addAttribute("products", productListPaginated);
-        getPageQuantityModelMap(productList, map, prodListQuantity);
-        return map;
-    }
-    public List<ProductDTO> getFilteredPaginatedList(Integer page, String color, String brand, String title){
-        List<ProductDTO> productList = getProductDtoList();
-        List<ProductDTO> filteredList = getFilteredProducts(productList, color, brand, title);
-        List<ProductDTO> paginatedFilteredList = new ArrayList<>();
-        int size = filteredList.size();
-        int end = (page - 1) * prodListQuantity + prodListQuantity;
-        if (filteredList.size() < prodListQuantity) {
-            paginatedFilteredList.addAll(filteredList);
-        } else if (size < end) {
-            for (int i = ((page - 1) * prodListQuantity); i < size; i++) {
-                paginatedFilteredList.add(filteredList.get(i));
-            }
-        } else {
-            for (int i = ((page - 1) * prodListQuantity); i < ((page - 1) * prodListQuantity) + prodListQuantity; i++) {
-                paginatedFilteredList.add(filteredList.get(i));
-            }
-        }
-        return paginatedFilteredList;
+        return productListPaginated;
     }
 
-    public ModelMap getPageQuantityModelMap(List<?> list, ModelMap map, int quantity) {
+    public int getPageQuantity(List<?> list, int quantity) {
         int pageQuantity;
         if ((list.size() / (double) quantity) % 1 != 0) {
             pageQuantity = list.size() / quantity + 1;
         } else {
             pageQuantity = list.size() / quantity;
         }
-        map.addAttribute("pageQuantity", pageQuantity);
-        return map;
+        return pageQuantity;
     }
 
     public ProductDTO getProductDTO(Product product) {

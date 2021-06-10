@@ -4,23 +4,28 @@ $(function (){
         filterData["color"] = $("#color").val();
         filterData["brand"] = $("#brand").val();
         filterData["title"] = $("#title").val();
-        let page = $(this).prop("id").split("-")[1]
+        let page = $(this).prop("id").split("-")[1];
 
         $.ajax({
             type: "GET",
             url: "products-json",
             data: {
-                buttonPage:page,
+                page:page,
                 color : filterData["color"],
                 brand : filterData["brand"],
                 title : filterData["title"],
+                type: 'json',
             },
-            dataType : 'json',
-            success: function(filterD) {
-                // alert(filterD.category);
-                // alert(filterD.color);
+            success: function(response) {
 
-                console.log(response);
+                $.each( responce,function(key, card) {
+
+                    alert(card.brand)
+
+                })
+
+                // $("#cards").html(response);
+                // console.log(response);
             }
         });
     });

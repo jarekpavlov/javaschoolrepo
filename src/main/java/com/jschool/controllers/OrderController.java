@@ -8,6 +8,7 @@ import com.jschool.service.OrderService;
 import com.jschool.service.ProductService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,6 +25,9 @@ import java.util.stream.Collectors;
 
 @Controller
 public class OrderController {
+
+    @Value("${orders.list.quantity}")
+    private int ordersOnPage;
 
     Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
@@ -43,7 +47,7 @@ public class OrderController {
         List<OrderDTO> ordersByClient = orders.stream()
                 .filter(order -> order.getClient().equals(client)).collect(Collectors.toList());
         map.addAttribute("orders", ordersByClient);
-        productService.getCartModelMap(map, httpSession);
+        map.addAttribute("productsInCart",productService.getProductInCartQuantity(httpSession));
         return "orders";
     }
 
@@ -57,7 +61,7 @@ public class OrderController {
     }
 
     @PostMapping(value = "/order/add-to-cart")
-    public String addToCart(HttpServletRequest request) throws NonValidNumberException {
+    public String addToCart(HttpServletRequest request) {
         int numberForOrder = 1;
         orderService.addToCart(numberForOrder, request);
 
@@ -98,7 +102,7 @@ public class OrderController {
         map.addAttribute("products", productsInOrderSet);
         map.addAttribute("total", orderService.getTotalPerOrder(productsInOrderSet));
         HttpSession httpSession = request.getSession();
-        productService.getCartModelMap(map, httpSession);
+        map.addAttribute("productsInCart",productService.getProductInCartQuantity(httpSession));
         return "productsPerOrder";
     }
 
@@ -112,7 +116,8 @@ public class OrderController {
 
     @GetMapping(value = "/admin/orders")
     public String getAllOrders(ModelMap map, @RequestParam(required = false) Integer page) {
-        orderService.getPaginatedMap(map, page);
+        map.addAttribute("orders",orderService.getPaginatedOrderList(page));
+        map.addAttribute("pageQuantity", productService.getPageQuantity(orderService.getOrderDtoList(), ordersOnPage));
         return "orders";
     }
 }

@@ -1,5 +1,6 @@
 package com.jschool.controllers;
 
+import com.jschool.DTO.ClientDTO;
 import com.jschool.domain.Address;
 import com.jschool.domain.AddressBuilder;
 import com.jschool.domain.Client;
@@ -13,6 +14,7 @@ import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
 import com.jschool.service.UserService;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,9 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class UserController {
+
+    @Value("${orders.list.quantity}")
+    private int clientsOnPage;
+
     Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
     private ClientService clientService;
@@ -40,7 +47,8 @@ public class UserController {
 
     @GetMapping(value = "/admin/users")
     public String getUsers(ModelMap map, @RequestParam(required = false) Integer page) {
-        userService.getUsersPaginated(map, page);
+        map.addAttribute("userList", userService.getUsersPaginated(page));
+        map.addAttribute("pageQuantity", productService.getPageQuantity(userService.getClientDtoList(), clientsOnPage));
         return "users";
     }
 
@@ -51,7 +59,7 @@ public class UserController {
             client = new Client();
         }
         map.addAttribute("client", client);
-        productService.getCartModelMap(map, httpSession);
+        map.addAttribute("productsInCart", productService.getProductInCartQuantity(httpSession));
         return "registrationPage";
     }
 
@@ -61,26 +69,26 @@ public class UserController {
         Long id = Long.parseLong(request.getParameter("id"));
         Client client = entityService.getEntity(Client.class, id);
         map.addAttribute(client);
-        productService.getCartModelMap(map, httpSession);
+        map.addAttribute("productsInCart", productService.getProductInCartQuantity(httpSession));
         return "registrationPage";
     }
 
     @PostMapping(value = "/users/registration/save")
     public String saveUser(@AuthenticationPrincipal Client clientWithPassword
-                    ,@RequestParam(required = false) String name
-                    ,@RequestParam(required = false) String surname
-                    ,@RequestParam(required = false) String country
-                    ,@RequestParam(required = false) String city
-                    ,@RequestParam(required = false) String street
-                    ,@RequestParam(required = false) String house
-                    ,@RequestParam(required = false) String password
-                    ,@RequestParam(required = false) String phone
-                    ,@RequestParam(required = false) String dateOfBirth
-                    ,@RequestParam(required = false) String email
-                    ,@RequestParam(required = false) Long id
-                    ,@RequestParam(required = false) Long address_id
-                    ,@RequestParam(required = false) Short flat
-                    ,@RequestParam(required = false) Integer postCode) throws EmptyFieldException, NonValidNumberException {
+            , @RequestParam(required = false) String name
+            , @RequestParam(required = false) String surname
+            , @RequestParam(required = false) String country
+            , @RequestParam(required = false) String city
+            , @RequestParam(required = false) String street
+            , @RequestParam(required = false) String house
+            , @RequestParam(required = false) String password
+            , @RequestParam(required = false) String phone
+            , @RequestParam(required = false) String dateOfBirth
+            , @RequestParam(required = false) String email
+            , @RequestParam(required = false) Long id
+            , @RequestParam(required = false) Long address_id
+            , @RequestParam(required = false) Short flat
+            , @RequestParam(required = false) Integer postCode) throws EmptyFieldException, NonValidNumberException {
 
         Address address = new AddressBuilder()
                 .setId(address_id)

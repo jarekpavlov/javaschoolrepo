@@ -177,7 +177,7 @@ public class OrderService {
         }
     }
 
-    public ModelMap getPaginatedMap(ModelMap map, Integer page){
+    public List<OrderDTO> getPaginatedOrderList(Integer page){
         List<OrderDTO> orderList = getOrderDtoList();
         List<OrderDTO> orderListPaginated;
 
@@ -186,9 +186,7 @@ public class OrderService {
         } else {
             orderListPaginated = getOrderDtoList(((page - 1) * ordersOnPage), ordersOnPage);
         }
-        map.addAttribute("orders", orderListPaginated);
-        productService.getPageQuantityModelMap(orderList, map, ordersOnPage);
-        return map;
+        return orderListPaginated;
     }
 
     public OrderDTO getOrderDTO(Order order) {

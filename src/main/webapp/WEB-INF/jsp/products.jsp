@@ -62,8 +62,8 @@
                 <div class="top-right" >
                     <%@ include file="fragments/cartInformation.jspf" %>
                 </div>
-                <div class="card-columns" style="text-align: center; margin-top: 1.5em">
-                    <c:forEach items="${products}" var="product" varStatus="status">
+                <div id="cards" class="card-columns" style="text-align: center; margin-top: 1.5em">
+                    <c:forEach  items="${products}" var="product" varStatus="status">
                         <div class="card text-left" style="width: 14rem">
                             <c:if test="${product.imgName==null || product.imgName==''}">
                                 <img class="card-img-top"  src="<c:url value="/resources/images/picture-tag.png"/>" alt="Card image cap">

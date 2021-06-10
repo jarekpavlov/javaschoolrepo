@@ -29,6 +29,9 @@ public class ProductController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    @Value("${products.list.quantity}")
+    private int productPerPage;
+
     Logger logger = Logger.getLogger(this.getClass());
     private EntityService entityService;
     private ProductService productService;
@@ -40,23 +43,28 @@ public class ProductController {
     }
 
     @GetMapping(value = "/products")
-    public String getProducts(ModelMap map, HttpSession httpSession
+    public ModelAndView getProducts(HttpSession httpSession
             , @RequestParam(required = false) Integer page
             , @RequestParam(required = false) String color
             , @RequestParam(required = false) String brand
             , @RequestParam(required = false) String title) {
-        productService.getPaginationMethod(map, page, color, brand, title);
-        productService.getCartModelMap(map, httpSession);
-        return "products";
+        ModelAndView model = new ModelAndView();
+        model.setViewName("products");
+        model.addObject("products", productService.getPaginationMethod(page,color,brand,title));
+        model.addObject("pageQuantity", productService.getPageQuantity(productService.getFullOrFilteredList(color,brand,title), productPerPage));
+        model.addObject("productsInCart",productService.getProductInCartQuantity(httpSession));
+        return model;
     }
+
     @GetMapping(value = "/products-json")
     @ResponseBody
-    public List<ProductDTO> getProductsJson(@RequestParam(required = false) Integer page
+    public List<ProductDTO> getProductsJson(
+             @RequestParam(required = false) Integer page
             , @RequestParam(required = false) String color
             , @RequestParam(required = false) String brand
             , @RequestParam(required = false) String title) {
-       System.out.println(color);
-       List<ProductDTO> list= productService.getFilteredPaginatedList(page,color,brand,title);
+
+        List<ProductDTO> list = productService.getPaginationMethod(page,color,brand,title);
         return list;
     }
 

@@ -7,7 +7,6 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,18 +18,15 @@ public class UserService {
     private int clientsOnPage;
 
     private EntityService entityService;
-    private ProductService productService;
     private ModelMapper modelMapper;
 
     @Autowired
-    public UserService(EntityService entityService, ProductService productService, ModelMapper modelMapper) {
+    public UserService(EntityService entityService, ModelMapper modelMapper) {
         this.entityService = entityService;
-        this.productService = productService;
         this.modelMapper = modelMapper;
     }
 
-    public ModelMap getUsersPaginated(ModelMap map, Integer page) {
-        List<ClientDTO> clientList = getClientDtoList();
+    public List<ClientDTO> getUsersPaginated(Integer page) {
         List<ClientDTO> clientListPaginated;
 
         if (page == null) {
@@ -38,9 +34,7 @@ public class UserService {
         } else {
             clientListPaginated = getClientDtoList(((page - 1) * clientsOnPage), clientsOnPage);
         }
-        map.addAttribute("userList", clientListPaginated);
-        productService.getPageQuantityModelMap(clientList, map, clientsOnPage);
-        return map;
+        return clientListPaginated;
     }
 
     public List<ClientDTO> getClientDtoList(int offset, int limit) {
