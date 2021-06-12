@@ -20,6 +20,12 @@
     <%@ include file="fragments/cartInformation.jspf" %>
 </div>
 <div class="container">
+    <c:if test="${userExists != null}">
+        <div style="margin-top: 1em" class="alert alert-danger" role="alert">${userExists}</div>
+    </c:if>
+    <c:if test="${userChanged != null}">
+        <div style="margin-top: 1em" class="alert alert-success" role="alert">${userChanged}</div>
+    </c:if>
     <div class = "card" style="margin-top: 1.5em">
         <div class="card-header">
             <h2>Client Information</h2>

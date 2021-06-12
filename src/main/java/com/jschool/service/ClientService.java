@@ -46,7 +46,7 @@ public class ClientService {
         this.modelMapper = modelMapper;
     }
 
-    public void saveClient(Client client, Client clientWithPassword) throws NonValidNumberException, EmptyFieldException, UserExists {
+    public int saveClient(Client client, Client clientWithPassword) throws NonValidNumberException, EmptyFieldException {
         String emptyS = "";
         if ((emptyS.equals(client.getPassword()) && clientWithPassword == null) || emptyS.equals(client.getName()) || emptyS.equals(client.getSurname()) || emptyS.equals(client.getPhone())) {
             logger.warn("User does not fill all fields in client registration/editing page");
@@ -58,7 +58,7 @@ public class ClientService {
         }
 
         if (entityService.getEntityByEmail(Client.class, client.getEmail()) != null && client.getId() == null) {
-            throw new UserExists("The user already exists!!!");
+            return 1;
         }
 
         Address address = client.getAddress();
@@ -67,6 +67,7 @@ public class ClientService {
             client.setPassword(clientWithPassword.getPassword());
             entityService.updateEntity(address);
             entityService.updateEntity(client);
+            return 2;
         } else if (!client.getPassword().equals("")) {
             PasswordEncoder encoder = new BCryptPasswordEncoder();
             String encodedPassword = encoder.encode(client.getPassword());
@@ -84,7 +85,7 @@ public class ClientService {
                 mailSender.send(client.getEmail(), "Activation code",message);
             }
         }
-
+        return 3;
     }
     public boolean activateClient(String code) {
         Client client = entityService.getEntityByActivationCode(Client.class, code);

@@ -33,6 +33,9 @@
                     <c:if test="${messageNotActivated != null}">
                         <div class="alert alert-danger" role="alert">${messageNotActivated}</div>
                     </c:if>
+                    <c:if test="${confirmRegistration != null}">
+                        <div class="alert alert-success" role="alert">${confirmRegistration}</div>
+                    </c:if>
                     <c:if test="${messageActivated != null}">
                         <div class="alert alert-success" role="alert">${messageActivated}</div>
                     </c:if>

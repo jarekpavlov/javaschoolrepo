@@ -13,6 +13,7 @@ import com.jschool.service.ClientService;
 import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
 import com.jschool.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -74,7 +75,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/users/registration/save")
-    public String saveUser(@AuthenticationPrincipal Client clientWithPassword
+    public String saveUser(@AuthenticationPrincipal Client clientWithPassword, ModelMap map
             , @RequestParam(required = false) String name
             , @RequestParam(required = false) String surname
             , @RequestParam(required = false) String country
@@ -109,9 +110,19 @@ public class UserController {
                 .setPhone(phone)
                 .setPassword(password)
                 .build();
-        clientService.saveClient(client, clientWithPassword);
+        int savingAction = clientService.saveClient(client, clientWithPassword);
+       switch (savingAction){
+           case 1:
+               map.addAttribute("userExists", "The user already exists");//user already exists
+               return "registrationPage";
+           case 2:
+               map.addAttribute("userChanged", "Client information is successfully changed");//changing client that already exists
+               return "registrationPage";
+       }
         logger.info("The user creation/editing method was accomplished");
-        return "redirect:/";
+        map.addAttribute("confirmRegistration", "The confirmation mail was send to your email");
+        return "loginPage";//creating a brand new client
+
     }
 
     @GetMapping(value = "/user/registration/change-password")
