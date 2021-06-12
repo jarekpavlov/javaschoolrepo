@@ -46,8 +46,6 @@
                     <td>${user.dateOfBirth}</td>
                     <td>
                         <a href="/MmsPr/admin/users/delete?id=${user.id}">delete</a>
-                        &nbsp;&nbsp;
-                        <a href="/MmsPr/users/edit?id=${user.id}">edit</a>
                     </td>
                 </tr>
             </c:forEach>

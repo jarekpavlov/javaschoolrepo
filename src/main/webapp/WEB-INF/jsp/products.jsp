@@ -117,7 +117,8 @@
                         <ul class="pagination justify-content-center">
                             <a class="page-link" href="#" tabindex="-1">Previous</a>
                             <c:forEach begin = "1" end = "${pageQuantity}" var="page">
-                                <li class="page-item"><input type="button" id = "pgBtn-${page}" class="page-link" value="${page}"/></li>
+<%--                                <li class="page-item"><input type="button" id = "pgBtn-${page}" class="page-link" value="${page}"/></li>--%>
+                                <li class="page-item"><a href="/MmsPr/products?page=${page}" class="page-link">${page}</a></li>
                             </c:forEach>
                             <a class="page-link" href="#">Next</a>
                         </ul>

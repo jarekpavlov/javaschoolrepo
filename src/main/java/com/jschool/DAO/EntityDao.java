@@ -2,6 +2,7 @@ package com.jschool.DAO;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -86,6 +87,10 @@ public class EntityDao {
                 " where m.order.dateOfOrder > '" + dateBefore_daysS + "'" + "and m.order.orderStatus = '3'");
         return query.getSingleResult();
     }
+    public <T> List<T> getEntityByActivationCode(Class<T> type, String code) {
+        Query query = currentSession.createQuery("select c from " + type.getName() + " c where c.activationCode='" + code + "'");
+              return query.getResultList();
+    }
 
     private String getDateBefore(int daysAgo) {
         Instant now = Instant.now();
@@ -99,5 +104,6 @@ public class EntityDao {
         currentSession = factory.getCurrentSession();
         return currentSession;
     }
+
 
 }

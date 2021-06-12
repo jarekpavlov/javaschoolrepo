@@ -1,12 +1,11 @@
 package com.jschool.controllers;
 
-import com.jschool.exceptions.ChangePasswordException;
-import com.jschool.exceptions.EmptyFieldException;
-import com.jschool.exceptions.NonValidNumberException;
-import com.jschool.exceptions.ProductIsInOrderException;
+import com.jschool.exceptions.*;
 import org.apache.log4j.Logger;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class ExceptionController {
@@ -15,6 +14,11 @@ public class ExceptionController {
     @ExceptionHandler(value = ChangePasswordException.class)
     public String getPasswordException() {
         return "exceptions/changePasswordExceptionPage";
+    }
+
+    @ExceptionHandler(value = UserExists.class)
+    public String getUserExistsException() {
+        return "exceptions/customPageException";
     }
 
     @ExceptionHandler(value = EmptyFieldException.class)

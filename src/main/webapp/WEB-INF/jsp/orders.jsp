@@ -21,6 +21,9 @@
 </div>
 <div class="container" >
     <h1 style="margin-left: 0.5em;margin-top: 1em">Orders</h1>
+    <c:if test="${orderIsChanged != null}">
+        <div class="alert alert-success" role="alert">${orderIsChanged}</div>
+    </c:if>
     <table class="table">
         <thead class="thead-light">
             <tr align="center">

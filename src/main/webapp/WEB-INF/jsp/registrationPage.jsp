@@ -45,7 +45,7 @@
                 <div class="form-group row">
                     <label for="email" class="col-sm-3 col-md-2 col-form-label">Email:</label>
                     <div class="col-sm-9 col-md-10">
-                        <input type="email" required="required" minlength="4" maxlength="20" class="form-control" id = "email" value="${client.email}" name = "email"/>
+                        <input type="email" required="required" minlength="4" maxlength="40" class="form-control" id = "email" value="${client.email}" name = "email"/>
                     </div>
                 </div>
                 <div class="form-group row">

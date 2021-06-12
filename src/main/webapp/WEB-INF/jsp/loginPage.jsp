@@ -23,15 +23,21 @@
             <form name='login' action="" method='POST'>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <fieldset>
-                    <c:if test="${param.error !=null}">
+                    <c:if test="${param.error != null}">
                         <div class="alert alert-danger" role="alert">Failed to login</div>
-                        <c:if test="${SPRING_SECURITY_LAST_EXCEPTION !=null}">
+                        <c:if test="${SPRING_SECURITY_LAST_EXCEPTION != null}">
                             Reason:
                                 <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>
                         </c:if>
                     </c:if>
-                    <c:if test="${param.logout!=null}">
-                        You have been logged out
+                    <c:if test="${messageNotActivated != null}">
+                        <div class="alert alert-danger" role="alert">${messageNotActivated}</div>
+                    </c:if>
+                    <c:if test="${messageActivated != null}">
+                        <div class="alert alert-success" role="alert">${messageActivated}</div>
+                    </c:if>
+                    <c:if test="${param.logout != null}">
+                        <div class="alert alert-success" role="alert">You have been logged out</div>
                     </c:if>
                     <div class="form-group row">
                         <label for="username" class="col-sm-3 col-md-2 col-form-label">Username:</label>

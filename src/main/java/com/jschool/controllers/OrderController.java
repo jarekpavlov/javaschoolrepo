@@ -42,12 +42,15 @@ public class OrderController {
     }
 
     @GetMapping(value = "/orders")
-    public String getOrdersByClient(ModelMap map, @AuthenticationPrincipal Client client, HttpSession httpSession) {
+    public String getOrdersByClient(@RequestParam(required = false) String status, ModelMap map, @AuthenticationPrincipal Client client, HttpSession httpSession) {
         List<OrderDTO> orders = orderService.getOrderDtoList();
         List<OrderDTO> ordersByClient = orders.stream()
                 .filter(order -> order.getClient().equals(client)).collect(Collectors.toList());
         map.addAttribute("orders", ordersByClient);
         map.addAttribute("productsInCart",productService.getProductInCartQuantity(httpSession));
+        if (status != null){
+            map.addAttribute("orderIsChanged", "order is created successfully");
+        }
         return "orders";
     }
 
@@ -91,7 +94,7 @@ public class OrderController {
                                     @AuthenticationPrincipal Client client, @RequestParam(required = false) String paymentMethod,
                                     @RequestParam(required = false) String deliveryMethod) throws NonValidNumberException {
         orderService.saveFromCart(quantityMap, session, client, paymentMethod, deliveryMethod);
-        return "redirect:/orders";
+        return "redirect:/orders?status=true";
     }
 
     @GetMapping(value = "/order/products-in-order")
@@ -111,13 +114,16 @@ public class OrderController {
             , @RequestParam(required = false) PaymentStatus paymentStatus
             , @RequestParam Long id) {
         orderService.saveOrderStatus(orderStatus, paymentStatus, id);
-        return "redirect:/admin/orders";
+        return "redirect:/admin/orders?status=true";
     }
 
     @GetMapping(value = "/admin/orders")
-    public String getAllOrders(ModelMap map, @RequestParam(required = false) Integer page) {
+    public String getAllOrders(ModelMap map, @RequestParam(required = false) Integer page, @RequestParam(required = false) String status) {
         map.addAttribute("orders",orderService.getPaginatedOrderList(page));
         map.addAttribute("pageQuantity", productService.getPageQuantity(orderService.getOrderDtoList(), ordersOnPage));
+        if (status != null){
+            map.addAttribute("orderIsChanged", "order is changed successfully");
+        }
         return "orders";
     }
 }

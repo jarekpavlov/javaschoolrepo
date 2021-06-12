@@ -4,6 +4,7 @@ import com.jschool.DAO.EntityDao;
 import com.jschool.count.JoinCountByClient;
 import com.jschool.count.JoinCountByProduct;
 import com.jschool.count.JoinCountSum;
+import com.jschool.domain.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,4 +106,12 @@ public class EntityService {
         return joinCountSum;
     }
 
+    public <T> T getEntityByActivationCode( Class<T> type, String code) {
+        entityDaoImpl.openCurrentSession();
+        List<T> entityByActivationCode = entityDaoImpl.getEntityByActivationCode(type, code);
+        for (T entity : entityByActivationCode) {
+            return entity;
+        }
+        return null;
+    }
 }

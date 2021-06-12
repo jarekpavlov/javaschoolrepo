@@ -92,6 +92,7 @@ public class OrderBuilder {
         Order order = new Order();
         order.setDateOfOrder(dateOfOrder);
         order.setOrderStatus(orderStatus);
+        order.setDeliveryMethod(deliveryMethod);
         order.setClient(client);
         order.setProductsInOrderSet(productsInOrderSet);
         order.setPayment(payment);

@@ -1,11 +1,11 @@
 package com.jschool.controllers;
 
-import com.jschool.DTO.ClientDTO;
 import com.jschool.domain.Address;
 import com.jschool.domain.AddressBuilder;
 import com.jschool.domain.Client;
 import com.jschool.domain.ClientBuilder;
 import com.jschool.exceptions.ChangePasswordException;
+import com.jschool.exceptions.UserExists;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.security.CustomSecurityClient;
@@ -19,12 +19,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 public class UserController {
@@ -88,7 +88,7 @@ public class UserController {
             , @RequestParam(required = false) Long id
             , @RequestParam(required = false) Long address_id
             , @RequestParam(required = false) Short flat
-            , @RequestParam(required = false) Integer postCode) throws EmptyFieldException, NonValidNumberException {
+            , @RequestParam(required = false) Integer postCode) throws EmptyFieldException, NonValidNumberException, UserExists {
 
         Address address = new AddressBuilder()
                 .setId(address_id)
@@ -135,6 +135,16 @@ public class UserController {
         Long id = Long.parseLong(request.getParameter("id"));
         entityService.deleteEntity(Client.class, id);
         return "redirect:/admin/users";
+    }
+    @GetMapping(value = "/activate/{code}")
+    public String activateAccount(ModelMap map,@PathVariable String code){
+        boolean isActivated = clientService.activateClient(code);
+        if (!isActivated){
+            map.addAttribute("messageNotActivated", "Activation code is not found.");
+        }else{
+            map.addAttribute("messageActivated", "Client is successfully activated.");
+        }
+        return "loginPage";
     }
 
 }

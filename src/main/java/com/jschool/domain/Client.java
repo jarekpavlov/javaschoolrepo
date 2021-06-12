@@ -27,6 +27,7 @@ public class Client {
     private String dateOfBirth;
     private Address address;
     private String password;
+    private String activationCode;
     private Set<Order> orders = new HashSet<>();
     private Set<Authority> authorities = new HashSet<>();
 
@@ -121,6 +122,14 @@ public class Client {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 
     @Override
