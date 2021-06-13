@@ -12,8 +12,6 @@ import com.jschool.security.CustomSecurityClient;
 import com.jschool.service.ClientService;
 import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
-import com.jschool.service.UserService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class UserController {
+public class ClientController {
 
     @Value("${orders.list.quantity}")
     private int clientsOnPage;
@@ -37,19 +35,17 @@ public class UserController {
     private EntityService entityService;
     private ClientService clientService;
     private ProductService productService;
-    private UserService userService;
 
-    public UserController(EntityService entityService, ClientService clientService, ProductService productService, UserService userService) {
+    public ClientController(EntityService entityService, ClientService clientService, ProductService productService) {
         this.entityService = entityService;
         this.clientService = clientService;
         this.productService = productService;
-        this.userService = userService;
     }
 
     @GetMapping(value = "/admin/users")
     public String getUsers(ModelMap map, @RequestParam(required = false) Integer page) {
-        map.addAttribute("userList", userService.getUsersPaginated(page));
-        map.addAttribute("pageQuantity", productService.getPageQuantity(userService.getClientDtoList(), clientsOnPage));
+        map.addAttribute("userList", clientService.getUsersPaginated(page));
+        map.addAttribute("pageQuantity", productService.getPageQuantity(clientService.getClientDtoList(0, Integer.MAX_VALUE), clientsOnPage));
         return "users";
     }
 

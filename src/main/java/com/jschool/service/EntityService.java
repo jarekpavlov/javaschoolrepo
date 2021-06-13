@@ -1,10 +1,13 @@
 package com.jschool.service;
 
 import com.jschool.DAO.EntityDao;
+import com.jschool.DTO.ClientDTO;
 import com.jschool.count.JoinCountByClient;
 import com.jschool.count.JoinCountByProduct;
 import com.jschool.count.JoinCountSum;
 import com.jschool.domain.Client;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +15,16 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class EntityService {
 
     private EntityDao entityDaoImpl;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     public EntityService(EntityDao entityDaoImpl) {

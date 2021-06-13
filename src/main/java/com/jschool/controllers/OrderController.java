@@ -43,12 +43,12 @@ public class OrderController {
 
     @GetMapping(value = "/orders")
     public String getOrdersByClient(@RequestParam(required = false) String status, ModelMap map, @AuthenticationPrincipal Client client, HttpSession httpSession) {
-        List<OrderDTO> orders = orderService.getOrderDtoList();
+        List<OrderDTO> orders = orderService.getOrderDtoList(0, Integer.MAX_VALUE);
         List<OrderDTO> ordersByClient = orders.stream()
                 .filter(order -> order.getClient().equals(client)).collect(Collectors.toList());
         map.addAttribute("orders", ordersByClient);
-        map.addAttribute("productsInCart",productService.getProductInCartQuantity(httpSession));
-        if (status != null){
+        map.addAttribute("productsInCart", productService.getProductInCartQuantity(httpSession));
+        if (status != null) {
             map.addAttribute("orderIsChanged", "order is created successfully");
         }
         return "orders";
@@ -105,7 +105,7 @@ public class OrderController {
         map.addAttribute("products", productsInOrderSet);
         map.addAttribute("total", orderService.getTotalPerOrder(productsInOrderSet));
         HttpSession httpSession = request.getSession();
-        map.addAttribute("productsInCart",productService.getProductInCartQuantity(httpSession));
+        map.addAttribute("productsInCart", productService.getProductInCartQuantity(httpSession));
         return "productsPerOrder";
     }
 
@@ -119,9 +119,9 @@ public class OrderController {
 
     @GetMapping(value = "/admin/orders")
     public String getAllOrders(ModelMap map, @RequestParam(required = false) Integer page, @RequestParam(required = false) String status) {
-        map.addAttribute("orders",orderService.getPaginatedOrderList(page));
-        map.addAttribute("pageQuantity", productService.getPageQuantity(orderService.getOrderDtoList(), ordersOnPage));
-        if (status != null){
+        map.addAttribute("orders", orderService.getPaginatedOrderList(page));
+        map.addAttribute("pageQuantity", productService.getPageQuantity(orderService.getOrderDtoList(0, Integer.MAX_VALUE), ordersOnPage));
+        if (status != null) {
             map.addAttribute("orderIsChanged", "order is changed successfully");
         }
         return "orders";

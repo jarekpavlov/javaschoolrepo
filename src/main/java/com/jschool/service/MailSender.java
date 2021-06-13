@@ -15,7 +15,7 @@ public class MailSender {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void send (String emailTo, String subject, String message) {
+    public boolean send (String emailTo, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(username);
         mailMessage.setTo(emailTo);
@@ -23,6 +23,7 @@ public class MailSender {
         mailMessage.setText(message);
 
         mailSender.send(mailMessage);
+        return true;
     }
 
 

@@ -77,14 +77,8 @@ public class ProductService {
             productPicture.transferTo(new File(uploadPath + "/" + resultName));
         }
 
-        if (emptyProductFields(product)) {
-            logger.warn("Not all fields were filled in saveProduct service method");
-            throw new EmptyFieldException("All fields required to be filled!");
-        }
-        if (product.getPrice() < 0.1 || product.getMass() < 0.1 || product.getQuantity() < 1) {
-            logger.warn("Employee entered incorrect number ");
-            throw new NonValidNumberException("Some numbers are incorrect");
-        }
+        emptyFieldsExceptionCheck(product);
+        nonValidExceptionCheck(product);
         if (product.getId() != null)
             entityService.updateEntity(product);
         else {
@@ -93,12 +87,18 @@ public class ProductService {
         logger.info("Employee left the saveProduct service method");
     }
 
-    public boolean emptyProductFields(Product product) {
+    public void nonValidExceptionCheck(Product product) throws NonValidNumberException {
+        if (product.getPrice() < 0.1 || product.getMass() < 0.1 || product.getQuantity() < 1) {
+            logger.warn("Employee entered incorrect number ");
+            throw new NonValidNumberException("Some numbers are incorrect");
+        }
+    }
+
+    public void emptyFieldsExceptionCheck(Product product) throws EmptyFieldException {
         if (emptyS.equals(product.getBrand()) || emptyS.equals(product.getTitle()) || emptyS.equals(product.getCategory())
                 || product.getMass() == null || product.getQuantity() == null || product.getPrice() == null) {
-            return true;
-        } else {
-            return false;
+            logger.warn("Not all fields were filled in saveProduct service method");
+            throw new EmptyFieldException("All fields required to be filled!");
         }
     }
 
@@ -166,22 +166,25 @@ public class ProductService {
     }
     public List<ProductDTO> getFullOrFilteredList(String color, String brand, String title){
         if (filterIsEmpty(color, brand, title)) {
-            return getProductDtoList();
+            return getProductDtoList(0, Integer.MAX_VALUE);
         }
-        return getFilteredProducts(getProductDtoList(),color,brand,title);
+        return getFilteredProducts(getProductDtoList(0, Integer.MAX_VALUE),color,brand,title);
     }
 
     public List<ProductDTO> getFilteredProductsPaginated(Integer page, String color, String brand, String title) {
         if (page == null) {
             page = 1;
         }
-
-        List<ProductDTO> productList = getProductDtoList();
+        List<ProductDTO> productList = getProductDtoList(0, Integer.MAX_VALUE);
         List<ProductDTO> filteredList = getFilteredProducts(productList, color, brand, title);
+        return formingFilteredPaginatedProductList(page, filteredList, prodListQuantity);
+    }
+
+    public List<ProductDTO> formingFilteredPaginatedProductList(Integer page, List<ProductDTO> filteredList, int prodListQuantity) {
         List<ProductDTO> paginatedFilteredList = new ArrayList<>();
         int size = filteredList.size();
         int end = (page - 1) * prodListQuantity + prodListQuantity;
-        if (filteredList.size() < prodListQuantity) {
+        if (size < prodListQuantity) {
             paginatedFilteredList.addAll(filteredList);
         } else if (size < end) {
             for (int i = ((page - 1) * prodListQuantity); i < size; i++) {
@@ -217,7 +220,6 @@ public class ProductService {
     }
 
     public List<ProductDTO> getPaginatedList(Integer page) {
-        List<ProductDTO> productList = getProductDtoList();
         List<ProductDTO> productListPaginated;
 
         if (page == null) {
@@ -243,13 +245,6 @@ public class ProductService {
                 .getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.LOOSE);
         return getModelMapper().map(product, ProductDTO.class);
-    }
-
-    public List<ProductDTO> getProductDtoList() {
-        return entityService.entityList(Product.class)
-                .stream()
-                .map(this::getProductDTO)
-                .collect(Collectors.toList());
     }
 
     public List<ProductDTO> getProductDtoList(int offset, int limit) {

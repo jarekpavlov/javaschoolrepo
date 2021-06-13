@@ -79,7 +79,7 @@ public class ProductDTO {
             return true;
         if(getClass()!=object.getClass())
             return false;
-        if(object==null)
+        if(object == null)
             return false;
         ProductDTO productDTO = (ProductDTO) object;
         if (((ProductDTO) object).getId() == null)

@@ -1,7 +1,6 @@
 package com.jschool.service;
 
 import com.jschool.DTO.OrderDTO;
-import com.jschool.DTO.ProductDTO;
 import com.jschool.count.JoinCountByProduct;
 import com.jschool.domain.*;
 import com.jschool.exceptions.NonValidNumberException;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,6 +23,10 @@ public class OrderService {
 
     @Value("${orders.list.quantity}")
     private int ordersOnPage;
+
+    @Value("${statistic.days}")
+    private int statisticDays;
+
 
     @Value("${queue.name}")
     private String queueName;
@@ -39,7 +41,7 @@ public class OrderService {
     }
 
     @Autowired
-    public OrderService(EntityService entityService,ProductService productService, ModelMapper modelMapper, AmqpTemplate template) {
+    public OrderService(EntityService entityService, ProductService productService, ModelMapper modelMapper, AmqpTemplate template) {
         this.entityService = entityService;
         this.modelMapper = modelMapper;
         this.template = template;
@@ -89,16 +91,7 @@ public class OrderService {
      */
     public void createOrder(HttpSession httpSession, Client client, String paymentMethod, String deliveryMethod) throws NonValidNumberException {
         Set<ProductsInOrder> productsInOrderSetTemp = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
-        Date date = new Date();
-        Order order = new OrderBuilder()
-                .setDateOfOrder(date)
-                .setClient(client)
-                .setDeliveryMethod(deliveryMethod)
-                .setPayment(paymentMethod)
-                .setProductsInOrderSet(productsInOrderSetTemp)
-                .setOrderStatus(OrderStatus.PENDING_PAYMENT)
-                .setPaymentStatus(PaymentStatus.PENDING_PAYMENT)
-                .build();
+        Order order = getPopulatedOrder(client, paymentMethod, deliveryMethod, productsInOrderSetTemp);//populating order fields with actual information
         for (ProductsInOrder temp : productsInOrderSetTemp) {
             temp.setOrder(order);
             Long product_id = temp.getProduct().getId();
@@ -109,6 +102,19 @@ public class OrderService {
         }
         entityService.saveEntity(order);
         httpSession.removeAttribute("productsInOrderSet");
+    }
+
+    public Order getPopulatedOrder(Client client, String paymentMethod, String deliveryMethod, Set<ProductsInOrder> productsInOrderSetTemp) {
+        Date date = new Date();
+        return new OrderBuilder()
+                .setDateOfOrder(date)
+                .setClient(client)
+                .setDeliveryMethod(deliveryMethod)
+                .setPayment(paymentMethod)
+                .setProductsInOrderSet(productsInOrderSetTemp)
+                .setOrderStatus(OrderStatus.PENDING_PAYMENT)
+                .setPaymentStatus(PaymentStatus.PENDING_PAYMENT)
+                .build();
     }
 
     public void deleteFromCart(HttpServletRequest request) {
@@ -131,6 +137,12 @@ public class OrderService {
         if (deliveryMethod == null)
             deliveryMethod = "Delivery to the store";
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
+        setProductQuantity(quantityMap, productsInOrderSet);//Setting product number that was taken from the cart page
+        session.setAttribute("productsInOrderSet", productsInOrderSet);
+        createOrder(session, client, paymentMethod, deliveryMethod);
+    }
+
+    public void setProductQuantity(Map<String, String> quantityMap, Set<ProductsInOrder> productsInOrderSet) throws NonValidNumberException {
         for (ProductsInOrder temp : productsInOrderSet) {
             Long productId = temp.getProduct().getId();
             String quantity = quantityMap.get(String.valueOf(productId));
@@ -139,8 +151,6 @@ public class OrderService {
             }
             temp.setQuantity(Integer.parseInt(quantity));
         }
-        session.setAttribute("productsInOrderSet", productsInOrderSet);
-        createOrder(session, client, paymentMethod, deliveryMethod);
     }
 
     public Set<ProductsInOrder> getProductsInOrder(HttpServletRequest request) {
@@ -161,13 +171,13 @@ public class OrderService {
 
     public void saveOrderStatus(OrderStatus orderStatus, PaymentStatus paymentStatus, Long id) {
 
-        Set<JoinCountByProduct> bestProductBefore = entityService.getBestProduct(30);
+        Set<JoinCountByProduct> bestProductBefore = entityService.getBestProduct(statisticDays);
 
         Order order = entityService.getEntity(Order.class, id);
         order.setOrderStatus(orderStatus);
         order.setPaymentStatus(paymentStatus);
         entityService.updateEntity(order);
-        Set<JoinCountByProduct> bestProductAfter = entityService.getBestProduct(30);
+        Set<JoinCountByProduct> bestProductAfter = entityService.getBestProduct(statisticDays);
         if (!bestProductAfter.equals(bestProductBefore)) {
             try {
                 template.convertAndSend(queueName, "The best products list is changed");
@@ -177,8 +187,7 @@ public class OrderService {
         }
     }
 
-    public List<OrderDTO> getPaginatedOrderList(Integer page){
-        List<OrderDTO> orderList = getOrderDtoList();
+    public List<OrderDTO> getPaginatedOrderList(Integer page) {
         List<OrderDTO> orderListPaginated;
 
         if (page == null) {
@@ -196,12 +205,6 @@ public class OrderService {
         return getModelMapper().map(order, OrderDTO.class);
     }
 
-    public List<OrderDTO> getOrderDtoList() {
-        return (entityService.entityList(Order.class))
-                .stream()
-                .map(this::getOrderDTO)
-                .collect(Collectors.toList());
-    }
     public List<OrderDTO> getOrderDtoList(int offset, int limit) {
         return (entityService.entityList(Order.class, offset, limit))
                 .stream()

@@ -126,7 +126,7 @@ public class ProductController {
                                 @RequestParam String brand,
                                 @RequestParam String title, ModelMap map) {
 
-        List<ProductDTO> filteredList = productService.getFilteredProducts(productService.getProductDtoList(), color, brand, title);
+        List<ProductDTO> filteredList = productService.getFilteredProducts(productService.getProductDtoList(0, Integer.MAX_VALUE), color, brand, title);
         map.addAttribute("products", filteredList);
         return "products";
     }
