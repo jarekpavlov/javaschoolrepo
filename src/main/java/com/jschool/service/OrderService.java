@@ -61,8 +61,7 @@ public class OrderService {
      *
      * @param request with ProductsInOrder instance to store the Products into the cart
      */
-    public void addToCart(int numberForOrder, HttpServletRequest request) {
-        Long id = Long.parseLong(request.getParameter("id"));
+    public void addToCart(int numberForOrder, HttpServletRequest request, Long id) {
 
         Product product = entityService.getEntity(Product.class, id);
         ProductsInOrder productsInOrder = new ProductsInOrderBuilder()

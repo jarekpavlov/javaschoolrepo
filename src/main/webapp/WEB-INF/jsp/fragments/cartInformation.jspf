@@ -1,4 +1,4 @@
 <sec:authorize access="hasRole('USER') or isAnonymous()">
     <img style="width: 2.5em" src="<c:url value="/resources/images/productCart.png"/>"/>
-    <a href="/MmsPr/order/products-in-cart"  class="btn btn-info btn-sm" role="button">Cart<span class="badge badge-light">${productsInCart}</span></a>
+    <a href="/MmsPr/order/products-in-cart"  class="btn btn-info btn-sm" role="button">Cart<span id="addToCartButton" class="badge badge-light">${productsInCart}</span></a>
 </sec:authorize>

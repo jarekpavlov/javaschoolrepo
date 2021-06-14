@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -41,6 +44,14 @@ public class HelloController {
     public String startPage(ModelMap map, HttpSession httpSession) {
         map.addAttribute("productsInCart", productService.getProductInCartQuantity(httpSession));
         return "startPage";
+    }
+
+    @PostMapping(value = "/test")
+    @ResponseBody
+    public int helloCart(@RequestParam(required = false) int productId) {
+        System.out.println(productId);
+
+        return productId;
     }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -64,11 +65,11 @@ public class OrderController {
     }
 
     @PostMapping(value = "/order/add-to-cart")
-    public String addToCart(HttpServletRequest request) {
+    @ResponseBody
+    public int addToCart(HttpServletRequest request, @RequestParam (required = false) Long productId) {
         int numberForOrder = 1;
-        orderService.addToCart(numberForOrder, request);
-
-        return "redirect:/products";
+        orderService.addToCart(numberForOrder, request, productId);
+        return productService.getProductInCartQuantity(request.getSession());
     }
 
     @GetMapping(value = "/order/products-in-cart")

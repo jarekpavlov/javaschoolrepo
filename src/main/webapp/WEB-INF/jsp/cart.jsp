@@ -39,7 +39,7 @@
                             <th>${status.index+1}</th>
                             <td>${entity.product.brand}</td>
                             <td>${entity.product.title}</td>
-                            <td>${entity.product.price}</td>
+                            <td>${entity.product.price}€</td>
                             <td><input class="form-control" required="required" type="number" min="1" max="${entity.product.quantity}" value="${entity.quantity}" name="${entity.product.id}"></td>
                             <td>
                                 <a href="/MmsPr/order/delete-from-cart?id=${entity.product.id}" class="btn btn-primary btn-sm" role="button">delete</a>

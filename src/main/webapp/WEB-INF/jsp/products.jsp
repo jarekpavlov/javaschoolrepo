@@ -64,7 +64,7 @@
                 </div>
                 <div id="cards" class="card-columns" style="text-align: center; margin-top: 1.5em">
                     <c:forEach  items="${products}" var="product" varStatus="status">
-                        <div class="card text-left" style="width: 14rem">
+                        <div id = "cardId-${product.id}" class="card text-left" style="width: 14rem">
                             <c:if test="${product.imgName==null || product.imgName==''}">
                                 <img class="card-img-top"  src="<c:url value="/resources/images/picture-tag.png"/>" alt="Card image cap">
                             </c:if>
@@ -95,19 +95,19 @@
                                     </div>
                                 </sec:authorize>
                                 <sec:authorize access="!hasRole('EMPLOYEE')">
-                                    <form:form action="/MmsPr/order/add-to-cart?id=${product.id}" method="post">
+                                    <form id="productCartForm" action="/MmsPr/order/add-to-cart?id=${product.id}" method="post" >
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                            <c:if test="${product.quantity!=0}">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <button class="btn btn-info btn-sm" id="cartBtn-${product.id}">Add to Cart</button>
-                                                    </div>
+                                        <c:if test="${product.quantity!=0}">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <input type="button" class="btn btn-info btn-sm" id="cartBtn-${product.id}" value="Add to Cart"/>
                                                 </div>
-                                            </c:if>
-                                            <c:if test="${product.quantity==0}">
-                                                <input class="btn btn-info btn-sm" type="submit" value="Add to Cart" disabled>
-                                            </c:if>
-                                    </form:form>
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${product.quantity==0}">
+                                            <input class="btn btn-info btn-sm" type="submit" value="Add to Cart" disabled>
+                                        </c:if>
+                                    </form>
                                 </sec:authorize>
                             </div>
                         </div>
@@ -117,8 +117,8 @@
                         <ul class="pagination justify-content-center">
                             <a class="page-link" href="#" tabindex="-1">Previous</a>
                             <c:forEach begin = "1" end = "${pageQuantity}" var="page">
-<%--                                <li class="page-item"><input type="button" id = "pgBtn-${page}" class="page-link" value="${page}"/></li>--%>
-                                <li class="page-item"><a href="/MmsPr/products?page=${page}" class="page-link">${page}</a></li>
+                                <li class="page-item"><input type="button" id = "pgBtn-${page}" class="page-link" value="${page}"/></li>
+<%--                                <li class="page-item"><a href="/MmsPr/products?page=${page}" class="page-link">${page}</a></li>--%>
                             </c:forEach>
                             <a class="page-link" href="#">Next</a>
                         </ul>
@@ -128,6 +128,6 @@
 
     </div>
 <%@ include file="fragments/JS.jspf" %>
-<script type="text/javascript" src="/MmsPr/resources/JS/filter.js"></script>
+<script type="text/javascript" src="/MmsPr/resources/JS/ajax-responsiveness.js"></script>
 </body>
 </html>
