@@ -30,10 +30,11 @@ $(function (){
                                     // '<input type="hidden" name="_csrf" value="da47e91b-6e46-4eac-9a4d-2be33e49e574"/>'+
                                         '<div class="row">'+
                                             '<div class="col">'+
-                                    '           <input type="button" class="btn btn-info btn-sm" id="cartBtn-'+element.id+'" value="Add to Cart"/>'+
+                                               '<input type="button" class="btn btn-info btn-sm" id="cartBtn-'+element.id+'" value="Add to Cart"/>'+
                                             '</div>'+
                                         '</div>'+
-                                    '</form>';
+                                    '</form>'+
+                                    '<input type="button"  class="btn btn-info btn-sm" id="button" value="SB"/>';
                     } else {
                         addButton = '<div class="row">'+
                                         '<div class="col">'+
@@ -72,6 +73,10 @@ $(function (){
         });
     });
 });
+$(document).on('click','#button', function(){
+        alert("pushed");
+    });
+
 $(function (){
     $("input[id*='cartBtn-']").on("click",function (){
         let productId = $(this).prop("id").split("-")[1];
