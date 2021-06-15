@@ -8,7 +8,6 @@ import com.jschool.domain.ProductsWithUser;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.exceptions.ProductIsInOrderException;
-import com.jschool.security.Authority;
 import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
 import org.apache.log4j.Logger;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class ProductController {
@@ -57,6 +55,9 @@ public class ProductController {
         model.addObject("products", productService.getPaginationMethod(page, color, brand, title));
         model.addObject("pageQuantity", productService.getPageQuantity(productService.getFullOrFilteredList(color, brand, title), productPerPage));
         model.addObject("productsInCart", productService.getProductInCartQuantity(httpSession));
+        model.addObject("color", color);
+        model.addObject("brand", brand);
+        model.addObject("title", title);
         return model;
     }
 
@@ -68,17 +69,8 @@ public class ProductController {
             , @RequestParam(required = false) String brand
             , @RequestParam(required = false) String title) {
 
-        Set<Authority> authorities = client.getAuthorities();
-        String clientAuthority = null;
-        for (Authority authority : authorities) {
-             clientAuthority = authority.getAuthority();
-        }
         List<ProductDTO> list = productService.getPaginationMethod(page, color, brand, title);
-        ProductsWithUser productsWithUser = new ProductsWithUser();
-        productsWithUser.setRole(clientAuthority);
-        productsWithUser.setProducts(list);
-
-        return productsWithUser;
+        return productService.getProductsWithUser(list, client);
     }
 
     @GetMapping(value = "admin/product/edit")

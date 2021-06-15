@@ -64,7 +64,7 @@ public class OrderController {
         return "redirect:/admin/orders";
     }
 
-    @PostMapping(value = "/order/add-to-cart")
+    @GetMapping(value = "/order/add-to-cart")
     @ResponseBody
     public int addToCart(HttpServletRequest request, @RequestParam (required = false) Long productId) {
         int numberForOrder = 1;

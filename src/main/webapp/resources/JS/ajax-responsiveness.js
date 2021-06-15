@@ -26,15 +26,13 @@ $(function (){
                         imgSource = "/MmsPr/pictures/"+element.imgName;
                     }
                     if (response.role!=="ROLE_EMPLOYEE"){
-                        addButton = '<form id="productCartForm" action="/MmsPr/order/add-to-cart?id='+element.id+'" method="post" >'+
-                                    // '<input type="hidden" name="_csrf" value="da47e91b-6e46-4eac-9a4d-2be33e49e574"/>'+
+                        addButton = '<form id="productCartForm" action="/MmsPr/order/add-to-cart?id='+element.id+'" method="get" >'+
                                         '<div class="row">'+
                                             '<div class="col">'+
                                                '<input type="button" class="btn btn-info btn-sm" id="cartBtn-'+element.id+'" value="Add to Cart"/>'+
                                             '</div>'+
                                         '</div>'+
-                                    '</form>'+
-                                    '<input type="button"  class="btn btn-info btn-sm" id="button" value="SB"/>';
+                                    '</form>';
                     } else {
                         addButton = '<div class="row">'+
                                         '<div class="col">'+
@@ -63,35 +61,22 @@ $(function (){
                                    '</div>';
                     $("#cards").append(oneCard);
                 });
-                // alert(JSON.stringify(response));
-                // alert(response.role);
-                // $.each(response.products, function(index, element) {
-                //     alert(element.price);
-                //     alert(element.quantity);
-                // });
             }
         });
     });
 });
-$(document).on('click','#button', function(){
-        alert("pushed");
-    });
-
-$(function (){
-    $("input[id*='cartBtn-']").on("click",function (){
+$(document).on('click',"input[id*='cartBtn-']", function(){
         let productId = $(this).prop("id").split("-")[1];
-        let csrfValue = $("input[name=_csrf]").val();
 
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "order/add-to-cart",
             data: {
                 productId : productId,
-                _csrf: csrfValue
             },
             success: function(response) {
                 $("#addToCartButton").empty().append(response);
             }
         });
     });
-});
+

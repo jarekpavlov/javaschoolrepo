@@ -1,26 +1,30 @@
 package com.jschool.service;
 
 import com.jschool.DTO.ProductDTO;
+import com.jschool.domain.Client;
 import com.jschool.domain.Product;
-import com.jschool.domain.ProductBuilder;
 import com.jschool.domain.ProductsInOrder;
+import com.jschool.domain.ProductsWithUser;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.exceptions.ProductIsInOrderException;
+import com.jschool.security.Authority;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -164,11 +168,12 @@ public class ProductService {
         return getFilteredProductsPaginated(page, color, brand, title);
 
     }
-    public List<ProductDTO> getFullOrFilteredList(String color, String brand, String title){
+
+    public List<ProductDTO> getFullOrFilteredList(String color, String brand, String title) {
         if (filterIsEmpty(color, brand, title)) {
             return getProductDtoList(0, Integer.MAX_VALUE);
         }
-        return getFilteredProducts(getProductDtoList(0, Integer.MAX_VALUE),color,brand,title);
+        return getFilteredProducts(getProductDtoList(0, Integer.MAX_VALUE), color, brand, title);
     }
 
     public List<ProductDTO> getFilteredProductsPaginated(Integer page, String color, String brand, String title) {
@@ -252,5 +257,19 @@ public class ProductService {
                 .stream()
                 .map(this::getProductDTO)
                 .collect(Collectors.toList());
+    }
+
+    public ProductsWithUser getProductsWithUser(List<ProductDTO> list, Client client) {
+        String clientAuthority = null;
+        if (client != null) {
+            Set<Authority> authorities = client.getAuthorities();
+            for (Authority authority : authorities) {
+                clientAuthority = authority.getAuthority();
+            }
+        }
+        ProductsWithUser productsWithUser = new ProductsWithUser();
+        productsWithUser.setRole(clientAuthority);
+        productsWithUser.setProducts(list);
+        return productsWithUser;
     }
 }
