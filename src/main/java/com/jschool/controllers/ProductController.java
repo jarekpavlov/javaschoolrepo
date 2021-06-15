@@ -1,16 +1,20 @@
 package com.jschool.controllers;
 
 import com.jschool.DTO.ProductDTO;
+import com.jschool.domain.Client;
 import com.jschool.domain.Product;
 import com.jschool.domain.ProductBuilder;
+import com.jschool.domain.ProductsWithUser;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.exceptions.ProductIsInOrderException;
+import com.jschool.security.Authority;
 import com.jschool.service.EntityService;
 import com.jschool.service.ProductService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class ProductController {
@@ -50,22 +54,31 @@ public class ProductController {
             , @RequestParam(required = false) String title) {
         ModelAndView model = new ModelAndView();
         model.setViewName("products");
-        model.addObject("products", productService.getPaginationMethod(page,color,brand,title));
-        model.addObject("pageQuantity", productService.getPageQuantity(productService.getFullOrFilteredList(color,brand,title), productPerPage));
-        model.addObject("productsInCart",productService.getProductInCartQuantity(httpSession));
+        model.addObject("products", productService.getPaginationMethod(page, color, brand, title));
+        model.addObject("pageQuantity", productService.getPageQuantity(productService.getFullOrFilteredList(color, brand, title), productPerPage));
+        model.addObject("productsInCart", productService.getProductInCartQuantity(httpSession));
         return model;
     }
 
     @GetMapping(value = "/products-json")
     @ResponseBody
-    public List<ProductDTO> getProductsJson(
-             @RequestParam(required = false) Integer page
+    public ProductsWithUser getProductsJson(@AuthenticationPrincipal Client client,
+                                            @RequestParam(required = false) Integer page
             , @RequestParam(required = false) String color
             , @RequestParam(required = false) String brand
             , @RequestParam(required = false) String title) {
 
-        List<ProductDTO> list = productService.getPaginationMethod(page,color,brand,title);
-        return list;
+        Set<Authority> authorities = client.getAuthorities();
+        String clientAuthority = null;
+        for (Authority authority : authorities) {
+             clientAuthority = authority.getAuthority();
+        }
+        List<ProductDTO> list = productService.getPaginationMethod(page, color, brand, title);
+        ProductsWithUser productsWithUser = new ProductsWithUser();
+        productsWithUser.setRole(clientAuthority);
+        productsWithUser.setProducts(list);
+
+        return productsWithUser;
     }
 
     @GetMapping(value = "admin/product/edit")
