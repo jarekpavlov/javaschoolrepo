@@ -80,13 +80,13 @@
     <div style="text-align: right; margin-right: 2.5em ">
         <i style="font-size: 1.5em"><b><u>${total}€</u></b></i>
     </div>
-    <sec:authorize access="hasRole('EMPLOYEE')">
-        <div class="row">
-            <div class="col-6" align="left" style="margin-left: 1.5em">
-                <a href="/MmsPr/admin/orders/delete?id=${order.id}" class="btn btn-primary">Delete Order</a>
-            </div>
-        </div>
-    </sec:authorize>
+<%--    <sec:authorize access="hasRole('EMPLOYEE')">--%>
+<%--        <div class="row">--%>
+<%--            <div class="col-6" align="left" style="margin-left: 1.5em">--%>
+<%--                <a href="/MmsPr/admin/orders/delete?id=${order.id}" class="btn btn-primary">Delete Order</a>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+<%--    </sec:authorize>--%>
 </div>
 <%@ include file="fragments/JS.jspf" %>
 </body>

@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class HelloController {
@@ -33,11 +36,14 @@ public class HelloController {
     String some;
 
     @GetMapping(value = "/test")
-    public String hello() {
-
-        mailSender.send("jarekpavlov@gmail.com", "Activation code", "Some message");
-        System.out.println("some");
-        return "startPage";
+    @ResponseBody
+    public Map<String, String> hello(@RequestParam(required = false) String productId) {
+        Map<String, String> someMap = new HashMap<>();
+        someMap.put("1", "5");
+        someMap.put("2", "10");
+        ModelAndView model = new ModelAndView();
+        model.addObject("map", someMap);
+        return someMap;
     }
 
     @GetMapping(value = "")

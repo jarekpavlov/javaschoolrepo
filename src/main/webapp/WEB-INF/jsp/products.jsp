@@ -20,7 +20,6 @@
 <body>
     <%@ include file="fragments/navbar.jspf" %>
     <div class="container">
-
         <div class="row">
             <div class="col-6 col-sm-5 col-md-3 col-lg-3 col-xl-3 ">
                 <div class="bottom-left">
@@ -89,9 +88,9 @@
                                         <div class="col">
                                             <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/edit?id=${product.id}">Edit</a>
                                         </div>
-                                        <div class="col">
-                                            <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/delete?id=${product.id}">Delete</a>
-                                        </div>
+<%--                                        <div class="col">--%>
+<%--                                            <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/delete?id=${product.id}">Delete</a>--%>
+<%--                                        </div>--%>
                                     </div>
                                 </sec:authorize>
                                 <sec:authorize access="!hasRole('EMPLOYEE')">

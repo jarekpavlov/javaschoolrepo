@@ -92,7 +92,7 @@ public class ProductService {
     }
 
     public void nonValidExceptionCheck(Product product) throws NonValidNumberException {
-        if (product.getPrice() < 0.1 || product.getMass() < 0.1 || product.getQuantity() < 1) {
+        if (product.getPrice() < 0.1 || product.getMass() < 0 || product.getQuantity() < 0) {
             logger.warn("Employee entered incorrect number ");
             throw new NonValidNumberException("Some numbers are incorrect");
         }
@@ -261,10 +261,14 @@ public class ProductService {
 
     public ProductsWithUser getProductsWithUser(List<ProductDTO> list, Client client) {
         String clientAuthority = null;
+        String employeeRole = "ROLE_EMPLOYEE";
         if (client != null) {
             Set<Authority> authorities = client.getAuthorities();
             for (Authority authority : authorities) {
-                clientAuthority = authority.getAuthority();
+                if (employeeRole.equals(authority.getAuthority())) {
+                    clientAuthority = employeeRole;
+                    break;
+                }
             }
         }
         ProductsWithUser productsWithUser = new ProductsWithUser();

@@ -1,19 +1,30 @@
 package com.jschool.service;
 
 import com.jschool.DTO.ProductDTO;
+import com.jschool.domain.Client;
 import com.jschool.domain.Product;
 import com.jschool.domain.ProductBuilder;
+import com.jschool.domain.ProductsWithUser;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.NonValidNumberException;
+import com.jschool.security.Authority;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ProductServiceTest {
+
 
     ProductService productService = new ProductService();
     List<ProductDTO> list = new ArrayList<>();
@@ -121,6 +132,55 @@ class ProductServiceTest {
                     productService.nonValidExceptionCheck(product);
                 });
     }
+    @Test
+    void testGetPaginationMethod(){
+
+        EntityService entityService = mock(EntityService.class, Mockito.RETURNS_DEEP_STUBS);
+        Product product1 = new Product();
+        Product product2 = new Product();
+        Product product3 = new Product();
+        Product product4 = new Product();
+        Product product5 = new Product();
+
+        product1.setBrand("brand1");
+        product1.setCategory("category1");
+        product1.setColor("color1");
+        product1.setId(1L);
+
+        product2.setBrand("brand1");
+        product2.setCategory("category2");
+        product2.setColor("color1");
+        product2.setId(2L);
+
+        product3.setBrand("brand2");
+        product3.setCategory("category1");
+        product3.setColor("color2");
+        product3.setId(3L);
+
+        product4.setBrand("brand3");
+        product4.setCategory("category3");
+        product4.setColor("color3");
+        product4.setId(4L);
+
+        product5.setBrand("brand1");
+        product5.setCategory("category4");
+        product5.setColor("color4");
+        product5.setId(5L);
+        List<Product> products = new ArrayList<>();
+        products.add(product1);
+        products.add(product2);
+        products.add(product3);
+        products.add(product4);
+        products.add(product5);
+
+        when(entityService.entityList(Product.class,0,2147483647)).thenReturn(products);
+
+        //List<Product> products1 = entityService.entityList(Product.class,0,2147483647);
+        //System.out.println(products1);
+
+        List<ProductDTO> productDTO = productService.getPaginationMethod(1,"color1","brand1",null);
+        System.out.println(productDTO);
+    }
 
     @Test
     void emptyFieldExceptionCheckTest() {
@@ -166,5 +226,49 @@ class ProductServiceTest {
         products.add(product3);
 
         Assertions.assertEquals(productService.getPageQuantity(products, 2), 2);
+    }
+
+    @Test
+    void getProductsWithUser() {
+
+        ProductDTO product1 = new ProductDTO();
+        product1.setId(1L);
+        ProductDTO product2 = new ProductDTO();
+        product1.setId(2L);
+        ProductDTO product3 = new ProductDTO();
+        product1.setId(3L);
+
+        List<ProductDTO> productList = new ArrayList<>();
+        productList.add(product1);
+        productList.add(product2);
+        productList.add(product3);
+
+        Client client = new Client();
+        client.setId(1L);
+        client.setName("Name");
+
+        Authority authority = new Authority();
+        authority.setAuthority("ROLE_EMPLOYEE");
+        authority.setClient(client);
+        authority.setId(1L);
+
+        Authority authority2 = new Authority();
+        authority2.setAuthority("ROLE");
+        authority2.setClient(client);
+        authority2.setId(2L);
+
+        Set<Authority> authorityList = new HashSet<>();
+        authorityList.add(authority);
+        client.setAuthorities(authorityList);
+
+        ProductsWithUser productsWithUser = productService.getProductsWithUser(productList, client);
+        Assertions.assertEquals(productsWithUser.getRole(),"ROLE_EMPLOYEE");
+        Assertions.assertEquals(productsWithUser.getProducts(),productList);
+        authorityList.clear();
+        authorityList.add(authority2);
+        client.setAuthorities(authorityList);
+        productsWithUser = productService.getProductsWithUser(productList, client);
+        Assertions.assertNull(productsWithUser.getRole());
+
     }
 }

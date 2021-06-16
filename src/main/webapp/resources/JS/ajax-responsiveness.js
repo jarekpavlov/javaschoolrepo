@@ -79,4 +79,3 @@ $(document).on('click',"input[id*='cartBtn-']", function(){
             }
         });
     });
-

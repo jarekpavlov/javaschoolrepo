@@ -47,7 +47,7 @@
                 <div class="form-group row">
                     <label for="mass" class="col-sm-3 col-md-2 col-form-label">Mass:</label>
                     <div class="col-sm-9 col-md-10">
-                        <input type="number" required="required" min="1" max="50000" class="form-control" id="mass" value="${product.mass}" name = "mass"/>
+                        <input type="number" required="required" min="0" max="50000" class="form-control" id="mass" value="${product.mass}" name = "mass"/>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -64,7 +64,7 @@
                 <div class="form-group row">
                     <label for="quantity" class="col-sm-3 col-md-2 col-form-label">Quantity:</label>
                     <div class="col-sm-9 col-md-10">
-                        <input type="number" required="required" min="1" max="50000" class="form-control" id="quantity" value="${product.quantity}" name = "quantity"/>
+                        <input type="number" required="required" min="0" max="50000" class="form-control" id="quantity" value="${product.quantity}" name = "quantity"/>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -76,7 +76,7 @@
                 <div class="form-group row">
                     <label for="volume" class="col-sm-3 col-md-2 col-form-label">Volume:</label>
                     <div class="col-sm-9 col-md-10">
-                        <input type="number" required="required" min="1" max="50000" class="form-control" id="volume" value="${product.volume}" name = "volume"/>
+                        <input type="number" required="required" min="0" max="50000" class="form-control" id="volume" value="${product.volume}" name = "volume"/>
                     </div>
                 </div>
                 <div class="form-group row">
