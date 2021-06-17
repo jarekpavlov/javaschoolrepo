@@ -59,9 +59,9 @@ public class OrderService {
     /**
      * This method is taking @param numberForOrder to create a session using
      *
-     * @param request with ProductsInOrder instance to store the Products into the cart
+     * @param httpSession with ProductsInOrder instance to store the Products into the cart
      */
-    public void addToCart(int numberForOrder, HttpServletRequest request, Long id) {
+    public void addToCart(int numberForOrder, HttpSession httpSession, Long id) {
 
         Product product = entityService.getEntity(Product.class, id);
         ProductsInOrder productsInOrder = new ProductsInOrderBuilder()
@@ -70,7 +70,6 @@ public class OrderService {
                 .setPrice(product.getPrice())
                 .build();
 
-        HttpSession httpSession = request.getSession();
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
         if (productsInOrderSet != null) {
             productsInOrderSet.add(productsInOrder);
@@ -88,7 +87,7 @@ public class OrderService {
      * @param httpSession to a new Order object to store it
      *                    into the database
      */
-    public void createOrder(HttpSession httpSession, Client client, String paymentMethod, String deliveryMethod) throws NonValidNumberException {
+    private void createOrder(HttpSession httpSession, Client client, String paymentMethod, String deliveryMethod) throws NonValidNumberException {
         Set<ProductsInOrder> productsInOrderSetTemp = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
         Order order = getPopulatedOrder(client, paymentMethod, deliveryMethod, productsInOrderSetTemp);//populating order fields with actual information
         for (ProductsInOrder temp : productsInOrderSetTemp) {
@@ -103,7 +102,7 @@ public class OrderService {
         httpSession.removeAttribute("productsInOrderSet");
     }
 
-    public Order getPopulatedOrder(Client client, String paymentMethod, String deliveryMethod, Set<ProductsInOrder> productsInOrderSetTemp) {
+    private Order getPopulatedOrder(Client client, String paymentMethod, String deliveryMethod, Set<ProductsInOrder> productsInOrderSetTemp) {
         Date date = new Date();
         return new OrderBuilder()
                 .setDateOfOrder(date)
@@ -141,7 +140,7 @@ public class OrderService {
         createOrder(session, client, paymentMethod, deliveryMethod);
     }
 
-    public void setProductQuantity(Map<String, String> quantityMap, Set<ProductsInOrder> productsInOrderSet) throws NonValidNumberException {
+    private void setProductQuantity(Map<String, String> quantityMap, Set<ProductsInOrder> productsInOrderSet) throws NonValidNumberException {
         for (ProductsInOrder temp : productsInOrderSet) {
             Long productId = temp.getProduct().getId();
             String quantity = quantityMap.get(String.valueOf(productId));

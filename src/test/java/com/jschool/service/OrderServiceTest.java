@@ -2,16 +2,77 @@ package com.jschool.service;
 
 import com.jschool.DTO.OrderDTO;
 import com.jschool.domain.*;
-import com.jschool.exceptions.NonValidNumberException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.mock.web.MockHttpServletRequest;
 
-import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
 
+    @Mock
+    HttpSession httpSession;
+
+    @Mock
+    HttpServletRequest request;
+
+    @Mock
+    EntityService entityService;
+
+    @InjectMocks
+    OrderService orderService1;
+
     OrderService orderService = new OrderService();
+
+    @Test
+    void addToCartTest() {
+//        Product product = new ProductBuilder()
+//                .setId(2L)
+//                .setPrice(100F)
+//                .setBrand("brand")
+//                .setColor("Color")
+//                .build();
+//        Product product1 = new ProductBuilder()
+//                .setId(1L)
+//                .setPrice(13F)
+//                .setBrand("brand1")
+//                .setColor("Color1")
+//                .build();
+//        ProductsInOrder productsInOrder = new ProductsInOrderBuilder()
+//                .setId(1L)
+//                .setProduct(product)
+//                .setPrice(100F)
+//                .setQuantity(1)
+//                .build();
+//
+//        Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
+//        productsInOrderSet.add(productsInOrder);
+//        when(httpSession.getAttribute("productsInOrderSet")).thenReturn(productsInOrderSet);
+//        Set<ProductsInOrder> productsInOrderSet2 = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
+//        when(entityService.getEntity(Product.class,1L)).thenReturn(product1);
+//        orderService1.addToCart(1, httpSession, 1L);
+        //verify(httpSession).setAttribute("productsInOrderSet", productsInOrder);
+    }
+
+    @Test
+    void deleteOrderTest(){
+        when(request.getParameter("id")).thenReturn("1");
+        verify(entityService).deleteEntity(Order.class,1L);
+    }
 
 
     @Test
@@ -39,48 +100,6 @@ class OrderServiceTest {
         orderDTO.setClient(new Client());
 
         Assertions.assertEquals(orderDTO, orderService.getOrderDTO(order));
-    }
-
-    @Test
-    void getPopulatedOrderTest() {
-
-        Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
-        ProductsInOrder productsInOrder = new ProductsInOrderBuilder()
-                .setId(1L)
-                .setPrice(55F)
-                .build();
-        productsInOrderSet.add(productsInOrder);
-        Order mockOrder = new OrderBuilder()
-                .setDeliveryMethod("Home")
-                .setPayment("Cash")
-                .setProductsInOrderSet(productsInOrderSet)
-                .build();
-        Client client = new ClientBuilder()
-                .setId(1L)
-                .setName("John")
-                .build();
-        Order order = orderService.getPopulatedOrder(client, "Cash", "Home", productsInOrderSet);
-        Assertions.assertEquals(mockOrder.getPayment(), order.getPayment());
-        Assertions.assertEquals(mockOrder.getDeliveryMethod(), order.getDeliveryMethod());
-        Assertions.assertEquals(mockOrder.getProductsInOrderSet(), order.getProductsInOrderSet());
-    }
-
-    @Test
-    void setProductQuantityTest() throws NonValidNumberException {
-        Map<String, String> quantityMap = new HashMap<>();
-        quantityMap.put("16", "10");
-        quantityMap.put("15", "12");
-        Set<ProductsInOrder> productsInOrderSet = getProductsInOrdersMock();
-        orderService.setProductQuantity(quantityMap, productsInOrderSet);
-        Set<Integer> quantitySet = new HashSet<>();
-        for (ProductsInOrder product : productsInOrderSet) {
-            quantitySet.add(product.getQuantity());
-        }
-        Set<Integer> quantityMockSet = new HashSet<>();
-        quantityMockSet.add(10);
-        quantityMockSet.add(12);
-        Assertions.assertEquals(quantitySet, quantityMockSet);
-
     }
 
     private Set<ProductsInOrder> getProductsInOrdersMock() {
@@ -129,7 +148,7 @@ class OrderServiceTest {
     @Test
     void getTotalPerOrderTest() {
         Set<ProductsInOrder> productsInOrderSet = getProductsInOrdersMock();
-        Assertions.assertEquals(orderService.getTotalPerOrder(productsInOrderSet),100D);
+        Assertions.assertEquals(orderService.getTotalPerOrder(productsInOrderSet), 100D);
     }
 
 }

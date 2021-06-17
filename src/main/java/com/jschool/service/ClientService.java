@@ -6,7 +6,6 @@ import com.jschool.domain.Client;
 import com.jschool.domain.ClientBuilder;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.NonValidNumberException;
-import com.jschool.exceptions.UserExists;
 import com.jschool.security.Authority;
 import com.jschool.security.CustomSecurityClient;
 import org.apache.log4j.Logger;
@@ -87,10 +86,10 @@ public class ClientService {
     public void sendEmail(Client client) {
         if (!StringUtils.isEmpty(client.getEmail())) {
             String message = String.format(
-                    "Hello %s! \n"+ "To confirm your registration, please, visit the link: http://localhost:8080/MmsPr/activate/%s"
+                    "Hello %s! \n" + "To confirm your registration, please, visit the link: http://localhost:8080/MmsPr/activate/%s"
                     , client.getName()
                     , client.getActivationCode());
-            mailSender.send(client.getEmail(), "Activation code",message);
+            mailSender.send(client.getEmail(), "Activation code", message);
         }
     }
 
@@ -135,6 +134,7 @@ public class ClientService {
             entityService.updateEntity(getClientFromUserDetails(customSecurityClient));
         }
     }
+
     public Client getClientFromUserDetails(CustomSecurityClient customSecurityClient) {
         return new ClientBuilder()
                 .setPhone(customSecurityClient.getPhone())

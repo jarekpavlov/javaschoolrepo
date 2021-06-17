@@ -11,20 +11,28 @@ import com.jschool.security.Authority;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
 
+    @InjectMocks
+    ProductService productService1;
+
+    @Mock
+    EntityService entityService;
 
     ProductService productService = new ProductService();
     List<ProductDTO> list = new ArrayList<>();
@@ -47,22 +55,22 @@ class ProductServiceTest {
         product2.setBrand("brand1");
         product2.setCategory("category2");
         product2.setColor("color1");
-        product1.setId(2L);
+        product2.setId(2L);
 
         product3.setBrand("brand2");
         product3.setCategory("category1");
         product3.setColor("color2");
-        product1.setId(3L);
+        product3.setId(3L);
 
         product4.setBrand("brand3");
         product4.setCategory("category3");
         product4.setColor("color3");
-        product1.setId(4L);
+        product4.setId(4L);
 
         product5.setBrand("brand1");
         product5.setCategory("category4");
         product5.setColor("color4");
-        product1.setId(5L);
+        product5.setId(5L);
 
         list.add(product1);
         list.add(product2);
@@ -72,7 +80,6 @@ class ProductServiceTest {
 
         expectedList.add(product1);
         expectedList.add(product2);
-        List<ProductDTO> filteredListAfterMethod = productService.getFilteredProducts(list, "color1", "brand1", "");
     }
 
     @Test
@@ -132,10 +139,10 @@ class ProductServiceTest {
                     productService.nonValidExceptionCheck(product);
                 });
     }
-    @Test
-    void testGetPaginationMethod(){
 
-        EntityService entityService = mock(EntityService.class, Mockito.RETURNS_DEEP_STUBS);
+    @Test
+    void testGetPaginationMethod() {
+
         Product product1 = new Product();
         Product product2 = new Product();
         Product product3 = new Product();
@@ -173,13 +180,12 @@ class ProductServiceTest {
         products.add(product4);
         products.add(product5);
 
-        when(entityService.entityList(Product.class,0,2147483647)).thenReturn(products);
+        when(entityService.entityList(Product.class, 0, Integer.MAX_VALUE)).thenReturn(products);
+        productService1.setModelMapper(new ModelMapper());
+        ReflectionTestUtils.setField(productService1, "prodListQuantity", 12);
 
-        //List<Product> products1 = entityService.entityList(Product.class,0,2147483647);
-        //System.out.println(products1);
-
-        List<ProductDTO> productDTO = productService.getPaginationMethod(1,"color1","brand1",null);
-        System.out.println(productDTO);
+        List<ProductDTO> productDTO = productService1.getPaginationMethod(1, "color1", "brand1", null);
+        Assertions.assertEquals(productDTO,expectedList);
     }
 
     @Test
@@ -192,25 +198,6 @@ class ProductServiceTest {
                 () -> {
                     productService.emptyFieldsExceptionCheck(product);
                 });
-    }
-
-    @Test
-    void formingFilteredPaginatedTest() {
-        List<ProductDTO> filteredList = new ArrayList<>();
-        ProductDTO product1 = new ProductDTO();
-        product1.setId(1L);
-        ProductDTO product2 = new ProductDTO();
-        product1.setId(2L);
-        ProductDTO product3 = new ProductDTO();
-        product1.setId(3L);
-        filteredList.add(product1);
-        filteredList.add(product2);
-        filteredList.add(product3);
-        List<ProductDTO> paginatedList = productService.formingFilteredPaginatedProductList(1, filteredList, 2);
-        List<ProductDTO> paginatedMockList = new ArrayList<>();
-        paginatedMockList.add(product1);
-        paginatedMockList.add(product2);
-        Assertions.assertEquals(paginatedMockList, paginatedList);
     }
 
     @Test
@@ -262,8 +249,8 @@ class ProductServiceTest {
         client.setAuthorities(authorityList);
 
         ProductsWithUser productsWithUser = productService.getProductsWithUser(productList, client);
-        Assertions.assertEquals(productsWithUser.getRole(),"ROLE_EMPLOYEE");
-        Assertions.assertEquals(productsWithUser.getProducts(),productList);
+        Assertions.assertEquals(productsWithUser.getRole(), "ROLE_EMPLOYEE");
+        Assertions.assertEquals(productsWithUser.getProducts(), productList);
         authorityList.clear();
         authorityList.add(authority2);
         client.setAuthorities(authorityList);

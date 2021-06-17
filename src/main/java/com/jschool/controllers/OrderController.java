@@ -66,10 +66,10 @@ public class OrderController {
 
     @GetMapping(value = "/order/add-to-cart")
     @ResponseBody
-    public int addToCart(HttpServletRequest request, @RequestParam (required = false) Long productId) {
+    public int addToCart(HttpSession session, @RequestParam (required = false) Long productId) {
         int numberForOrder = 1;
-        orderService.addToCart(numberForOrder, request, productId);
-        return productService.getProductInCartQuantity(request.getSession());
+        orderService.addToCart(numberForOrder, session, productId);
+        return productService.getProductInCartQuantity(session);
     }
 
     @GetMapping(value = "/order/products-in-cart")

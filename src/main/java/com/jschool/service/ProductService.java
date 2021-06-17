@@ -15,6 +15,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -116,13 +117,13 @@ public class ProductService {
      */
     public List<ProductDTO> getFilteredProducts(List<ProductDTO> productDtoList, String color, String brand, String title) {
         List<ProductDTO> filteredList = null;
-        if (!emptyS.equals(color)) {
+        if (!StringUtils.isEmpty(color)) {
             filteredList = productDtoList
                     .stream()
                     .filter(l -> l.getColor().equalsIgnoreCase(color))
                     .collect(Collectors.toList());
         }
-        if (!emptyS.equals(brand)) {
+        if (!StringUtils.isEmpty(brand)) {
             if (filteredList == null) {
                 filteredList = productDtoList
                         .stream()
@@ -135,7 +136,7 @@ public class ProductService {
                         .collect(Collectors.toList());
             }
         }
-        if (!emptyS.equals(title)) {
+        if (!StringUtils.isEmpty(title)) {
             if (filteredList == null) {
                 filteredList = productDtoList
                         .stream()
@@ -176,7 +177,7 @@ public class ProductService {
         return getFilteredProducts(getProductDtoList(0, Integer.MAX_VALUE), color, brand, title);
     }
 
-    public List<ProductDTO> getFilteredProductsPaginated(Integer page, String color, String brand, String title) {
+    private List<ProductDTO> getFilteredProductsPaginated(Integer page, String color, String brand, String title) {
         if (page == null) {
             page = 1;
         }
@@ -185,7 +186,7 @@ public class ProductService {
         return formingFilteredPaginatedProductList(page, filteredList, prodListQuantity);
     }
 
-    public List<ProductDTO> formingFilteredPaginatedProductList(Integer page, List<ProductDTO> filteredList, int prodListQuantity) {
+    private List<ProductDTO> formingFilteredPaginatedProductList(Integer page, List<ProductDTO> filteredList, int prodListQuantity) {
         List<ProductDTO> paginatedFilteredList = new ArrayList<>();
         int size = filteredList.size();
         int end = (page - 1) * prodListQuantity + prodListQuantity;
@@ -224,7 +225,7 @@ public class ProductService {
         return 0;
     }
 
-    public List<ProductDTO> getPaginatedList(Integer page) {
+    private List<ProductDTO> getPaginatedList(Integer page) {
         List<ProductDTO> productListPaginated;
 
         if (page == null) {
@@ -253,10 +254,15 @@ public class ProductService {
     }
 
     public List<ProductDTO> getProductDtoList(int offset, int limit) {
-        return entityService.entityList(Product.class, offset, limit)
+
+        List<Product> list1 = entityService.entityList(Product.class, offset, limit);
+        System.out.println(list1);
+        List<ProductDTO> list = list1
                 .stream()
                 .map(this::getProductDTO)
                 .collect(Collectors.toList());
+        System.out.println(5);
+        return list;
     }
 
     public ProductsWithUser getProductsWithUser(List<ProductDTO> list, Client client) {

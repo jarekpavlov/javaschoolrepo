@@ -31,14 +31,10 @@ public class ExceptionController {
         return "exceptions/productIsInOrderPage";
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<Object> handle(Exception ex,
-//                                         HttpServletRequest request, HttpServletResponse response) {
-//        if (ex instanceof NullPointerException) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//    }
+    @ExceptionHandler(value = Exception.class)
+    public String getException() {
+        return "exceptions/genericExceptionPage";
+    }
 
     @ExceptionHandler(value = NonValidNumberException.class)
     public String getNonValidNumberException() {
