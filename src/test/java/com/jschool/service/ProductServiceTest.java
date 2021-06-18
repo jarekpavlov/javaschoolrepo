@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 class ProductServiceTest {
 
     @InjectMocks
-    ProductService productService1;
+    ProductService productServiceInject;
 
     @Mock
     EntityService entityService;
@@ -181,10 +181,10 @@ class ProductServiceTest {
         products.add(product5);
 
         when(entityService.entityList(Product.class, 0, Integer.MAX_VALUE)).thenReturn(products);
-        productService1.setModelMapper(new ModelMapper());
-        ReflectionTestUtils.setField(productService1, "prodListQuantity", 12);
+        productServiceInject.setModelMapper(new ModelMapper());
+        ReflectionTestUtils.setField(productServiceInject, "prodListQuantity", 12);
 
-        List<ProductDTO> productDTO = productService1.getPaginationMethod(1, "color1", "brand1", null);
+        List<ProductDTO> productDTO = productServiceInject.getPaginationMethod(1, "color1", "brand1", null);
         Assertions.assertEquals(productDTO,expectedList);
     }
 

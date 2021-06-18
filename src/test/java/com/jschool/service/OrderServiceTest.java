@@ -3,20 +3,17 @@ package com.jschool.service;
 import com.jschool.DTO.OrderDTO;
 import com.jschool.domain.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,50 +25,56 @@ class OrderServiceTest {
     HttpSession httpSession;
 
     @Mock
-    HttpServletRequest request;
-
-    @Mock
     EntityService entityService;
 
     @InjectMocks
-    OrderService orderService1;
+    OrderService orderServiceInject;
 
     OrderService orderService = new OrderService();
+    Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
+    Product product;
+    Product product1;
 
-    @Test
-    void addToCartTest() {
-//        Product product = new ProductBuilder()
-//                .setId(2L)
-//                .setPrice(100F)
-//                .setBrand("brand")
-//                .setColor("Color")
-//                .build();
-//        Product product1 = new ProductBuilder()
-//                .setId(1L)
-//                .setPrice(13F)
-//                .setBrand("brand1")
-//                .setColor("Color1")
-//                .build();
-//        ProductsInOrder productsInOrder = new ProductsInOrderBuilder()
-//                .setId(1L)
-//                .setProduct(product)
-//                .setPrice(100F)
-//                .setQuantity(1)
-//                .build();
-//
-//        Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
-//        productsInOrderSet.add(productsInOrder);
-//        when(httpSession.getAttribute("productsInOrderSet")).thenReturn(productsInOrderSet);
-//        Set<ProductsInOrder> productsInOrderSet2 = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
-//        when(entityService.getEntity(Product.class,1L)).thenReturn(product1);
-//        orderService1.addToCart(1, httpSession, 1L);
-        //verify(httpSession).setAttribute("productsInOrderSet", productsInOrder);
+    @BeforeEach
+    void init() {
+        product = new ProductBuilder()
+                .setId(2L)
+                .setPrice(100F)
+                .setBrand("brand")
+                .setColor("Color")
+                .build();
+        product1 = new ProductBuilder()
+                .setId(1L)
+                .setPrice(13F)
+                .setBrand("brand1")
+                .setColor("Color1")
+                .build();
+        ProductsInOrder productsInOrder = new ProductsInOrderBuilder()
+                .setId(1L)
+                .setProduct(product1)
+                .setPrice(100F)
+                .setQuantity(1)
+                .build();
+        productsInOrderSet.add(productsInOrder);
     }
 
     @Test
-    void deleteOrderTest(){
-        when(request.getParameter("id")).thenReturn("1");
-        verify(entityService).deleteEntity(Order.class,1L);
+    void addToCartTest() {
+
+        when(httpSession.getAttribute("productsInOrderSet")).thenReturn(productsInOrderSet);
+        when(entityService.getEntity(Product.class, 1L)).thenReturn(product1);
+        orderServiceInject.addToCart(1, httpSession, 1L);
+        verify(httpSession).setAttribute("productsInOrderSet", productsInOrderSet);
+
+    }
+
+    @Test
+    void deleteForCartTest() {
+        when(httpSession.getAttribute("productsInOrderSet")).thenReturn(productsInOrderSet);
+        System.out.println(productsInOrderSet);
+        orderServiceInject.deleteFromCart(httpSession, 1L);
+        System.out.println(productsInOrderSet);
+        verify(httpSession).setAttribute("productsInOrderSet", productsInOrderSet);
     }
 
 
@@ -149,6 +152,40 @@ class OrderServiceTest {
     void getTotalPerOrderTest() {
         Set<ProductsInOrder> productsInOrderSet = getProductsInOrdersMock();
         Assertions.assertEquals(orderService.getTotalPerOrder(productsInOrderSet), 100D);
+    }
+
+    @Test
+    void getPaginatedOrderListTest() {
+        Date date = new Date();
+
+        List<OrderDTO> listOrdersDTO = new ArrayList<>();
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setId(3L);
+        orderDTO.setDateOfOrder(date);
+        orderDTO.setOrderStatus(OrderStatus.DELIVERED);
+        orderDTO.setPaymentStatus(PaymentStatus.PENDING_PAYMENT);
+        orderDTO.setClient(new Client());
+        listOrdersDTO.add(orderDTO);
+
+        List<Order> listOrders = new ArrayList<>();
+        Order order = new OrderBuilder()
+                .setId(3L)
+                .setDateOfOrder(date)
+                .setOrderStatus(OrderStatus.DELIVERED)
+                .setProductsInOrderSet(new HashSet<>())
+                .setPaymentStatus(PaymentStatus.PENDING_PAYMENT)
+                .setClient(new Client())
+                .setDeliveryMethod("deliveryMethod")
+                .setProductsInOrderSet(new HashSet<>())
+                .build();
+        listOrders.add(order);
+
+        orderServiceInject.setModelMapper(new ModelMapper());
+        ReflectionTestUtils.setField(orderServiceInject, "ordersOnPage", 12);
+        when(entityService.entityList(Order.class, 0, 12)).thenReturn(listOrders);
+        List<OrderDTO> list = orderServiceInject.getPaginatedOrderList(null);
+        Assertions.assertEquals(list, listOrdersDTO);
+
     }
 
 }

@@ -31,10 +31,10 @@ public class ExceptionController {
         return "exceptions/productIsInOrderPage";
     }
 
-    @ExceptionHandler(value = Exception.class)
-    public String getException() {
-        return "exceptions/genericExceptionPage";
-    }
+//    @ExceptionHandler(value = Exception.class)
+//    public String getException() {
+//        return "exceptions/genericExceptionPage";
+//    }
 
     @ExceptionHandler(value = NonValidNumberException.class)
     public String getNonValidNumberException() {

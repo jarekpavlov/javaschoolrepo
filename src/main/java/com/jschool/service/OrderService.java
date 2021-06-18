@@ -115,9 +115,7 @@ public class OrderService {
                 .build();
     }
 
-    public void deleteFromCart(HttpServletRequest request) {
-        Long id = Long.parseLong(request.getParameter("id"));
-        HttpSession session = request.getSession();
+    public void deleteFromCart(HttpSession session, Long id) {
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
         Iterator<ProductsInOrder> itr = productsInOrderSet.iterator();
         while (itr.hasNext()) {

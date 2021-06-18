@@ -85,8 +85,8 @@ public class OrderController {
     }
 
     @GetMapping(value = "/order/delete-from-cart")
-    public String deleteProductFromCart(HttpServletRequest request) {
-        orderService.deleteFromCart(request);
+    public String deleteProductFromCart(HttpSession session, @RequestParam(required = false) Long id) {
+        orderService.deleteFromCart(session, id);
         return "redirect:/order/products-in-cart";
     }
 

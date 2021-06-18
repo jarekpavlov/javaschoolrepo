@@ -70,9 +70,9 @@ public class EntityService {
         entityDaoImpl.openCurrentSession();
         List<?> bestClient = entityDaoImpl.getBestClient(daysAgo);
         Set<JoinCountByClient> joinCountByClients = new TreeSet<>();
-        for (int i = 0; i < bestClient.size(); i++) {
+        for (Object o : bestClient) {
             JoinCountByClient joinCountByClient = new JoinCountByClient();
-            Object[] result = (Object[]) bestClient.get(i);
+            Object[] result = (Object[]) o;
             joinCountByClient.setResultAmount((Double) result[0]);
             joinCountByClient.setClient_id((Long) result[1]);
             joinCountByClients.add(joinCountByClient);
@@ -84,9 +84,9 @@ public class EntityService {
         entityDaoImpl.openCurrentSession();
         List<?> bestProduct = entityDaoImpl.getBestProduct(daysAgo);
         Set<JoinCountByProduct> joinCountByProductSet = new TreeSet<>();
-        for (int i = 0; i < bestProduct.size(); i++) {
+        for (Object o : bestProduct) {
             JoinCountByProduct joinCountByProduct = new JoinCountByProduct();
-            Object[] result = (Object[]) bestProduct.get(i);
+            Object[] result = (Object[]) o;
             joinCountByProduct.setResultAmount((Double) result[0]);
             joinCountByProduct.setProduct_id((Long) result[1]);
             joinCountByProduct.setBrand(result[2].toString());

@@ -43,10 +43,6 @@ public class ClientService {
         this.mailSender = mailSender;
     }
 
-    public ModelMapper getModelMapper() {
-        return modelMapper;
-    }
-
     public void setModelMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
@@ -76,14 +72,14 @@ public class ClientService {
         return 3;
     }
 
-    public void clientCreationSequence(Client client) {
+    private void clientCreationSequence(Client client) {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(client.getPassword());
         client.setPassword(encodedPassword);
         client.setActivationCode(UUID.randomUUID().toString());
     }
 
-    public void sendEmail(Client client) {
+    private void sendEmail(Client client) {
         if (!StringUtils.isEmpty(client.getEmail())) {
             String message = String.format(
                     "Hello %s! \n" + "To confirm your registration, please, visit the link: http://localhost:8080/MmsPr/activate/%s"
@@ -93,14 +89,14 @@ public class ClientService {
         }
     }
 
-    public void clientWrongFormatEntry(Client client) throws NonValidNumberException {
+    private void clientWrongFormatEntry(Client client) throws NonValidNumberException {
         if (client.getAddress().getFlat() < 1 || client.getAddress().getPostCode() < 1) {
             logger.warn("User entered incorrect number ");
             throw new NonValidNumberException("Some numbers are incorrect");
         }
     }
 
-    public void clientEmptyFields(Client client, Client clientWithPassword) throws EmptyFieldException {
+    private void clientEmptyFields(Client client, Client clientWithPassword) throws EmptyFieldException {
         String emptyS = "";
         if ((emptyS.equals(client.getPassword()) && clientWithPassword == null) || emptyS.equals(client.getName()) || emptyS.equals(client.getSurname()) || emptyS.equals(client.getPhone())) {
             logger.warn("User does not fill all fields in client registration/editing page");
@@ -118,7 +114,7 @@ public class ClientService {
         return true;
     }
 
-    public void getActivatedClient(Client client) {
+    private void getActivatedClient(Client client) {
         client.setActivationCode(null);
         Authority authority = new Authority();
         authority.setAuthority("ROLE_USER");
@@ -135,7 +131,7 @@ public class ClientService {
         }
     }
 
-    public Client getClientFromUserDetails(CustomSecurityClient customSecurityClient) {
+    private Client getClientFromUserDetails(CustomSecurityClient customSecurityClient) {
         return new ClientBuilder()
                 .setPhone(customSecurityClient.getPhone())
                 .setAddress(customSecurityClient.getAddress())

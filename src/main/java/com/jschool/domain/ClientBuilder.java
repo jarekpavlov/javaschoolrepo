@@ -14,6 +14,7 @@ public class ClientBuilder {
     private String dateOfBirth;
     private Address address;
     private String password;
+    private String activationCode;
     private Set<Order> orders = new HashSet<>();
     private Set<Authority> authorities = new HashSet<>();
 
@@ -106,6 +107,14 @@ public class ClientBuilder {
         this.authorities = authorities;
         return this;
     }
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public ClientBuilder setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
+        return this;
+    }
     public Client build(){
         Client client = new Client();
         client.setId(id);
@@ -118,6 +127,7 @@ public class ClientBuilder {
         client.setOrders(orders);
         client.setPassword(password);
         client.setPhone(phone);
+        client.setActivationCode(activationCode);
         return client;
     }
 }
