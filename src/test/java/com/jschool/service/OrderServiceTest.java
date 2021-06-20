@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.servlet.http.HttpSession;
@@ -186,6 +187,40 @@ class OrderServiceTest {
         List<OrderDTO> list = orderServiceInject.getPaginatedOrderList(null);
         Assertions.assertEquals(list, listOrdersDTO);
 
+    }
+
+    @Test
+    void repeatOrderTest() {
+        Product product = new Product();
+        product.setId(16L);
+        product.setQuantity(10);
+        product.setPrice(50F);
+
+        Set<ProductsInOrder> productsInOrderSet = new HashSet<>();
+
+        Date date = new Date();
+        Order order = new Order();
+        order.setId(3L);
+        order.setDateOfOrder(date);
+        order.setOrderStatus(OrderStatus.PENDING_PAYMENT);
+        order.setPaymentStatus(PaymentStatus.PENDING_PAYMENT);
+        order.setClient(new Client());
+        order.setDeliveryMethod("deliveryMethod");
+
+        ProductsInOrder productsInOrder = new ProductsInOrderBuilder()
+                .setId(1L)
+                .setQuantity(1)
+                .setOrder(order)
+                .setPrice(55F)
+                .setProduct(product)
+                .build();
+
+        productsInOrderSet.add(productsInOrder);
+        order.setProductsInOrderSet(productsInOrderSet);
+
+        when(entityService.getEntity(Order.class, order.getId())).thenReturn(order);
+        Set<ProductsInOrder> productsInOrderCartSet = orderServiceInject.repeatOrder(new MockHttpSession(), order.getId());
+        Assertions.assertEquals(productsInOrderCartSet, productsInOrderSet);
     }
 
 }

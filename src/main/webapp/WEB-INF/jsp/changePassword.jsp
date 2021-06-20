@@ -17,6 +17,9 @@
 <body>
     <%@ include file="fragments/navbar.jspf" %>
     <div class="container">
+        <c:if test="${passwordMatching != null}">
+            <div style="margin-top: 1em" class="alert alert-danger" role="alert">${passwordMatching}</div>
+        </c:if>
         <div class = "card" style="margin-top: 1.5em">
             <div class="card-header">
                 <h2>Change Password</h2>
@@ -38,7 +41,7 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <button class="btn btn-lg btn-primary" type="submit" class="btn btn-primary">Change Password</button>
+                            <button type="submit" class="btn btn-primary">Change Password</button>
                         </div>
                     </div>
                 </form>

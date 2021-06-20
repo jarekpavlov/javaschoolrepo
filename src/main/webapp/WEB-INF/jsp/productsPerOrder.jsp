@@ -16,8 +16,8 @@
 </head>
 <body>
 <%@ include file="fragments/navbar.jspf" %>
-<div class="container">
-    <div align="right" style="margin-right: 1.5em" >
+<div class="container" style="margin-top: 1.5em">
+    <div style="float: right " >
         <%@ include file="fragments/cartInformation.jspf" %>
     </div>
     <h1 style="margin-left: 0.5em; margin-top: 1em">Products in order</h1>
@@ -80,6 +80,13 @@
     <div style="text-align: right; margin-right: 2.5em ">
         <i style="font-size: 1.5em"><b><u>${total}€</u></b></i>
     </div>
+    <form action="/MmsPr/order/repeat-order?orderId=${order.id}" method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <div style="float: right; margin-right: 2.5em; margin-top: 1.5em">
+            <button type="submit" class="btn btn-primary">Repeat Order</button>
+        </div>
+    </form>
+
 <%--    <sec:authorize access="hasRole('EMPLOYEE')">--%>
 <%--        <div class="row">--%>
 <%--            <div class="col-6" align="left" style="margin-left: 1.5em">--%>

@@ -5,7 +5,6 @@ import com.jschool.domain.AddressBuilder;
 import com.jschool.domain.Client;
 import com.jschool.domain.ClientBuilder;
 import com.jschool.exceptions.ChangePasswordException;
-import com.jschool.exceptions.UserExists;
 import com.jschool.exceptions.EmptyFieldException;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.security.CustomSecurityClient;
@@ -17,10 +16,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -79,14 +82,19 @@ public class ClientController {
             , @RequestParam(required = false) String street
             , @RequestParam(required = false) String house
             , @RequestParam(required = false) String password
+            , @RequestParam(required = false) String repeatPassword
             , @RequestParam(required = false) String phone
             , @RequestParam(required = false) String dateOfBirth
             , @RequestParam(required = false) String email
             , @RequestParam(required = false) Long id
             , @RequestParam(required = false) Long address_id
             , @RequestParam(required = false) Short flat
-            , @RequestParam(required = false) Integer postCode) throws EmptyFieldException, NonValidNumberException, UserExists {
-
+            , @RequestParam(required = false) Integer postCode) throws EmptyFieldException, NonValidNumberException {
+        if (!(StringUtils.isEmpty(password) || StringUtils.isEmpty(repeatPassword)))
+            if (!password.equals(repeatPassword)){
+                map.addAttribute("clientFailure", "The passwords didn't match");//user already exists
+                return "registrationPage";
+            }
         Address address = new AddressBuilder()
                 .setId(address_id)
                 .setCity(city)
@@ -107,17 +115,17 @@ public class ClientController {
                 .setPassword(password)
                 .build();
         int savingAction = clientService.saveClient(client, clientWithPassword);
-       switch (savingAction){
-           case 1:
-               map.addAttribute("userExists", "The user already exists");//user already exists
-               return "registrationPage";
-           case 2:
-               map.addAttribute("userChanged", "Client information is successfully changed");//changing client that already exists
-               return "registrationPage";
-       }
+        switch (savingAction){
+            case 1:
+                map.addAttribute("clientFailure", "The user already exists");//user already exists
+                return "registrationPage";
+            case 2:
+                map.addAttribute("clientSuccess", "Client information was successfully changed");//changing client that already exists
+                return "registrationPage";
+        }
         logger.info("The user creation/editing method was accomplished");
-        map.addAttribute("confirmRegistration", "The confirmation mail was send to your email");
-        return "loginPage";//creating a brand new client
+        map.addAttribute("clientSuccess", "The confirmation mail was send to your email");
+        return "registrationPage";//creating a brand new client
 
     }
 
@@ -128,10 +136,11 @@ public class ClientController {
 
     @PostMapping(value = "/user/registration/change-password")
     public String changePassword(@RequestParam String newPassword1
-            , @RequestParam String newPassword2, @AuthenticationPrincipal CustomSecurityClient client) throws ChangePasswordException {
+            , @RequestParam String newPassword2, @AuthenticationPrincipal CustomSecurityClient client, ModelMap map) throws ChangePasswordException {
         if (!newPassword1.equals(newPassword2)) {
             logger.warn("The passwords didn't match during the changing");
-            throw new ChangePasswordException("The passwords didn't match during the changing");
+            map.addAttribute("passwordMatching","The passwords didn't match");
+            return "changePassword";
         }
         clientService.saveClientWithChangedPassword(newPassword1, newPassword2, client);
         return "redirect:/";
@@ -143,15 +152,16 @@ public class ClientController {
         entityService.deleteEntity(Client.class, id);
         return "redirect:/admin/users";
     }
+
     @GetMapping(value = "/activate/{code}")
-    public String activateAccount(ModelMap map,@PathVariable String code){
+    public String activateAccount(ModelMap map, @PathVariable String code) {
         boolean isActivated = clientService.activateClient(code);
-        if (!isActivated){
-            map.addAttribute("messageNotActivated", "Activation code is not found.");
-        }else{
-            map.addAttribute("messageActivated", "Client is successfully activated.");
+        if (!isActivated) {
+            map.addAttribute("clientFailure", "The activation code is not found.");
+        } else {
+            map.addAttribute("clientSuccess", "The client was successfully activated.");
         }
-        return "loginPage";
+        return "registrationPage";
     }
 
 }

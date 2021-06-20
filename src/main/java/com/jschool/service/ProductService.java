@@ -69,7 +69,7 @@ public class ProductService {
      * @throws NonValidNumberException
      * @throws IOException
      */
-    public void saveProduct(Product product, MultipartFile productPicture) throws EmptyFieldException, NonValidNumberException, IOException {
+    public boolean saveProduct(Product product, MultipartFile productPicture) throws EmptyFieldException, NonValidNumberException, IOException {
 
         if (productPicture.getSize() != 0) {
             File uploadDir = new File(uploadPath);
@@ -90,6 +90,7 @@ public class ProductService {
             entityService.saveEntity(product);
         }
         logger.info("Employee left the saveProduct service method");
+        return true;
     }
 
     public void nonValidExceptionCheck(Product product) throws NonValidNumberException {

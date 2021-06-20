@@ -26,21 +26,31 @@ $(function (){
                         imgSource = "/MmsPr/pictures/"+element.imgName;
                     }
                     if (response.role!=="ROLE_EMPLOYEE"){
-                        addButton = '<form id="productCartForm" action="/MmsPr/order/add-to-cart?id='+element.id+'" method="get" >'+
-                                        '<div class="row">'+
-                                            '<div class="col">'+
-                                               '<input type="button" class="btn btn-info btn-sm" id="cartBtn-'+element.id+'" value="Add to Cart"/>'+
+                        if (element.quantity === 0) {
+                            addButton = '<form id="productCartForm" action="/MmsPr/order/add-to-cart?id='+element.id+'" method="get" >'+
+                                            '<div class="row">'+
+                                                '<div class="col">'+
+                                                    '<input type="button"  class="btn btn-info btn-sm" id="cartBtn-'+element.id+'" value="Add to Cart" disabled/>'+
+                                                '</div>'+
                                             '</div>'+
-                                        '</div>'+
-                                    '</form>';
+                                        '</form>';
+                        } else {
+                            addButton = '<form id="productCartForm" action="/MmsPr/order/add-to-cart?id='+element.id+'" method="get" >'+
+                                            '<div class="row">'+
+                                                '<div class="col">'+
+                                                   '<input type="button" class="btn btn-info btn-sm" id="cartBtn-'+element.id+'" value="Add to Cart"/>'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</form>';
+                        }
                     } else {
                         addButton = '<div class="row">'+
                                         '<div class="col">'+
                                            ' <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/edit?id='+element.id+'">Edit</a>'+
                                         '</div>'+
-                                        '<div class="col">'+
-                                           ' <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/delete?id='+element.id+'">Delete</a>'+
-                                        '</div>'+
+                                        // '<div class="col">'+
+                                        //    ' <a class="btn btn-info btn-sm" href="/MmsPr/admin/product/delete?id='+element.id+'">Delete</a>'+
+                                        // '</div>'+
                                     '</div>';
                     }
                      let oneCard = '<div class="card text-left" style="width: 14rem">'+

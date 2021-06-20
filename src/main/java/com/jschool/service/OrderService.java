@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -149,8 +148,7 @@ public class OrderService {
         }
     }
 
-    public Set<ProductsInOrder> getProductsInOrder(HttpServletRequest request) {
-        Long id = Long.parseLong(request.getParameter("id"));
+    public Set<ProductsInOrder> getProductsInOrder(Long id) {
         Order order = entityService.getEntity(Order.class, id);
         return order.getProductsInOrderSet();
     }
@@ -214,5 +212,33 @@ public class OrderService {
             totalPerOrder = totalPerOrder + product.getPrice() * product.getQuantity();
         }
         return totalPerOrder;
+    }
+
+    public Set<ProductsInOrder> repeatOrder(HttpSession httpSession, Long orderId) {
+
+        Order order = entityService.getEntity(Order.class, orderId);
+
+        Set<ProductsInOrder> productsInOrderSet = order.getProductsInOrderSet();
+        Iterator<ProductsInOrder> itr = productsInOrderSet.iterator();
+        while (itr.hasNext()) {
+            ProductsInOrder productsInOrder = itr.next();
+            Product product = productsInOrder.getProduct();
+            int quantity = product.getQuantity();
+            if (quantity > 0) {
+                productsInOrder.setPrice(product.getPrice());
+                itr.remove();
+                productsInOrderSet.add(productsInOrder);
+            } else {
+                itr.remove();
+            }
+        }
+        Set<ProductsInOrder> productsInOrderCartSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
+        if (productsInOrderCartSet == null) {
+            productsInOrderCartSet = new HashSet<>();
+        }
+        productsInOrderCartSet.addAll(productsInOrderSet);
+        httpSession.setAttribute("productsInOrderSet", productsInOrderCartSet);
+
+        return productsInOrderCartSet;
     }
 }

@@ -30,15 +30,6 @@
                                 <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>
                         </c:if>
                     </c:if>
-                    <c:if test="${messageNotActivated != null}">
-                        <div class="alert alert-danger" role="alert">${messageNotActivated}</div>
-                    </c:if>
-                    <c:if test="${confirmRegistration != null}">
-                        <div class="alert alert-success" role="alert">${confirmRegistration}</div>
-                    </c:if>
-                    <c:if test="${messageActivated != null}">
-                        <div class="alert alert-success" role="alert">${messageActivated}</div>
-                    </c:if>
                     <c:if test="${param.logout != null}">
                         <div class="alert alert-success" role="alert">You have been logged out</div>
                     </c:if>

@@ -1,5 +1,6 @@
 package com.jschool.controllers;
 
+import com.jschool.domain.ProductsInOrder;
 import com.jschool.service.EntityService;
 import com.jschool.service.MailSender;
 import com.jschool.service.ProductService;
@@ -34,6 +35,9 @@ public class HelloController {
 
     @GetMapping(value = "/test")
     public String hello() {
+       ProductsInOrder productsInOrderSet = entityService.getEntity(ProductsInOrder.class, 1L);
+       System.out.println(productsInOrderSet);
+
         return "startPage";
     }
 

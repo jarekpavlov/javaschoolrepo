@@ -16,10 +16,10 @@
 </head>
 <body>
 <%@ include file="fragments/navbar.jspf" %>
-<div align="right" style="margin-right: 1.5em" >
-    <%@ include file="fragments/cartInformation.jspf" %>
-</div>
-<div class="container" >
+<div class="container" style="margin-top: 1.5em" >
+    <div style="float: right" >
+        <%@ include file="fragments/cartInformation.jspf" %>
+    </div>
     <h1 style="margin-left: 0.5em;margin-top: 1em">Orders</h1>
     <c:if test="${orderIsChanged != null}">
         <div class="alert alert-success" role="alert">${orderIsChanged}</div>

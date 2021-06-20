@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -66,7 +68,7 @@ public class OrderController {
 
     @GetMapping(value = "/order/add-to-cart")
     @ResponseBody
-    public int addToCart(HttpSession session, @RequestParam (required = false) Long productId) {
+    public int addToCart(HttpSession session, @RequestParam(required = false) Long productId) {
         int numberForOrder = 1;
         orderService.addToCart(numberForOrder, session, productId);
         return productService.getProductInCartQuantity(session);
@@ -99,15 +101,22 @@ public class OrderController {
     }
 
     @GetMapping(value = "/order/products-in-order")
-    public String getProductsInOrder(HttpServletRequest request, ModelMap map) {
-        Set<ProductsInOrder> productsInOrderSet = orderService.getProductsInOrder(request);
+    public String getProductsInOrder(HttpSession httpSession, @RequestParam Long id, ModelMap map) {
+        Set<ProductsInOrder> productsInOrderSet = orderService.getProductsInOrder(id);
         OrderDTO orderDTO = orderService.getOrderFromJoinTable(productsInOrderSet);
         map.addAttribute("order", orderDTO);
         map.addAttribute("products", productsInOrderSet);
         map.addAttribute("total", orderService.getTotalPerOrder(productsInOrderSet));
-        HttpSession httpSession = request.getSession();
         map.addAttribute("productsInCart", productService.getProductInCartQuantity(httpSession));
         return "productsPerOrder";
+    }
+
+    @PostMapping(value = "/order/repeat-order")
+    public RedirectView repeatOrder(HttpSession session, @RequestParam Long orderId, RedirectAttributes attributes) {
+        attributes.addFlashAttribute("flashAttribute", "redirectWithRedirectView");
+        orderService.repeatOrder(session, orderId);
+        attributes.addAttribute("id", orderId);
+        return new RedirectView("/MmsPr/order/products-in-order");
     }
 
     @PostMapping(value = "admin/orders/save")
@@ -123,7 +132,7 @@ public class OrderController {
         map.addAttribute("orders", orderService.getPaginatedOrderList(page));
         map.addAttribute("pageQuantity", productService.getPageQuantity(orderService.getOrderDtoList(0, Integer.MAX_VALUE), ordersOnPage));
         if (status != null) {
-            map.addAttribute("orderIsChanged", "order is changed successfully");
+            map.addAttribute("orderIsChanged", "order was changed successfully");
         }
         return "orders";
     }

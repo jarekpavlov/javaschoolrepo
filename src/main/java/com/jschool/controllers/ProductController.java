@@ -96,6 +96,8 @@ public class ProductController {
             , @RequestParam(required = false) Float volume
     ) throws EmptyFieldException, NonValidNumberException, IOException {
         logger.debug("Employee entered saveProduct method");
+        if ("".equals(imgName))
+            imgName=null;
         Product product = new ProductBuilder()
                 .setBrand(brand)
                 .setCategory(category)
