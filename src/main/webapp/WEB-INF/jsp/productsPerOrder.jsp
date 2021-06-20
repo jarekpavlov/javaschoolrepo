@@ -80,12 +80,14 @@
     <div style="text-align: right; margin-right: 2.5em ">
         <i style="font-size: 1.5em"><b><u>${total}€</u></b></i>
     </div>
-    <form action="/MmsPr/order/repeat-order?orderId=${order.id}" method="post">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <div style="float: right; margin-right: 2.5em; margin-top: 1.5em">
-            <button type="submit" class="btn btn-primary">Repeat Order</button>
-        </div>
-    </form>
+    <sec:authorize access="hasRole('USER')">
+        <form action="/MmsPr/order/repeat-order?orderId=${order.id}" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <div style="float: right; margin-right: 2.5em; margin-top: 1.5em">
+                <button type="submit" class="btn btn-primary">Repeat Order</button>
+            </div>
+        </form>
+    </sec:authorize>
 
 <%--    <sec:authorize access="hasRole('EMPLOYEE')">--%>
 <%--        <div class="row">--%>

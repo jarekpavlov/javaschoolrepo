@@ -1,6 +1,7 @@
 package com.jschool.controllers;
 
 import com.jschool.DTO.OrderDTO;
+import com.jschool.comporator.OrderDtoComparator;
 import com.jschool.domain.*;
 import com.jschool.exceptions.NonValidNumberException;
 import com.jschool.service.EntityService;
@@ -49,6 +50,7 @@ public class OrderController {
         List<OrderDTO> orders = orderService.getOrderDtoList(0, Integer.MAX_VALUE);
         List<OrderDTO> ordersByClient = orders.stream()
                 .filter(order -> order.getClient().equals(client)).collect(Collectors.toList());
+        ordersByClient.sort(new OrderDtoComparator());
         map.addAttribute("orders", ordersByClient);
         map.addAttribute("productsInCart", productService.getProductInCartQuantity(httpSession));
         if (status != null) {

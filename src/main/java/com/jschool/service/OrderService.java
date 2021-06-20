@@ -219,24 +219,21 @@ public class OrderService {
         Order order = entityService.getEntity(Order.class, orderId);
 
         Set<ProductsInOrder> productsInOrderSet = order.getProductsInOrderSet();
-        Iterator<ProductsInOrder> itr = productsInOrderSet.iterator();
-        while (itr.hasNext()) {
-            ProductsInOrder productsInOrder = itr.next();
+        Set<ProductsInOrder> newProductsInOrderSet = new HashSet<>();
+        for (ProductsInOrder productsInOrder : productsInOrderSet) {
             Product product = productsInOrder.getProduct();
             int quantity = product.getQuantity();
             if (quantity > 0) {
                 productsInOrder.setPrice(product.getPrice());
-                itr.remove();
-                productsInOrderSet.add(productsInOrder);
-            } else {
-                itr.remove();
+                productsInOrder.setQuantity(1);
+                newProductsInOrderSet.add(productsInOrder);
             }
         }
         Set<ProductsInOrder> productsInOrderCartSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
         if (productsInOrderCartSet == null) {
             productsInOrderCartSet = new HashSet<>();
         }
-        productsInOrderCartSet.addAll(productsInOrderSet);
+        productsInOrderCartSet.addAll(newProductsInOrderSet);
         httpSession.setAttribute("productsInOrderSet", productsInOrderCartSet);
 
         return productsInOrderCartSet;
