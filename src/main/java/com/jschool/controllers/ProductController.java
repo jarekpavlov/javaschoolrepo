@@ -28,9 +28,6 @@ import java.util.List;
 @Controller
 public class ProductController {
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
     @Value("${products.list.quantity}")
     private int productPerPage;
 
@@ -97,7 +94,7 @@ public class ProductController {
     ) throws EmptyFieldException, NonValidNumberException, IOException {
         logger.debug("Employee entered saveProduct method");
         if ("".equals(imgName))
-            imgName=null;
+            imgName = null;
         Product product = new ProductBuilder()
                 .setBrand(brand)
                 .setCategory(category)

@@ -122,25 +122,6 @@ class ProductServiceTest {
     }
 
     @Test
-    void filterIsEmptyTest() {
-        String color = "green";
-        Assertions.assertFalse(productService.filterIsEmpty(color, null, null));
-    }
-
-    @Test
-    void nonValidExceptionTest() {
-        Product product = new ProductBuilder()
-                .setPrice(0F)
-                .setMass(0F)
-                .build();
-
-        Assertions.assertThrows(NonValidNumberException.class,
-                () -> {
-                    productService.nonValidExceptionCheck(product);
-                });
-    }
-
-    @Test
     void testGetPaginationMethod() {
 
         Product product1 = new Product();
@@ -186,18 +167,6 @@ class ProductServiceTest {
 
         List<ProductDTO> productDTO = productServiceInject.getPaginationMethod(1, "color1", "brand1", null);
         Assertions.assertEquals(productDTO,expectedList);
-    }
-
-    @Test
-    void emptyFieldExceptionCheckTest() {
-        Product product = new ProductBuilder()
-                .setPrice(10F)
-                .setMass(1F)
-                .build();
-        Assertions.assertThrows(EmptyFieldException.class,
-                () -> {
-                    productService.emptyFieldsExceptionCheck(product);
-                });
     }
 
     @Test

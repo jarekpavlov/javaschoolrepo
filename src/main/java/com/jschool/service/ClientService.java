@@ -47,6 +47,14 @@ public class ClientService {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * is used to save a new client, save the checking email, edit an already created client
+     * @param client
+     * @param clientWithPassword
+     * @return
+     * @throws NonValidNumberException
+     * @throws EmptyFieldException
+     */
     public int saveClient(Client client, Client clientWithPassword) throws NonValidNumberException, EmptyFieldException {
 
         clientEmptyFields(client, clientWithPassword);//If Some fields are empty throwing an exception
@@ -104,6 +112,12 @@ public class ClientService {
         }
     }
 
+    /**
+     * Activates a client that is registering by searching the activation code
+     * in the database
+     * @param code
+     * @return
+     */
     public boolean activateClient(String code) {
         Client client = entityService.getEntityByActivationCode(Client.class, code);
         if (client == null) {
@@ -122,6 +136,12 @@ public class ClientService {
         client.getAuthorities().add(authority);
     }
 
+    /**
+     * is used for changing the client password that already exists
+     * @param newPassword1
+     * @param newPassword2
+     * @param customSecurityClient
+     */
     public void saveClientWithChangedPassword(String newPassword1, String newPassword2, CustomSecurityClient customSecurityClient) {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         if (newPassword1.equals(newPassword2)) {

@@ -57,7 +57,6 @@ public class OrderService {
 
     /**
      * This method is taking @param numberForOrder to create a session using
-     *
      * @param httpSession with ProductsInOrder instance to store the Products into the cart
      */
     public void addToCart(int numberForOrder, HttpSession httpSession, Long id) {
@@ -82,7 +81,6 @@ public class OrderService {
 
     /**
      * The method is taking the session instance using
-     *
      * @param httpSession to a new Order object to store it
      *                    into the database
      */
@@ -114,6 +112,10 @@ public class OrderService {
                 .build();
     }
 
+    /**
+     * The method deletes a product from cart therefore
+     * from the session using product id parameter
+     */
     public void deleteFromCart(HttpSession session, Long id) {
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) session.getAttribute("productsInOrderSet");
         Iterator<ProductsInOrder> itr = productsInOrderSet.iterator();
@@ -126,6 +128,15 @@ public class OrderService {
         session.setAttribute("productsInOrderSet", productsInOrderSet);
     }
 
+    /**
+     * The method creates the order using products in cart
+     * @param quantityMap contains id and the corresponding number of the product
+     * @param session
+     * @param client
+     * @param paymentMethod
+     * @param deliveryMethod
+     * @throws NonValidNumberException
+     */
     public void saveFromCart(Map<String, String> quantityMap, HttpSession session, @AuthenticationPrincipal Client client, String paymentMethod, String deliveryMethod) throws NonValidNumberException {
         if (paymentMethod == null)
             paymentMethod = "Card";
@@ -163,6 +174,13 @@ public class OrderService {
         return getOrderDTO(order);
     }
 
+    /**
+     * The method saves the order status and sends MQ message if
+     * the best product list would change
+     * @param orderStatus
+     * @param paymentStatus
+     * @param id
+     */
     public void saveOrderStatus(OrderStatus orderStatus, PaymentStatus paymentStatus, Long id) {
 
         Set<JoinCountByProduct> bestProductBefore = entityService.getBestProduct(statisticDays);
@@ -181,6 +199,11 @@ public class OrderService {
         }
     }
 
+    /**
+     * returns the paginated OrderDTO list regarding to the page number
+     * @param page
+     * @return
+     */
     public List<OrderDTO> getPaginatedOrderList(Integer page) {
         List<OrderDTO> orderListPaginated;
 
@@ -206,6 +229,11 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * returns total amount of money for an order
+     * @param productsInOrderSet
+     * @return
+     */
     public double getTotalPerOrder(Set<ProductsInOrder> productsInOrderSet) {
         double totalPerOrder = 0D;
         for (ProductsInOrder product : productsInOrderSet) {
@@ -214,6 +242,15 @@ public class OrderService {
         return totalPerOrder;
     }
 
+    /**
+     * Is used to repeat order using
+     * @param httpSession
+     * and
+     * @param orderId
+     * to take product list from the session, putting in the products from the order
+     * that is repeated and returns the final list
+     * @return
+     */
     public Set<ProductsInOrder> repeatOrder(HttpSession httpSession, Long orderId) {
 
         Order order = entityService.getEntity(Order.class, orderId);
@@ -226,6 +263,8 @@ public class OrderService {
             if (quantity > 0) {
                 productsInOrder.setPrice(product.getPrice());
                 productsInOrder.setQuantity(1);
+                productsInOrder.setOrder(null);
+                productsInOrder.setId(null);
                 newProductsInOrderSet.add(productsInOrder);
             }
         }

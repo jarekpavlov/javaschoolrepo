@@ -93,14 +93,14 @@ public class ProductService {
         return true;
     }
 
-    public void nonValidExceptionCheck(Product product) throws NonValidNumberException {
+    private void nonValidExceptionCheck(Product product) throws NonValidNumberException {
         if (product.getPrice() < 0.1 || product.getMass() < 0 || product.getQuantity() < 0) {
             logger.warn("Employee entered incorrect number ");
             throw new NonValidNumberException("Some numbers are incorrect");
         }
     }
 
-    public void emptyFieldsExceptionCheck(Product product) throws EmptyFieldException {
+    private void emptyFieldsExceptionCheck(Product product) throws EmptyFieldException {
         if (emptyS.equals(product.getBrand()) || emptyS.equals(product.getTitle()) || emptyS.equals(product.getCategory())
                 || product.getMass() == null || product.getQuantity() == null || product.getPrice() == null) {
             logger.warn("Not all fields were filled in saveProduct service method");
@@ -155,7 +155,7 @@ public class ProductService {
         return filteredList;
     }
 
-    public boolean filterIsEmpty(String color, String brand, String title) {
+    private boolean filterIsEmpty(String color, String brand, String title) {
         if ((emptyS.equals(color) || color == null) && (emptyS.equals(brand) || brand == null)
                 && (emptyS.equals(title) || title == null)) {
             return true;
@@ -163,14 +163,31 @@ public class ProductService {
         return false;
     }
 
+    /**
+     * The method is picking the pagination method regarding to whether filter
+     * was used or not.
+     * @param page
+     * @param color
+     * @param brand
+     * @param title
+     * It returns paginated ProductDTO list
+     * @return
+     */
     public List<ProductDTO> getPaginationMethod(Integer page, String color, String brand, String title) {
         if (filterIsEmpty(color, brand, title)) {
             return getPaginatedList(page);
         }
         return getFilteredProductsPaginated(page, color, brand, title);
-
     }
 
+    /**
+     * The method returns ProductDTO list filtered by params:
+     * @param color
+     * @param brand
+     * @param title
+     * if params are empty the method returns full unfiltered list
+     * @return
+     */
     public List<ProductDTO> getFullOrFilteredList(String color, String brand, String title) {
         if (filterIsEmpty(color, brand, title)) {
             return getProductDtoList(0, Integer.MAX_VALUE);
@@ -205,6 +222,12 @@ public class ProductService {
         return paginatedFilteredList;
     }
 
+    /**
+     * The method deletes Product from the database by id which
+     * is taken from request
+     * @param request
+     * @throws ProductIsInOrderException
+     */
     public void deleteProduct(HttpServletRequest request) throws ProductIsInOrderException {
         List<ProductsInOrder> productsInOrderList = entityService.entityList(ProductsInOrder.class);
         Long id = Long.parseLong(request.getParameter("id"));
@@ -218,6 +241,12 @@ public class ProductService {
         entityService.deleteEntity(Product.class, id);
     }
 
+    /**
+     * The method returns the quantity of products which are present
+     * in product cart and therefore in the httpsession
+     * @param httpSession
+     * @return
+     */
     public int getProductInCartQuantity(HttpSession httpSession) {
         Set<ProductsInOrder> productsInOrderSet = (Set<ProductsInOrder>) httpSession.getAttribute("productsInOrderSet");
         if (productsInOrderSet != null) {
@@ -237,6 +266,13 @@ public class ProductService {
         return productListPaginated;
     }
 
+    /**
+     * The method calculates the quantity of paginated pages
+     * regarding to the list passed to the method
+     * @param list
+     * @param quantity
+     * @return
+     */
     public int getPageQuantity(List<?> list, int quantity) {
         int pageQuantity;
         if ((list.size() / (double) quantity) % 1 != 0) {
@@ -266,6 +302,13 @@ public class ProductService {
         return list;
     }
 
+    /**
+     * The method is returning the object which consist of the ProductDTO list
+     * and client role for sending it as JSON in controller for the frontend
+     * @param list
+     * @param client
+     * @return
+     */
     public ProductsWithUser getProductsWithUser(List<ProductDTO> list, Client client) {
         String clientAuthority = null;
         String employeeRole = "ROLE_EMPLOYEE";
